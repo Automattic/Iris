@@ -1,6 +1,6 @@
 # Iris
 
-A(n awesome) Color Picker. Uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for [Custom Colors](http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/) on WordPress.com
+Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for [Custom Colors](http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/) on WordPress.com
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
