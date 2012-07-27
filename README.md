@@ -15,14 +15,9 @@ Or, if you already have [Color.js](https://github.com/Automattic/Color.js) insta
 
 You'll need to use [jQuery](http://jquery.com/), of course, and [jQuery UI](http://jqueryui.com/)'s `draggable` and `slider` components.
 
-## Documentation
-_(Coming soon)_
+## Documentation & Examples
 
-## Examples
-_(Coming soon)_
-
-## Release History
-_(Nothing yet)_
+See the [Iris project page](http://automattic.github.com/Iris/).
 
 ## License
 Copyright (c) 2012 Automattic.  
