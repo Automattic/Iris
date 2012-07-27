@@ -28,15 +28,29 @@
 				</ul>
 			</header>
 			<section>
-				<p>Iris is a(n awesome) Color Picker. Initially developed for <a href="http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/">Custom Colors</a> on WordPress.com</p>
+				<p>Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for <a href="http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/">Custom Colors</a> on WordPress.com</p>
 
 <h2>Documentation</h2>
 
 <p>Found on the <a href="https://github.com/Automattic/Iris">project page</a>.</p>
 
-<h2>Example</h2>
+<h2 id="example">Example: (This title will change color)</h2>
 
-<p>Example goes here.</p>
+<p><input type="text" id="color" value="#393939" /></p>
+
+<p>The code for the above is simple:</p>
+
+<pre><code>jQuery(document).ready(function($) {
+  $("#color").iris({
+    hide: false,
+    change: function( event, ui ) {
+      $("#example").css( "color", ui.color.toString() );
+    }
+  });
+});</code></pre>
+
+<h2>Browser Support</h2>
+<p>Works in IE >= 8 and all other good browsers.</p>
 			</section>
 			<footer>
 				<p>This project is maintained by <a href="https://github.com/Automattic">Automattic</a></p>
@@ -44,6 +58,20 @@
 			</footer>
 		</div>
 		<script src="javascripts/scale.fix.js"></script>
-
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
+		<!-- Todo: use the script below once the repo is public -->
+		<!--<script src="https://raw.github.com/Automattic/Iris/master/dist/iris.min.js"></script>-->
+		<script src="javascripts/iris.min.js"></script>
+		<script>
+			jQuery(document).ready(function($) {
+				$("#color").iris({
+					hide: false,
+					change: function( event, ui ) {
+						$("#example").css( "color", ui.color.toString() );
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
