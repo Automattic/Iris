@@ -1,3 +1,7 @@
+/**
+ * This is for convenience of developing only. The minified result should go into
+ * the _css var in iris.js. Run grunt cssmin to generate.
+ */
 .iris-picker {
 	display: block;
 	position: relative;
@@ -14,9 +18,9 @@
 .iris-picker .iris-square,
 .iris-picker .iris-slider,
 .iris-picker .grad-box {
-	-webkit-border-radius:4px;
-	   -moz-border-radius:4px;
-	        border-radius:4px;
+	-webkit-border-radius: 4px;
+	   -moz-border-radius: 4px;
+	        border-radius: 4px;
 	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	   -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
@@ -41,6 +45,11 @@
 	   -moz-box-shadow: none;
 	        box-shadow: none;
 	border-radius: 0;
+}
+.iris-picker .iris-square .sat {
+	-webkit-border-radius: 4px;
+	   -moz-border-radius: 4px;
+	        border-radius: 4px;
 }
 .iris-ie-8 .iris-square,
 .iris-ie-8 .iris-slider,

@@ -1,4 +1,4 @@
-/*! Iris - v0.8.0 - 2012-07-26
+/*! Iris - v0.8.0 - 2012-07-27
 * https://github.com/Automattic/Iris
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL */
 
@@ -8,6 +8,8 @@
 	var nonGradientIE = !! ( $.browser.msie && parseInt( $.browser.version, 10 ) < 10 );
 	var gradientType = false;
 	var vendorPrefixes = ['', '-moz-', '-webkit-', '-o-', '-ms-' ];
+	// This is manually copied from iris.min.css until I can figure out how to do it without
+	var _css = '.iris-picker{display:block;position:relative;width:240px;height:163px}.iris-picker-inner{position:absolute;top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:10%;float:left;margin-right:5%}.iris-picker .iris-square{width:65%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.iris-ie-8 .iris-square,.iris-ie-8 .iris-slider,.iris-ie-8 .grad-box,.iris-ie-8 .iris-square .ui-slider-handle,.iris-ie-8 .iris-hue .ui-slider-handle{outline:1px solid #aaa}.iris-picker .iris-result{margin-right:0}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-10px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:3px solid #fff;box-shadow:inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );width:14px;height:14px;position:absolute;left:-10px;top:-10px;cursor:move}.iris-picker .iris-square-v';
 	// Bail for IE <= 7
 	if ( nonGradientIE && parseInt( $.browser.version, 10 ) <= 7 ) {
 		return $.fn.iris = $.noop;
@@ -552,6 +554,8 @@
 	};
 	// initialize the widget
 	$.widget( 'a8c.iris', Iris );
+	// add CSS
+	$('<style id="iris-css" />').text( _css ).appendTo( 'head' );
 
 }( jQuery ));
 

@@ -19,10 +19,6 @@ module.exports = function(grunt) {
       basic: {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
         dest: 'dist/<%= pkg.name %>-basic.js'
-      },
-      css: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:src/iris.css>'],
-        dest: 'dist/iris.css'
       }
     },
     min: {
@@ -64,10 +60,17 @@ module.exports = function(grunt) {
         Color: true
       }
     },
-    uglify: {}
+    uglify: {},
+    cssmin: {
+      dist: {
+        src: ['src/iris.css'],
+        dest: 'src/iris.min.css'
+      }
+    }
   });
 
   // Default task.
   grunt.registerTask('default', 'lint qunit concat min');
+  grunt.loadNpmTasks('grunt-css');
 
 };
