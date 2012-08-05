@@ -304,6 +304,10 @@
 				}
 			});
 
+			this.controls.square.mouseleave( function() {
+				$( this ).find( '.iris-square-slider .ui-slider-handle' ).removeClass( 'active' );
+			});
+
 			this._initControls();
 			this._dimensions();
 			this.active = 'external';
