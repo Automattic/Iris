@@ -10,6 +10,7 @@
 	border-radius: 4px;
 	border: 1px solid #aaa;
 	width: 200px;
+	background-color: #fff;
 }
 .iris-picker-inner {
 	position: absolute;
