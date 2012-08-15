@@ -5,11 +5,20 @@
 .iris-picker {
 	display: block;
 	position: relative;
-	width: 240px;
-	height: 163px;
+}
+.iris-border {
+	border-radius: 4px;
+	border: 1px solid #aaa;
+	width: 200px;
 }
 .iris-picker-inner {
 	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+.iris-border .iris-picker-inner {
 	top: 10px;
 	right: 10px;
 	left: 10px;
@@ -18,19 +27,17 @@
 .iris-picker .iris-square,
 .iris-picker .iris-slider,
 .iris-picker .grad-box {
-	-webkit-border-radius: 4px;
-	   -moz-border-radius: 4px;
-	        border-radius: 4px;
+	border-radius: 4px;
 	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	   -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	height: 100%;
-	width: 10%;
+	width: 12.5%;
 	float: left;
 	margin-right: 5%;
 }
 .iris-picker .iris-square {
-	width: 65%;
+	width: 76%;
 	margin-right: 10%;
 }
 .iris-picker .grad-box {
@@ -60,6 +67,9 @@
 	outline: 1px solid #aaa;
 	background-color: #fff;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+}
+.iris-picker .iris-hue {
+	margin-right: 0;
 }
 .iris-picker .iris-hue .ui-slider-handle {
 	position: absolute;
