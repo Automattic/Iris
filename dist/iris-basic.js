@@ -1,4 +1,4 @@
-/*! Iris - v0.9.0 - 2012-08-15
+/*! Iris - v0.9.1 - 2012-08-26
 * https://github.com/Automattic/Iris
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL */
 
@@ -9,7 +9,7 @@
 	var gradientType = false;
 	var vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
 	// This is manually copied from iris.min.css until I can figure out how to do it without
-	var _css = '.iris-picker{display:block;position:relative}.iris-border{border-radius:4px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{border-radius:4px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .grad-box{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-picker .iris-hue{margin-right:0}.iris-picker .iris-hue .ui-slider-handle{position:absolute;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;background:none;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5}.iris-hue .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-picker .iris-result{margin-right:0}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:3px solid #fff;box-shadow:inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );width:14px;height:14px;position:absolute;left:-10px;top:-10px;cursor:move}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
+	var _css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:4px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{border-radius:4px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .grad-box{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-picker .iris-hue{margin-right:0}.iris-picker .iris-hue .ui-slider-handle{position:absolute;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;background:none;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5}.iris-hue .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-picker .iris-result{margin-right:0}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:3px solid #fff;box-shadow:inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );width:14px;height:14px;position:absolute;left:-10px;top:-10px;cursor:move}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
 	// Bail for IE <= 7
 	if ( nonGradientIE && parseInt( $.browser.version, 10 ) <= 7 ) {
 		return $.fn.iris = $.noop;
@@ -32,9 +32,8 @@
 			// check for legacy webkit gradient syntax
 			if ( $.browser.webkit && gradientType === false ) {
 				el.css( 'background', '-webkit-gradient(linear,0% 0%,0% 100%,from(#fff),to(#000))' );
-				if ( el.css( 'backgroundImage').match('gradient') ) {
+				if ( el.css( 'backgroundImage').match('gradient') )
 					gradientType = 'webkit';
-				}
 			}
 			el.remove();
 		}
@@ -53,11 +52,10 @@
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
 		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call(arguments, 1);
-		if ( gradientType === 'webkit' ) {
+		if ( gradientType === 'webkit' )
 			return legacyWebkitGradient( origin, stops );
-		} else {
+		else
 			return vendorPrefixes[gradientType] + 'linear-gradient(' + origin + ', ' + stops.join(', ') + ')';
-		}
 	}
 
 	/**
@@ -81,20 +79,20 @@
 		var template = '<div class="iris-ie-gradient-shim" style="position:absolute;' + dimensionProp + ':100%;' + startPosProp + ':%start%;' + endPosProp + ':%end%;' + filter + ':%filter%;" data-color:"%color%"></div>';
 		var html = "";
 		// need a positioning context
-		if ( self.css('position') === 'static' ) {
+		if ( self.css('position') === 'static' )
 			self.css( {position: 'relative' } );
-		}
+
 		stops = fillColorStops( stops );
 		$.each(stops, function( i, startColor ) {
 			// we want two at a time. if we're on the last pair, bail.
-			if ( i === lastIndex ) {
+			if ( i === lastIndex )
 				return false;
-			}
+
 			var endColor = stops[ i + 1 ];
 			//if our pairs are at the same color stop, moving along.
-			if ( startColor.stop === endColor.stop ) {
+			if ( startColor.stop === endColor.stop )
 				return;
-			}
+
 			var endStop = 100 - parseFloat( endColor.stop ) + '%';
 			startColor.octoHex = new Color( startColor.color ).toIEOctoHex();
 			endColor.octoHex = new Color( endColor.color ).toIEOctoHex();
@@ -134,12 +132,12 @@
 		});
 
 		// back fill first and last
-		if ( percs[0] === false ) {
+		if ( percs[0] === false )
 			percs[0] = '0%';
-		}
-		if ( percs[lastIndex] === false ) {
+
+		if ( percs[lastIndex] === false )
 			percs[lastIndex] = '100%';
-		}
+
 		percs = backFillColorStops( percs );
 
 		$.each( percs, function( i ){
@@ -158,8 +156,7 @@
 			if ( ! foundFirst && stops[i] === false ) {
 				first = i - 1;
 				foundFirst = true;
-			}
-			else if ( foundFirst && stops[i] !== false ) {
+			} else if ( foundFirst && stops[i] !== false ) {
 				last = i;
 				i = stops.length;
 			}
@@ -182,11 +179,11 @@
 		var args = arguments;
 		return this.each( function() {
 			// this'll be oldishIE
-			if ( nonGradientIE ) {
+			if ( nonGradientIE )
 				stupidIEGradient.apply( this, args );
-			} else { // new hotness
+			else // new hotness
 				$( this ).css( 'backgroundImage', createGradient.apply( this, args ) );
-			}
+
 		});
 	};
 
@@ -205,9 +202,9 @@
 			var top = self.find('.lum');
 			var bottom = self.find('.sat');
 
-			if ( ! initialized ) {
+			if ( ! initialized )
 				top.gradient( 'top', '#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)' );
-			}
+
 
 			bottom.gradient( 'left', 'hsl('+ hue +',0%,50%)', 'hsl(' + hue + ',100%,50%)' );
 			self.data( 'hue', hue );
@@ -249,11 +246,11 @@
 			}
 
 			if ( el.is("input") ) {
-				if ( this.options.target ) {
+				if ( this.options.target )
 					this.picker = $( _html ).appendTo( this.options.target );
-				} else {
+				else
 					this.picker = $( _html ).insertAfter( el );
-				}
+
 				this._addInputListeners( el );
 			} else {
 				el.append( _html );
@@ -263,11 +260,11 @@
 				this.picker.addClass( 'iris-mozilla' );
 			} else if ( $.browser.msie ) {
 				var _IEVER = parseInt( $.browser.version, 10 );
-				if ( _IEVER === 9 ) {
+				if ( _IEVER === 9 )
 					this.picker.addClass( 'iris-ie-9' );
-				} else if ( _IEVER <= 8 ) {
+				else if ( _IEVER <= 8 )
 					this.picker.addClass( 'iris-ie-lt9' );
-				}
+
 			}
 
 			this.color = new Color( color );
@@ -278,12 +275,12 @@
 			// store it. HSL gets squirrely
 			var hue = this.hue = this.color.h();
 
-			if ( this.options.hide ) {
+			if ( this.options.hide )
 				this.picker.hide();
-			}
-			if ( this.options.border ) {
+
+			if ( this.options.border )
 				this.picker.addClass( 'iris-border' );
-			}
+
 			this.controls.square.LSSquare( hue );
 			this.picker.find( '.iris-hue' ).raninbowGradient();
 
@@ -324,14 +321,13 @@
 			input.on('change', function( event ){
 				var color = new Color( input.val() );
 				var val = input.val().replace(/^#/, '');
-				// if we got black, but didn't give it, it's an error
-				if ( color.toInt() === 0 && val !== '000000' ) {
-					// restore it
-					input.val( self.color.toString() );
-				} else {
-					// change it
+				input.removeClass( 'iris-error' );
+				// we gave a bad color
+				if ( color.error && val !== '' )
+					input.addClass( 'iris-error' );
+				else
 					self._setOption( 'color', color.toString() );
-				}
+
 			});
 		},
 
@@ -372,13 +368,12 @@
 			// allow clicking on the square to move there
 			square.mousedown( function( event ) {
 				// only left click
-				if ( event.button !== 0 ) {
+				if ( event.button !== 0 )
 					return;
-				}
+
 				// prevent bubbling from the handle: no infinite loops
-				if ( ! $( event.target ).is("div") ) {
+				if ( ! $( event.target ).is("div") )
 					return;
-				}
 
 				var squareOffset = self.controls.square.offset();
 				var pos = {
@@ -417,17 +412,17 @@
 				var handleX = me.find( '.iris-square-horiz .ui-slider-handle' );
 				var handleY = me.find( '.iris-square-vert .ui-slider-handle' );
 
-				if ( x > self.controls.square.width() - 20 ) {
+				if ( x > self.controls.square.width() - 20 )
 					handleY.addClass( 'active' );
-				} else {
+				else
 					handleY.removeClass( 'active' );
-				}
 
-				if ( y < 20 ) {
+
+				if ( y < 20 )
 					handleX.addClass( 'active' );
-				} else {
+				else
 					handleX.removeClass( 'active' );
-				}
+
 			});
 
 			self.controls.square.mouseleave( function() {
@@ -468,9 +463,10 @@
 		_squareDimensions: function( forceRefresh ) {
 			var square = this.controls.square;
 			var dimensions, control;
-			if ( forceRefresh !== undef && square.data('dimensions') ){
+
+			if ( forceRefresh !== undef && square.data('dimensions') )
 				return square.data('dimensions');
-			}
+
 			control = this.controls.squareDrag;
 			dimensions = {
 				w: square.width(),
@@ -490,11 +486,12 @@
 
 			if ( self.active === 'external' || self.active === 'h' ) {
 				controls.square.LSSquare( hsl.h );
-				if ( self.active === 'h' ) {
+
+				if ( self.active === 'h' )
 					actions = [];
-				} else {
+				else
 					actions.push( 'h' );
-				}
+
 				// store h: it gets squirrely
 				this.hue = hsl.h;
 			} else {
@@ -533,11 +530,11 @@
 							};
 
 							// things go all squirrely if we do both. HSL is weird.
-							if ( self.active === 's' ) {
+							if ( self.active === 's' )
 								delete cssObj.top;
-							} else if ( self.active === 'l' ) {
+							else if ( self.active === 'l' )
 								delete cssObj.left;
-							}
+
 							self.controls.squareDrag.css( cssObj );
 							break;
 					}
@@ -545,14 +542,14 @@
 			});
 
 			this.controls.result.css( 'backgroundColor', hex );
-			if ( this.element.is(":input") ) {
+
+			if ( this.element.is(":input") )
 				this.element.val( hex );
-			}
 
 			// don't run it the first time
-			if ( this._inited ) {
+			if ( this._inited )
 				this._trigger( 'change', { type: this.active }, { color: this.color } );
-			}
+
 			this._inited = true;
 			this.active = false;
 		},
@@ -570,7 +567,5 @@
 	$.widget( 'a8c.iris', Iris );
 	// add CSS
 	$('<style id="iris-css">' + _css + '</style>').appendTo( 'head' );
-	//var head = $("head");
-	//$('<style id="iris-css" />').text( _css ).appendTo( 'head' );
 
 }( jQuery ));
