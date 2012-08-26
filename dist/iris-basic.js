@@ -1,4 +1,4 @@
-/*! Iris - v0.9.2 - 2012-08-26
+/*! Iris - v0.9.3 - 2012-08-26
 * https://github.com/Automattic/Iris
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL */
 
@@ -230,7 +230,6 @@
 	var Iris = {
 		options: {
 			color: false,
-			displayType: 'float/inline', //float: abs pos, inline,
 			hide: true,
 			border: true,
 			target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
@@ -458,6 +457,7 @@
 				var newColor = new Color( value );
 				if ( ! ( newColor.error ) ) {
 					this.color = newColor;
+					this.options.color = this.color.toString();
 					this.active = 'external';
 					this._change();
 					this.options[key] = this.color.toString();
@@ -547,6 +547,7 @@
 			});
 
 			this.controls.result.css( 'backgroundColor', hex );
+			this.options.color = this.color.toString();
 
 			if ( this.element.is(":input") && ! self.color.error )
 				this.element.val( hex ).removeClass( 'iris-error' );
