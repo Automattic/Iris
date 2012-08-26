@@ -1,17 +1,20 @@
-/*! Color.js - v0.9 - 2012-07-26
+/*! Color.js - v0.9.1 - 2012-08-26
 * https://github.com/Automattic/Color.js
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
 
 (function(exports, undef) {
 
 	var Color = function( color, type ) {
-		this._init( color, type );
-		return this;
+		if ( ! ( this instanceof Color ) )
+			return new Color( color, type );
+
+		return this._init( color, type );
 	};
 
 	Color.prototype = {
 		_color: 0,
 		_alpha: 1,
+		error: false,
 		// for preserving hue/sat in fromHsl().toHsl() flows
 		__hsl: { h: 0, s: 0, l: 0 },
 
@@ -38,6 +41,7 @@
 
 		fromCSS: function( color ) {
 			var nums, list;
+			this.error = false;
 			if ( color.match(/^(rgb|hsl)a?/) ) {
 				list = color.replace(/(\s|%)/g, '').replace(/^(rgb|hsl)a?\(/, '').replace(/\);?$/, '').split(',');
 				if ( list.length === 4 ) {
@@ -65,18 +69,31 @@
 		},
 
 		fromRgb: function( rgb, preserve ) {
+			if ( typeof rgb !== 'object' && ( ! rgb.r || ! rgb.g || ! rgb.b ) ) {
+				this.error = true;
+				return this;
+			}
+			this.error = false;
 			return this.fromInt( parseInt( ( rgb.r << 16 ) + ( rgb.g << 8 ) + rgb.b, 10 ), preserve );
 		},
 
 		fromHex: function( color ) {
-			color = color.replace(/^#/, '');
+			color = color.replace(/^#/, '').replace(/^0x/, '');
 			if ( color.length === 3 ) {
 				color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
 			}
+
+			// rough error checking - this is where things go squirrely the most
+			this.error = ! /^[0-9A-F]{6}$/i.test( color );
 			return this.fromInt( parseInt( color, 16 ) );
 		},
 
 		fromHsl: function( hsl ) {
+			if ( typeof hsl !== 'object' || ( ! hsl.h || ! hsl.s || ! hsl.l ) ) {
+				this.error = true;
+				return this;
+			}
+
 			var r, g, b, q, p, h, s, l;
 			this.__hsl = hsl; // store it
 			h = hsl.h / 360; s = hsl.s / 100; l = hsl.l / 100;
@@ -99,6 +116,12 @@
 
 		fromInt: function( color, preserve ) {
 			this._color = parseInt( color, 10 );
+			// let's coerce things
+			if ( this._color > 16777215 )
+				this._color = 16777215;
+			else if ( this._color < 0 )
+				this._color = 0;
+
 			if ( preserve === undef ) {
 				this.__hsl.h = this.__hsl.s = 0;
 			}
