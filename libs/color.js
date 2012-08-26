@@ -1,4 +1,4 @@
-/*! Color.js - v0.9.2 - 2012-08-26
+/*! Color.js - v0.9.3 - 2012-08-26
 * https://github.com/Automattic/Color.js
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
 
@@ -155,6 +155,8 @@
 
 		toString: function() {
 			var hex = parseInt( this._color, 10 ).toString( 16 );
+			if ( this.error )
+				return '';
 			// maybe left pad it
 			if ( hex.length < 6 ) {
 				for (var i = 6 - hex.length - 1; i >= 0; i--) {
