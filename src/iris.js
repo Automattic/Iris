@@ -5,7 +5,7 @@
 	var gradientType = false;
 	var vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
 	// This is manually copied from iris.min.css until I can figure out how to do it without
-	var _css = '.iris-picker{display:block;position:relative}.iris-border{border-radius:4px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{border-radius:4px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .grad-box{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-picker .iris-hue{margin-right:0}.iris-picker .iris-hue .ui-slider-handle{position:absolute;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;background:none;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5}.iris-hue .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-picker .iris-result{margin-right:0}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:3px solid #fff;box-shadow:inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );width:14px;height:14px;position:absolute;left:-10px;top:-10px;cursor:move}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
+	var _css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:4px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{border-radius:4px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .grad-box{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-picker .iris-hue{margin-right:0}.iris-picker .iris-hue .ui-slider-handle{position:absolute;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;background:none;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5}.iris-hue .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-picker .iris-result{margin-right:0}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:3px solid #fff;box-shadow:inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );width:14px;height:14px;position:absolute;left:-10px;top:-10px;cursor:move}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
 	// Bail for IE <= 7
 	if ( nonGradientIE && parseInt( $.browser.version, 10 ) <= 7 ) {
 		return $.fn.iris = $.noop;
@@ -317,14 +317,13 @@
 			input.on('change', function( event ){
 				var color = new Color( input.val() );
 				var val = input.val().replace(/^#/, '');
-				// if we got black, but didn't give it, it's an error
-				if ( color.toInt() === 0 && val !== '000000' ) {
-					// restore it
-					input.val( self.color.toString() );
-				} else {
-					// change it
+				input.removeClass( 'iris-error' );
+				// we gave a bad color
+				if ( color.error && val !== '' )
+					input.addClass( 'iris-error' );
+				else
 					self._setOption( 'color', color.toString() );
-				}
+
 			});
 		},
 
@@ -460,9 +459,10 @@
 		_squareDimensions: function( forceRefresh ) {
 			var square = this.controls.square;
 			var dimensions, control;
-			if ( forceRefresh !== undef && square.data('dimensions') ){
+
+			if ( forceRefresh !== undef && square.data('dimensions') )
 				return square.data('dimensions');
-			}
+
 			control = this.controls.squareDrag;
 			dimensions = {
 				w: square.width(),
@@ -482,6 +482,7 @@
 
 			if ( self.active === 'external' || self.active === 'h' ) {
 				controls.square.LSSquare( hsl.h );
+
 				if ( self.active === 'h' )
 					actions = [];
 				else
