@@ -28,9 +28,8 @@
 			// check for legacy webkit gradient syntax
 			if ( $.browser.webkit && gradientType === false ) {
 				el.css( 'background', '-webkit-gradient(linear,0% 0%,0% 100%,from(#fff),to(#000))' );
-				if ( el.css( 'backgroundImage').match('gradient') ) {
+				if ( el.css( 'backgroundImage').match('gradient') )
 					gradientType = 'webkit';
-				}
 			}
 			el.remove();
 		}
@@ -49,11 +48,10 @@
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
 		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call(arguments, 1);
-		if ( gradientType === 'webkit' ) {
+		if ( gradientType === 'webkit' )
 			return legacyWebkitGradient( origin, stops );
-		} else {
+		else
 			return vendorPrefixes[gradientType] + 'linear-gradient(' + origin + ', ' + stops.join(', ') + ')';
-		}
 	}
 
 	/**
@@ -77,20 +75,20 @@
 		var template = '<div class="iris-ie-gradient-shim" style="position:absolute;' + dimensionProp + ':100%;' + startPosProp + ':%start%;' + endPosProp + ':%end%;' + filter + ':%filter%;" data-color:"%color%"></div>';
 		var html = "";
 		// need a positioning context
-		if ( self.css('position') === 'static' ) {
+		if ( self.css('position') === 'static' )
 			self.css( {position: 'relative' } );
-		}
+
 		stops = fillColorStops( stops );
 		$.each(stops, function( i, startColor ) {
 			// we want two at a time. if we're on the last pair, bail.
-			if ( i === lastIndex ) {
+			if ( i === lastIndex )
 				return false;
-			}
+
 			var endColor = stops[ i + 1 ];
 			//if our pairs are at the same color stop, moving along.
-			if ( startColor.stop === endColor.stop ) {
+			if ( startColor.stop === endColor.stop )
 				return;
-			}
+
 			var endStop = 100 - parseFloat( endColor.stop ) + '%';
 			startColor.octoHex = new Color( startColor.color ).toIEOctoHex();
 			endColor.octoHex = new Color( endColor.color ).toIEOctoHex();
@@ -130,12 +128,12 @@
 		});
 
 		// back fill first and last
-		if ( percs[0] === false ) {
+		if ( percs[0] === false )
 			percs[0] = '0%';
-		}
-		if ( percs[lastIndex] === false ) {
+
+		if ( percs[lastIndex] === false )
 			percs[lastIndex] = '100%';
-		}
+
 		percs = backFillColorStops( percs );
 
 		$.each( percs, function( i ){
@@ -154,8 +152,7 @@
 			if ( ! foundFirst && stops[i] === false ) {
 				first = i - 1;
 				foundFirst = true;
-			}
-			else if ( foundFirst && stops[i] !== false ) {
+			} else if ( foundFirst && stops[i] !== false ) {
 				last = i;
 				i = stops.length;
 			}
@@ -178,11 +175,11 @@
 		var args = arguments;
 		return this.each( function() {
 			// this'll be oldishIE
-			if ( nonGradientIE ) {
+			if ( nonGradientIE )
 				stupidIEGradient.apply( this, args );
-			} else { // new hotness
+			else // new hotness
 				$( this ).css( 'backgroundImage', createGradient.apply( this, args ) );
-			}
+
 		});
 	};
 
@@ -201,9 +198,9 @@
 			var top = self.find('.lum');
 			var bottom = self.find('.sat');
 
-			if ( ! initialized ) {
+			if ( ! initialized )
 				top.gradient( 'top', '#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)' );
-			}
+
 
 			bottom.gradient( 'left', 'hsl('+ hue +',0%,50%)', 'hsl(' + hue + ',100%,50%)' );
 			self.data( 'hue', hue );
@@ -245,11 +242,11 @@
 			}
 
 			if ( el.is("input") ) {
-				if ( this.options.target ) {
+				if ( this.options.target )
 					this.picker = $( _html ).appendTo( this.options.target );
-				} else {
+				else
 					this.picker = $( _html ).insertAfter( el );
-				}
+
 				this._addInputListeners( el );
 			} else {
 				el.append( _html );
@@ -259,11 +256,11 @@
 				this.picker.addClass( 'iris-mozilla' );
 			} else if ( $.browser.msie ) {
 				var _IEVER = parseInt( $.browser.version, 10 );
-				if ( _IEVER === 9 ) {
+				if ( _IEVER === 9 )
 					this.picker.addClass( 'iris-ie-9' );
-				} else if ( _IEVER <= 8 ) {
+				else if ( _IEVER <= 8 )
 					this.picker.addClass( 'iris-ie-lt9' );
-				}
+
 			}
 
 			this.color = new Color( color );
@@ -274,12 +271,12 @@
 			// store it. HSL gets squirrely
 			var hue = this.hue = this.color.h();
 
-			if ( this.options.hide ) {
+			if ( this.options.hide )
 				this.picker.hide();
-			}
-			if ( this.options.border ) {
+
+			if ( this.options.border )
 				this.picker.addClass( 'iris-border' );
-			}
+
 			this.controls.square.LSSquare( hue );
 			this.picker.find( '.iris-hue' ).raninbowGradient();
 
@@ -368,13 +365,12 @@
 			// allow clicking on the square to move there
 			square.mousedown( function( event ) {
 				// only left click
-				if ( event.button !== 0 ) {
+				if ( event.button !== 0 )
 					return;
-				}
+
 				// prevent bubbling from the handle: no infinite loops
-				if ( ! $( event.target ).is("div") ) {
+				if ( ! $( event.target ).is("div") )
 					return;
-				}
 
 				var squareOffset = self.controls.square.offset();
 				var pos = {
@@ -413,17 +409,17 @@
 				var handleX = me.find( '.iris-square-horiz .ui-slider-handle' );
 				var handleY = me.find( '.iris-square-vert .ui-slider-handle' );
 
-				if ( x > self.controls.square.width() - 20 ) {
+				if ( x > self.controls.square.width() - 20 )
 					handleY.addClass( 'active' );
-				} else {
+				else
 					handleY.removeClass( 'active' );
-				}
 
-				if ( y < 20 ) {
+
+				if ( y < 20 )
 					handleX.addClass( 'active' );
-				} else {
+				else
 					handleX.removeClass( 'active' );
-				}
+
 			});
 
 			self.controls.square.mouseleave( function() {
@@ -486,11 +482,11 @@
 
 			if ( self.active === 'external' || self.active === 'h' ) {
 				controls.square.LSSquare( hsl.h );
-				if ( self.active === 'h' ) {
+				if ( self.active === 'h' )
 					actions = [];
-				} else {
+				else
 					actions.push( 'h' );
-				}
+
 				// store h: it gets squirrely
 				this.hue = hsl.h;
 			} else {
@@ -529,11 +525,11 @@
 							};
 
 							// things go all squirrely if we do both. HSL is weird.
-							if ( self.active === 's' ) {
+							if ( self.active === 's' )
 								delete cssObj.top;
-							} else if ( self.active === 'l' ) {
+							else if ( self.active === 'l' )
 								delete cssObj.left;
-							}
+
 							self.controls.squareDrag.css( cssObj );
 							break;
 					}
@@ -541,14 +537,14 @@
 			});
 
 			this.controls.result.css( 'backgroundColor', hex );
-			if ( this.element.is(":input") ) {
+
+			if ( this.element.is(":input") )
 				this.element.val( hex );
-			}
 
 			// don't run it the first time
-			if ( this._inited ) {
+			if ( this._inited )
 				this._trigger( 'change', { type: this.active }, { color: this.color } );
-			}
+
 			this._inited = true;
 			this.active = false;
 		},
@@ -566,7 +562,5 @@
 	$.widget( 'a8c.iris', Iris );
 	// add CSS
 	$('<style id="iris-css">' + _css + '</style>').appendTo( 'head' );
-	//var head = $("head");
-	//$('<style id="iris-css" />').text( _css ).appendTo( 'head' );
 
 }( jQuery ));
