@@ -1,4 +1,4 @@
-/*! Iris - v0.9.1 - 2012-08-26
+/*! Iris - v0.9.2 - 2012-08-26
 * https://github.com/Automattic/Iris
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL */
 
@@ -323,10 +323,14 @@
 				var val = input.val().replace(/^#/, '');
 				input.removeClass( 'iris-error' );
 				// we gave a bad color
-				if ( color.error && val !== '' )
-					input.addClass( 'iris-error' );
-				else
+				if ( color.error ) {
+					// don't error on an empty input - we want those allowed
+					if ( val !== '' )
+						input.addClass( 'iris-error' );
+				} else {
 					self._setOption( 'color', color.toString() );
+				}
+
 
 			});
 		},
@@ -437,6 +441,7 @@
 			var sat = 100 - Math.round( ( dimensions.w - ui.position.left ) / dimensions.w * 100 );
 
 			self.color.s( sat ).l( light );
+
 			self.active = 'square';
 			self._change.apply( self, arguments );
 		},
@@ -449,9 +454,9 @@
 				var hexLessColor = value.replace(/^#/, '');
 				// Color.js returns black when passed a dodgy color
 				// we'll use this to detect a bad color
-				var isBlack = hexLessColor === '0' || hexLessColor === '000' || hexLessColor === '000000';
+				//var isBlack = hexLessColor === '0' || hexLessColor === '000' || hexLessColor === '000000';
 				var newColor = new Color( value );
-				if ( ! ( newColor.toInt() === 0 && isBlack ) ) {
+				if ( ! ( newColor.error ) ) {
 					this.color = newColor;
 					this.active = 'external';
 					this._change();
@@ -543,8 +548,8 @@
 
 			this.controls.result.css( 'backgroundColor', hex );
 
-			if ( this.element.is(":input") )
-				this.element.val( hex );
+			if ( this.element.is(":input") && ! self.color.error )
+				this.element.val( hex ).removeClass( 'iris-error' );
 
 			// don't run it the first time
 			if ( this._inited )
