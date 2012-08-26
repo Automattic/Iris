@@ -1,4 +1,4 @@
-/*! Color.js - v0.9.1 - 2012-08-26
+/*! Color.js - v0.9.2 - 2012-08-26
 * https://github.com/Automattic/Color.js
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
 
@@ -69,7 +69,7 @@
 		},
 
 		fromRgb: function( rgb, preserve ) {
-			if ( typeof rgb !== 'object' && ( ! rgb.r || ! rgb.g || ! rgb.b ) ) {
+			if ( typeof rgb !== 'object' || rgb.r === undef || rgb.g === undef || rgb.b === undef ) {
 				this.error = true;
 				return this;
 			}
@@ -89,7 +89,7 @@
 		},
 
 		fromHsl: function( hsl ) {
-			if ( typeof hsl !== 'object' || ( ! hsl.h || ! hsl.s || ! hsl.l ) ) {
+			if ( typeof hsl !== 'object' || hsl.h === undef || hsl.s === undef || hsl.l === undef ) {
 				this.error = true;
 				return this;
 			}
@@ -114,8 +114,13 @@
 			}, true ); // true preserves hue/sat
 		},
 
+		// everything comes down to fromInt
 		fromInt: function( color, preserve ) {
 			this._color = parseInt( color, 10 );
+
+			if ( isNaN( this._color ) )
+				this._color = 0;
+
 			// let's coerce things
 			if ( this._color > 16777215 )
 				this._color = 16777215;
