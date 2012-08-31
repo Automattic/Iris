@@ -263,10 +263,11 @@
 			}
 
 			this.color = new Color( color );
+			this.initError = this.color.error;
 			this.options.color = this.color.toString();
 			this.controls = {};
 			this.controls.square = this.picker.find( '.iris-square' );
-			this.controls.result = this.picker.find( '.iris-result' );
+
 			// store it. HSL gets squirrely
 			var hue = this.hue = this.color.h();
 
@@ -278,6 +279,11 @@
 
 			this.controls.square.LSSquare( hue );
 			this.picker.find( '.iris-hue' ).raninbowGradient();
+
+			// UX: If our color is empty/error, start S-L puck in middle
+			// It will be restored on first run of this._change()
+			if ( this.initError )
+				this.color.s(50).l(50);
 
 			this._initControls();
 			this.active = 'external';
@@ -325,8 +331,6 @@
 				} else {
 					self._setOption( 'color', color.toString() );
 				}
-
-
 			});
 		},
 
@@ -554,15 +558,19 @@
 				}
 			});
 
-			this.controls.result.css( 'backgroundColor', hex );
 			this.options.color = this.color.toString();
+
+			// only run after the first time
+			if ( this._inited ) {
+				this._trigger( 'change', { type: this.active }, { color: this.color } );
+			} else if ( this.initError ) {
+				// restore color error state if we did the UX S-L puck centering
+				this.color.error = true;
+				this.options.color = this.color.toString();
+			}
 
 			if ( this.element.is(":input") && ! self.color.error )
 				this.element.val( hex ).removeClass( 'iris-error' );
-
-			// don't run it the first time
-			if ( this._inited )
-				this._trigger( 'change', { type: this.active }, { color: this.color } );
 
 			this._inited = true;
 			this.active = false;
