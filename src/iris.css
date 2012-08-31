@@ -72,6 +72,11 @@
 	background-color: #fff;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
+.iris-ie-lt9 .iris-square .iris-square-handle {
+	background: none;
+	border: 3px solid #fff;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+}
 .iris-picker .iris-hue {
 	margin-right: 0;
 }
@@ -101,9 +106,6 @@
 	-webkit-border-radius: 3px;
 	   -moz-border-radius: 3px;
 	        border-radius: 3px;
-}
-.iris-picker .iris-result {
-	margin-right: 0;
 }
 .iris-picker .iris-slider-offset {
 	width: 100%;
@@ -154,6 +156,7 @@
 	width: 20px;
 	cursor: default;
 	cursor: ns-resize;
+	z-index: 5;
 }
 .iris-square-horiz .ui-slider-handle {
 	cursor: ew-resize;
@@ -166,14 +169,37 @@
 }
 .iris-picker .iris-square-handle {
 	background: transparent;
-	border: 3px solid #fff;
-	box-shadow: inset 0px -1px 1px rgba( 0, 0, 0, 0.4 ), 0px 1px 4px 0px rgba( 0, 0, 0, 0.2 ), 0 0 2px rgba( 0, 0, 0, 0.3 );
-	width: 14px;
-	height: 14px;
+	border: 5px solid #aaa;
+	border-color: rgba(128,128,128,.5);
+	box-shadow:none;
+	width:  12px;
+	height: 12px;
 	position: absolute;
 	left: -10px;
 	top:  -10px;
 	cursor: move;
+	opacity: 1;
+	z-index: 10;
+}
+.iris-picker .ui-state-focus .iris-square-handle {
+	opacity: .8;
+}
+.iris-picker .iris-square-handle:hover {
+	border-color: #999;
+}
+.iris-picker .iris-square-handle:hover::after {
+	border-color: #fff;
+}
+.iris-picker .iris-square-handle::after {
+	position: absolute;
+	bottom: -4px;
+	right:  -4px;
+	left:   -4px;
+	top:    -4px;
+	border: 3px solid #f9f9f9;
+	border-color: rgba(255,255,255,.8);
+	border-radius: 50%;
+	content: " ";
 }
 .iris-picker .iris-square-value {
 	width:  8px;
