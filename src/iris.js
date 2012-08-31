@@ -358,10 +358,22 @@
 				},
 				start: function() {
 					square.addClass( 'iris-dragging' );
+					$(this).addClass('ui-state-focus');
 				},
 				stop: function() {
 					square.removeClass( 'iris-dragging' );
+					$(this).removeClass('ui-state-focus');
 				}
+			}).on( 'mousedown mouseup', function( event ) {
+				event.preventDefault();
+				var focusClass = 'ui-state-focus';
+				if (event.type === 'mousedown' ) {
+					self.picker.find('.' + focusClass).removeClass(focusClass).blur();
+					$(this).addClass( focusClass );
+				} else {
+					$(this).removeClass( 'ui-state-focus' );
+				}
+
 			});
 
 			// allow clicking on the square to move there
