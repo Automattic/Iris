@@ -383,7 +383,7 @@
 			// allow clicking on the square to move there
 			square.mousedown( function( event ) {
 				// only left click
-				if ( event.button !== 0 )
+				if ( event.which !== 1 )
 					return;
 
 				// prevent bubbling from the handle: no infinite loops
