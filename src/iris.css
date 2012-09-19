@@ -10,7 +10,7 @@
 	background-color: #ffafaf;
 }
 .iris-border {
-	border-radius: 4px;
+	border-radius: 3px;
 	border: 1px solid #aaa;
 	width: 200px;
 	background-color: #fff;
@@ -31,7 +31,7 @@
 .iris-picker .iris-square,
 .iris-picker .iris-slider,
 .iris-picker .grad-box {
-	border-radius: 4px;
+	border-radius: 3px;
 	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	   -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
@@ -58,9 +58,9 @@
 	border-radius: 0;
 }
 .iris-picker .iris-square .sat {
-	-webkit-border-radius: 4px;
-	   -moz-border-radius: 4px;
-	        border-radius: 4px;
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	        border-radius: 3px;
 }
 .iris-ie-lt9 .iris-square,
 .iris-ie-lt9 .iris-slider,
@@ -80,32 +80,60 @@
 .iris-picker .iris-hue {
 	margin-right: 0;
 }
+.iris-picker .iris-tooltip {
+	position: absolute;
+	z-index: 10;
+	font: 10px/1 sans-serif;
+	color: #222;
+	background: #fff;
+	border: 1px solid #666;
+	padding: 3px 6px;
+	border-radius: 3px;
+	opacity: .94;
+	white-space: nowrap;
+	top: -36px;
+	left: -12px;
+}
+.iris-picker .iris-tooltip:before, .iris-picker .iris-tooltip:after {
+	content: " ";
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 6px 6px 0 6px;
+	border-color: #666 transparent transparent transparent;
+	position: absolute;
+	bottom: -6px;
+	left: 6px;
+}
+.iris-picker .iris-tooltip:after {
+	bottom: -5px;
+	border-top-color: #fff;
+}
 .iris-picker .iris-hue .ui-slider-handle {
 	position: absolute;
-	right: -3px;
-	left:  -3px;
-	border: 4px solid #aaa;
-	border-width: 4px 3px;
-	width: auto;
-	height: 6px;
+	width: 100%;
+	height: 12px;
 	background: none;
-	border-radius: 4px;
-	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-
-	opacity: .9;
+	border-radius: 0;
+	box-shadow: none;
+	opacity: 1;
 	z-index: 5;
 }
-.iris-hue .ui-slider-handle:before {
+.iris-hue .ui-slider-handle:before, .iris-hue .ui-slider-handle:after {
 	content: " ";
-	position:absolute;
-	left:   -2px;
-	right:  -2px;
-	top:    -3px;
-	bottom: -3px;
-	border:  2px solid #fff;
-	-webkit-border-radius: 3px;
-	   -moz-border-radius: 3px;
-	        border-radius: 3px;
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 6px 7px 6px 0;
+	border-color: transparent #555 transparent transparent;
+	position: absolute;
+	right: -4px;
+}
+.iris-hue .ui-slider-handle:after {
+	border-width: 6px 0 6px 7px;
+	border-color: transparent transparent transparent #555;
+	right: auto;
+	left: -4px;
 }
 .iris-picker .iris-slider-offset {
 	width: 100%;
