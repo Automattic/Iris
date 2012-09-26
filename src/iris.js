@@ -183,30 +183,6 @@
 		});
 	};
 
-	$.fn.LSSquare = function( hue ) {
-		hue = hue | 0;
-		return this.each(function() {
-			var self = $(this);
-			var initialized = self.data( 'hue' ) !== undef;
-			// not yet initialized
-			if ( ! initialized ) {
-				self.append( '<div class="sat iris-square-inner" /><div class="lum iris-square-inner" />' );
-				self.css( "position", "relative" );
-				self.children(".iris-square-inner").css({ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 });
-			}
-
-			var top = self.find('.lum');
-			var bottom = self.find('.sat');
-
-			if ( ! initialized )
-				top.gradient( 'top', '#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)' );
-
-
-			bottom.gradient( 'left', 'hsl('+ hue +',0%,50%)', 'hsl(' + hue + ',100%,50%)' );
-			self.data( 'hue', hue );
-		});
-	};
-
 	$.fn.raninbowGradient = function( origin, args ) {
 		origin = origin || 'top';
 		var opts = $.extend( {}, { s: 100, l: 50 }, args );
