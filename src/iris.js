@@ -1,11 +1,11 @@
 (function( $, undef ){
-	var _html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-slider iris-square-horiz"></div><div class="iris-square-slider iris-square-vert"></div></div><div class="iris-slider iris-hue"><div class="iris-slider-offset"></div></div></div></div>';
+	var _html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-slider iris-horiz-slider"></div><div class="iris-square-slider iris-vert-slider"></div><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
 	// Even IE9 dosen't support gradients. Elaborate sigh.
 	var nonGradientIE = !! ( $.browser.msie && parseInt( $.browser.version, 10 ) < 10 );
 	var gradientType = false;
 	var vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
 	// This is manually copied from iris.min.css until I can figure out how to do it without
-	var _css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .grad-box{border-radius:3px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%}.iris-picker .grad-box{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .grad-box{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .grad-box{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:none;border:3px solid #fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"}.iris-picker .iris-hue{margin-right:0}.iris-picker .iris-tooltip{position:absolute;z-index:10;font:10px/1 sans-serif;color:#222;background:#fff;border:1px solid #666;padding:3px 6px;border-radius:3px;opacity:.94;white-space:nowrap;top:-36px;left:-12px}.iris-picker .iris-tooltip:before,.iris-picker .iris-tooltip:after{content:" ";width:0;height:0;border-style:solid;border-width:6px 6px 0 6px;border-color:#666 transparent transparent transparent;position:absolute;bottom:-6px;left:6px}.iris-picker .iris-tooltip:after{bottom:-5px;border-top-color:#fff}.iris-picker .iris-hue .ui-slider-handle{position:absolute;width:100%;height:12px;background:none;border-radius:0;box-shadow:none;opacity:1;z-index:5}.iris-hue .ui-slider-handle:before,.iris-hue .ui-slider-handle:after{content:" ";width:0;height:0;border-style:solid;border-width:6px 7px 6px 0;border-color:transparent #555 transparent transparent;position:absolute;right:-4px}.iris-hue .ui-slider-handle:after{border-width:6px 0 6px 7px;border-color:transparent transparent transparent #555;right:auto;left:-4px}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-square-horiz{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-square-vert{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize;z-index:5}.iris-square-horiz .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
+	var _css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner{border-radius:3px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);-moz-box-shadow:inset 0 0 5px rgba(0,0,0,0.4);box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-picker .iris-square .sat,.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-radius:0}.iris-picker .iris-square .sat{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:none;border:3px solid #fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0}.iris-picker .iris-tooltip{position:absolute;z-index:10;font:10px/1 sans-serif;color:#222;background:#fff;border:1px solid #666;padding:3px 6px;border-radius:3px;opacity:.94;white-space:nowrap;top:-36px;left:-12px}.iris-picker .iris-tooltip:before,.iris-picker .iris-tooltip:after{content:" ";width:0;height:0;border-style:solid;border-width:6px 6px 0 6px;border-color:#666 transparent transparent transparent;position:absolute;bottom:-6px;left:6px}.iris-picker .iris-tooltip:after{bottom:-5px;border-top-color:#fff}.iris-picker .iris-strip .ui-slider-handle{position:absolute;width:100%;height:12px;background:none;border-radius:0;box-shadow:none;opacity:1;z-index:5}.iris-strip .ui-slider-handle:before,.iris-strip .ui-slider-handle:after{content:" ";width:0;height:0;border-style:solid;border-width:6px 7px 6px 0;border-color:transparent #555 transparent transparent;position:absolute;right:-4px}.iris-strip .ui-slider-handle:after{border-width:6px 0 6px 7px;border-color:transparent transparent transparent #555;right:auto;left:-4px}.iris-picker .iris-slider-offset{width:100%;height:100%;position:relative;bottom:-6px}.iris-square .iris-horiz-slider{position:absolute;top:-7px;left:-7px;height:1px;width:100%}.iris-square .iris-vert-slider{position:absolute;right:6px;top:7px;width:1px;height:100%}.iris-square .iris-square-slider a{opacity:.3;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";-moz-transition:opacity 300ms;-webkit-transition:opacity 300ms;transition:opacity 300ms}.iris-square .iris-square-slider .ui-slider-handle.active{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"}.iris-dragging .iris-square-slider .ui-slider-handle.active{opacity:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"}.iris-picker .ui-slider-handle{background:#f5f5f5;-webkit-border-radius:10px;-moz-border-radius:50%;border-radius:50%;box-shadow:inset #fff 0 1px 1px,inset 0 -1px 1px rgba( 0,0,0,0.4 ),0px 1px 4px 0 rgba( 0,0,0,0.2 ),0 0 2px rgba( 0,0,0,0.3 );display:block;opacity:0.7;position:absolute;z-index:5;height:20px;width:20px;cursor:default;cursor:ns-resize;z-index:5}.iris-horiz-slider .ui-slider-handle{cursor:ew-resize}.iris-square-slider .ui-slider-handle{width:14px;height:14px;opacity:1;background-color:#eee}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}';
 	// Bail for IE <= 7
 	if ( nonGradientIE && parseInt( $.browser.version, 10 ) <= 7 ) {
 		return $.fn.iris = $.noop;
@@ -190,9 +190,9 @@
 			var initialized = self.data( 'hue' ) !== undef;
 			// not yet initialized
 			if ( ! initialized ) {
-				self.append( '<div class="sat grad-box" /><div class="lum grad-box" />' );
+				self.append( '<div class="sat iris-square-inner" /><div class="lum iris-square-inner" />' );
 				self.css( "position", "relative" );
-				self.children(".grad-box").css({ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 });
+				self.children(".iris-square-inner").css({ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 });
 			}
 
 			var top = self.find('.lum');
@@ -226,6 +226,11 @@
 	var Iris = {
 		options: {
 			color: false,
+			controls: {
+				horiz: 's', // horizontal defaults to saturation
+				vert: 'l', // vertical defaults to lightness
+				strip: 'h' // right strip defaults to hue
+			},
 			hide: true,
 			border: true,
 			target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
@@ -233,90 +238,143 @@
 			tooltip: false
 		},
 		_inited: false,
+		_scale: {
+			h: 359,
+			s: 100,
+			l: 100
+		},
 		_create: function() {
-			var el = this.element;
-			var color = this.options.color || el.val();
+			var self = this,
+				el = self.element,
+				color = self.options.color || el.val(),
+				hue;
 
-			if ( gradientType === false ) {
+			if ( gradientType === false )
 				testGradientType();
-			}
 
 			if ( el.is("input") ) {
-				if ( this.options.target )
-					this.picker = $( _html ).appendTo( this.options.target );
-				else
-					this.picker = $( _html ).insertAfter( el );
+				if ( self.options.target ) {
+					self.picker = $( _html ).appendTo( self.options.target );
+				} else {
+					self.picker = $( _html ).insertAfter( el );
+					//el.after( _html );
+					//self.picker = el.find('iris-picker');
+				}
 
-				this._addInputListeners( el );
+				self._addInputListeners( el );
 			} else {
 				el.append( _html );
-				this.picker = el.find( '.iris-picker' );
+				self.picker = el.find( '.iris-picker' );
 			}
 			if ( $.browser.mozilla ) {
-				this.picker.addClass( 'iris-mozilla' );
+				self.picker.addClass( 'iris-mozilla' );
 			} else if ( $.browser.msie ) {
 				var _IEVER = parseInt( $.browser.version, 10 );
 				if ( _IEVER === 9 )
-					this.picker.addClass( 'iris-ie-9' );
+					self.picker.addClass( 'iris-ie-9' );
 				else if ( _IEVER <= 8 )
-					this.picker.addClass( 'iris-ie-lt9' );
-
+					self.picker.addClass( 'iris-ie-lt9' );
 			}
 
-			this.color = new Color( color );
-			this.initError = this.color.error;
-			this.options.color = this.color.toString();
-			this.controls = {};
-			this.controls.square = this.picker.find( '.iris-square' );
+			self.color = new Color( color );
+			self.options.color = self.color.toString();
+			self.initError = self.color.error;
+
+			self.controls = {
+				square: self.picker.find( '.iris-square' ),
+				horiz:  self.picker.find( '.iris-square-horiz'),
+				vert:   self.picker.find( '.iris-square-vert' ),
+				strip:  self.picker.find( '.iris.strip' )
+			};
 
 			// store it. HSL gets squirrely
-			var hue = this.hue = this.color.h();
+			hue = self.hue = self.color.h();
 
-			if ( this.options.hide )
-				this.picker.hide();
+			if ( self.options.hide )
+				self.picker.hide();
 
-			if ( this.options.border )
-				this.picker.addClass( 'iris-border' );
-
-			this.controls.square.LSSquare( hue );
-			this.picker.find( '.iris-hue' ).raninbowGradient();
+			if ( self.options.border )
+				self.picker.addClass( 'iris-border' );
 
 			// UX: If our color is empty/error, start S-L puck in middle
 			// It will be restored on first run of this._change()
-			if ( this.initError )
-				this.color.s(50).l(50);
+			if ( self.initError )
+				self.color.s(50).l(50);
 
-			this._initControls();
-			this.active = 'external';
-			this._dimensions();
-			this._change();
-			if ( this.options.tooltip )
-				this._addTooltip();
+			self._initControls();
+			self.active = 'external';
+			self._dimensions();
+			self._change();
+			if ( self.options.tooltip )
+				self._addTooltip();
+		},
+		_paint: function() {
+			var self = this;
+			self._paintDimension( 'top', 'strip' );
+			self._paintDimension( 'top', 'vert' );
+			self._paintDimension( 'left', 'horiz' );
+		},
+		_paintDimension: function( origin, control ) {
+			var self = this,
+				hsl = self.color.toHsl(),
+				selector = {
+					strip: '.iris-strip',
+					vert: '.iris-square-vert',
+					horiz: '.iris-square-horiz'
+				},
+				target = self.picker.find( selector[ control ] ),
+				stops;
+			switch ( self.options.controls[ control ] ) {
+				case 'h':
+					if ( control === 'strip' )
+						target.raninbowGradient( origin, {s: hsl.s, l: hsl.l } );
+					else
+						target.raninbowGradient( origin, {s: 100, l: hsl.l } );
+					break;
+				case 's':
+					if ( control === 'vert' && self.options.controls.horiz === 'h' )
+						stops = ['hsla(0, 0%, ' + hsl.l + '%, 0)', 'hsla(0, 0%, ' + hsl.l + '%, 1)'];
+					else
+						stops = ['hsl('+ hsl.h +',0%,50%)', 'hsl(' + hsl.h + ',100%,50%)'];
+
+					target.gradient( origin, stops );
+					break;
+				case 'l':
+					if ( control === 'strip' )
+						stops = ['hsl('+ hsl.h +',100%,0%)', 'hsl(' + hsl.h + ', ' + hsl.s + '%,50%)', 'hsl(' + hsl.h + ',100%,100%)'];
+					else
+						stops = ['#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)'];
+					target.gradient( origin, stops );
+					break;
+				default:
+					//target.gradient( origin, )
+					break;
+			}
 		},
 		_dimensions: function( reset ) {
 			// whatever size
-			var inner = this.picker.find(".iris-picker-inner");
-			var controls = this.controls;
-			var square = controls.square;
-			var hue = this.picker.find('.iris-hue');
-			var squareWidth = '77.5%';
-			var hueWidth = '12%';
-			var totalPadding = 20;
-			var innerWidth = this.options.border ? this.options.width - totalPadding : this.options.width;
-			var controlsHeight;
+			var inner = this.picker.find(".iris-picker-inner"),
+				controls = this.controls,
+				square = controls.square,
+				strip = this.picker.find('.iris-strip'),
+				squareWidth = '77.5%',
+				stripWidth = '12%',
+				totalPadding = 20,
+				innerWidth = this.options.border ? this.options.width - totalPadding : this.options.width,
+				controlsHeight;
 
 			if ( reset ) {
 				square.css('width', '');
-				hue.css('width', '');
+				strip.css('width', '');
 				this.picker.removeAttr( 'style' );
 			}
 
 			squareWidth = innerWidth * ( parseFloat( squareWidth ) / 100 );
-			hueWidth = innerWidth * ( parseFloat( hueWidth ) / 100 );
+			stripWidth = innerWidth * ( parseFloat( stripWidth ) / 100 );
 			controlsHeight = this.options.border ? squareWidth + totalPadding : squareWidth;
 
 			square.width( squareWidth ).height( squareWidth );
-			hue.height( squareWidth ).width( hueWidth );
+			strip.height( squareWidth ).width( stripWidth );
 			this.picker.css( { width: this.options.width, height: controlsHeight } );
 		},
 
@@ -338,20 +396,22 @@
 		},
 
 		_initControls: function() {
-			var self = this;
-			var square = self.controls.square;
-			var hue = self.color.h();
+			var self = this,
+				square = self.controls.square,
+				hue = self.color.h(),
+				controlOpts = self.options.controls,
+				stripScale = self._scale[controlOpts.strip];
 
-			self.controls.h = self.picker.find('.iris-hue .iris-slider-offset').slider({
+			/*self.controls.strip = */self.picker.find('.iris-strip .iris-slider-offset').slider({
 				orientation: 'vertical',
-				max: 359,
+				max: stripScale,
 				min: 0,
-				value: 359 - hue,
+				value: stripScale - hue,
 				slide: function( event, ui ) {
-					self.active = 'h';
+					self.active = 'strip';
 					// there does not appear to be a way to "reverse" this.
-					ui.value = 359 - ui.value;
-					self.color.h( ui.value );
+					ui.value = stripScale - ui.value;
+					self.color[controlOpts.strip]( ui.value );
 					self._change.apply( self, arguments );
 				}
 			});
@@ -380,7 +440,6 @@
 				} else {
 					$(this).removeClass( 'ui-state-focus' );
 				}
-
 			});
 
 			// allow clicking on the square to move there
@@ -404,19 +463,23 @@
 				self.controls.squareDrag.css( pos ).trigger( event );
 			});
 
-			self.controls.s = square.find( '.iris-square-horiz').slider({
+			square.find( '.iris-horiz-slider').slider({
+				max: self._scale[controlOpts.horiz],
+				min: 0,
 				slide: function( event, ui ) {
-					self.color.s( ui.value );
-					self.active = 's';
+					self.color[controlOpts.horiz]( ui.value );
+					self.active = 'horiz';
 					self._change.apply( self, arguments );
 				}
 			});
 
-			self.controls.l = square.find( '.iris-square-vert').slider({
+			square.find( '.iris-vert-slider').slider({
+				max: self._scale[controlOpts.vert],
+				min: 0,
 				orientation: 'vertical',
 				slide: function( event, ui ) {
-					self.color.l( ui.value );
-					self.active = 'l';
+					self.color[controlOpts.vert]( ui.value );
+					self.active = 'vert';
 					self._change.apply( self, arguments );
 				}
 			});
@@ -427,8 +490,8 @@
 				var offset = me.offset();
 				var x = e.pageX - offset.left;
 				var y = e.pageY - offset.top;
-				var handleX = me.find( '.iris-square-horiz .ui-slider-handle' );
-				var handleY = me.find( '.iris-square-vert .ui-slider-handle' );
+				var handleX = me.find( '.iris-horiz-slider .ui-slider-handle' );
+				var handleY = me.find( '.iris-vert-slider .ui-slider-handle' );
 
 				if ( x > self.controls.square.width() - 20 )
 					handleY.addClass( 'active' );
@@ -449,12 +512,13 @@
 		},
 
 		_squareDrag: function( event, ui ) {
-			var self = this;
-			var dimensions = self._squareDimensions();
-			var light = Math.round( ( dimensions.h - ui.position.top ) / dimensions.h * 100 );
-			var sat = 100 - Math.round( ( dimensions.w - ui.position.left ) / dimensions.w * 100 );
+			var self = this,
+				controlOpts = self.options.controls,
+				dimensions = self._squareDimensions(),
+				vertVal = Math.round( ( dimensions.h - ui.position.top ) / dimensions.h * self._scale[controlOpts.vert] ),
+				horizVal = self._scale[controlOpts.horiz] - Math.round( ( dimensions.w - ui.position.left ) / dimensions.w * self._scale[controlOpts.horiz] );
 
-			self.color.s( sat ).l( light );
+			self.color[controlOpts.horiz]( horizVal )[controlOpts.vert]( vertVal );
 
 			self.active = 'square';
 			self._change.apply( self, arguments );
@@ -497,20 +561,25 @@
 		},
 
 		_change: function( event, ui ) {
-			var self = this;
-			var controls = self.controls;
-			var hsl = self.color.toHsl();
-			var hex = self.color.toString();
+			var self = this,
+				controls = self.controls,
+				hsl = self.color.toHsl(),
+				hex = self.color.toString(),
+				actions = [ 'vert', 'horiz', 'strip', 'square' ],
+				controlOpts = self.options.controls,
+				type = controlOpts[self.active] || 'external';
 
-			var actions = [ 's', 'l', 'square' ];
+			// take no action on any of the square sliders if we adjusted the strip
+			if ( self.active === 'strip' )
+				actions = [];
 
-			if ( self.active === 'external' || self.active === 'h' ) {
-				controls.square.LSSquare( hsl.h );
+			if ( type === 'external' || type === 'h' ) {
+				//controls.square.LSSquare( hsl.h );
 
-				if ( self.active === 'h' )
-					actions = [];
-				else
-					actions.push( 'h' );
+				//if ( self.active === 'h' )
+				//	actions = [];
+				//else
+				//	actions.push( 'h' );
 
 				// store h: it gets squirrely
 				this.hue = hsl.h;
@@ -525,34 +594,36 @@
 			}
 
 			hex = self.color.toString();
-
+			//console.log( 'active', self.active );
 			$.each( actions, function(index, item) {
+
 				if ( item !== self.active ) {
 					switch ( item ) {
-						case 'h':
-							controls.h.slider( 'value', 359 - hsl.h );
+						case 'strip':
+							controls.strip.slider( 'value', self._scale[type] - hsl[type] );
 							break;
-						case 's':
-							if ( self.active !== 'l' ) {
-								controls.s.slider( 'value', hsl.s );
+						case 'vert':
+							if ( self.active !== 'horiz' ) {
+								controls.square.find('.iris-vert-slider').slider( 'value', hsl[controlOpts.vert] );
 							}
 							break;
-						case 'l':
-							if ( self.active !== 's' ) {
-								controls.l.slider( 'value', hsl.l );
+						case 'horiz':
+							if ( self.active !== 'vert' ) {
+								controls.square.find('.iris-horiz-slider').slider( 'value', hsl[controlOpts.horiz] );
 							}
 							break;
 						case 'square':
-							var dimensions = self._squareDimensions();
-							var cssObj = {
-								left: hsl.s / 100 * dimensions.w,
-								top: dimensions.h - ( hsl.l / 100 * dimensions.h )
-							};
+
+							var dimensions = self._squareDimensions(),
+								cssObj = {
+									left: hsl[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
+									top: dimensions.h - ( hsl[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
+								};
 
 							// things go all squirrely if we do both. HSL is weird.
-							if ( self.active === 's' )
+							if ( self.active === 'horiz' )
 								delete cssObj.top;
-							else if ( self.active === 'l' )
+							else if ( self.active === 'vert' )
 								delete cssObj.left;
 
 							self.controls.squareDrag.css( cssObj );
@@ -577,6 +648,7 @@
 
 			this._inited = true;
 			this.active = false;
+			this._paint();
 		},
 		_addTooltip: function() {
 			var self = this;

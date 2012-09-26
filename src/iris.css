@@ -28,9 +28,16 @@
 	left: 10px;
 	bottom: 10px;
 }
+.iris-picker .iris-square-inner {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
 .iris-picker .iris-square,
 .iris-picker .iris-slider,
-.iris-picker .grad-box {
+.iris-picker .iris-square-inner {
 	border-radius: 3px;
 	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	   -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
@@ -43,15 +50,16 @@
 .iris-picker .iris-square {
 	width: 76%;
 	margin-right: 10%;
+	position: relative;
 }
-.iris-picker .grad-box {
+.iris-picker .iris-square-inner {
 	width: auto;
 	margin: 0;
 }
 .iris-picker .iris-square .sat,
 .iris-ie-9 .iris-square,
 .iris-ie-9 .iris-slider,
-.iris-ie-9 .grad-box {
+.iris-ie-9 .iris-square-inner {
 	-webkit-box-shadow: none;
 	   -moz-box-shadow: none;
 	        box-shadow: none;
@@ -64,7 +72,7 @@
 }
 .iris-ie-lt9 .iris-square,
 .iris-ie-lt9 .iris-slider,
-.iris-ie-lt9 .grad-box {
+.iris-ie-lt9 .iris-square-inner {
 	outline: 1px solid #aaa;
 }
 .iris-ie-lt9 .iris-square .ui-slider-handle {
@@ -77,7 +85,7 @@
 	border: 3px solid #fff;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
-.iris-picker .iris-hue {
+.iris-picker .iris-strip {
 	margin-right: 0;
 }
 .iris-picker .iris-tooltip {
@@ -109,7 +117,7 @@
 	bottom: -5px;
 	border-top-color: #fff;
 }
-.iris-picker .iris-hue .ui-slider-handle {
+.iris-picker .iris-strip .ui-slider-handle {
 	position: absolute;
 	width: 100%;
 	height: 12px;
@@ -119,7 +127,7 @@
 	opacity: 1;
 	z-index: 5;
 }
-.iris-hue .ui-slider-handle:before, .iris-hue .ui-slider-handle:after {
+.iris-strip .ui-slider-handle:before, .iris-strip .ui-slider-handle:after {
 	content: " ";
 	width: 0px;
 	height: 0px;
@@ -129,7 +137,7 @@
 	position: absolute;
 	right: -4px;
 }
-.iris-hue .ui-slider-handle:after {
+.iris-strip .ui-slider-handle:after {
 	border-width: 6px 0 6px 7px;
 	border-color: transparent transparent transparent #555;
 	right: auto;
@@ -141,14 +149,14 @@
 	position: relative;
 	bottom: -6px;
 }
-.iris-square .iris-square-horiz {
+.iris-square .iris-horiz-slider {
 	position: absolute;
 	top: -7px;
 	left: -7px;
 	height: 1px;
 	width: 100%;
 }
-.iris-square .iris-square-vert {
+.iris-square .iris-vert-slider {
 	position: absolute;
 	right: 6px;
 	top: 7px;
@@ -186,7 +194,7 @@
 	cursor: ns-resize;
 	z-index: 5;
 }
-.iris-square-horiz .ui-slider-handle {
+.iris-horiz-slider .ui-slider-handle {
 	cursor: ew-resize;
 }
 .iris-square-slider .ui-slider-handle {
