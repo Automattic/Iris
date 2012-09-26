@@ -88,35 +88,6 @@
 .iris-picker .iris-strip {
 	margin-right: 0;
 }
-.iris-picker .iris-tooltip {
-	position: absolute;
-	z-index: 10;
-	font: 10px/1 sans-serif;
-	color: #222;
-	background: #fff;
-	border: 1px solid #666;
-	padding: 3px 6px;
-	border-radius: 3px;
-	opacity: .94;
-	white-space: nowrap;
-	top: -36px;
-	left: -12px;
-}
-.iris-picker .iris-tooltip:before, .iris-picker .iris-tooltip:after {
-	content: " ";
-	width: 0px;
-	height: 0px;
-	border-style: solid;
-	border-width: 6px 6px 0 6px;
-	border-color: #666 transparent transparent transparent;
-	position: absolute;
-	bottom: -6px;
-	left: 6px;
-}
-.iris-picker .iris-tooltip:after {
-	bottom: -5px;
-	border-top-color: #fff;
-}
 .iris-picker .iris-strip .ui-slider-handle {
 	position: absolute;
 	width: 100%;
