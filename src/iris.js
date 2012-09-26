@@ -229,13 +229,10 @@
 				testGradientType();
 
 			if ( el.is("input") ) {
-				if ( self.options.target ) {
+				if ( self.options.target )
 					self.picker = $( _html ).appendTo( self.options.target );
-				} else {
+				else
 					self.picker = $( _html ).insertAfter( el );
-					//el.after( _html );
-					//self.picker = el.find('iris-picker');
-				}
 
 				self._addInputListeners( el );
 			} else {
@@ -323,7 +320,6 @@
 					target.gradient( origin, stops );
 					break;
 				default:
-					//target.gradient( origin, )
 					break;
 			}
 		},
@@ -506,16 +502,12 @@
 				// cast to string in case we have a number
 				value = "" + value;
 				var hexLessColor = value.replace(/^#/, '');
-				// Color.js returns black when passed a dodgy color
-				// we'll use this to detect a bad color
-				//var isBlack = hexLessColor === '0' || hexLessColor === '000' || hexLessColor === '000000';
 				var newColor = new Color( value );
 				if ( ! ( newColor.error ) ) {
 					this.color = newColor;
-					this.options.color = this.color.toString();
+					this.options.color = this.options[key] = this.color.toString();
 					this.active = 'external';
 					this._change();
-					this.options[key] = this.color.toString();
 				}
 			}
 		},
@@ -550,29 +542,19 @@
 				actions = [];
 
 			if ( type === 'external' || type === 'h' ) {
-				//controls.square.LSSquare( hsl.h );
-
-				//if ( self.active === 'h' )
-				//	actions = [];
-				//else
-				//	actions.push( 'h' );
-
 				// store h: it gets squirrely
-				this.hue = hsl.h;
+				self.hue = hsl.h;
 			} else {
 				// we're left with s, l, or square, which shouldn't affect hue, but sometimes does
 				// because hue can be weird like that
-				if ( hsl.h !== this.hue ) {
+				if ( hsl.h !== self.hue ) {
 					// set it
-					hsl.h = this.hue;
-					self.color.h( this.hue );
+					hsl.h = self.hue;
+					self.color.h( self.hue );
 				}
 			}
 
-			hex = self.color.toString();
-			//console.log( 'active', self.active );
 			$.each( actions, function(index, item) {
-
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
@@ -608,23 +590,23 @@
 				}
 			});
 
-			this.options.color = this.color.toString();
+			self.options.color = self.color.toString();
 
 			// only run after the first time
-			if ( this._inited ) {
-				this._trigger( 'change', { type: this.active }, { color: this.color } );
-			} else if ( this.initError ) {
+			if ( self._inited ) {
+				self._trigger( 'change', { type: self.active }, { color: self.color } );
+			} else if ( self.initError ) {
 				// restore color error state if we did the UX S-L puck centering
-				this.color.error = true;
-				this.options.color = this.color.toString();
+				self.color.error = true;
+				self.options.color = self.color.toString();
 			}
 
-			if ( this.element.is(":input") && ! self.color.error )
-				this.element.val( hex ).removeClass( 'iris-error' );
+			if ( self.element.is(":input") && ! self.color.error )
+				self.element.val( self.color.toString() ).removeClass( 'iris-error' );
 
-			this._inited = true;
-			this.active = false;
-			this._paint();
+			self._inited = true;
+			self.active = false;
+			self._paint();
 		},
 		_addTooltip: function() {
 			var self = this;
