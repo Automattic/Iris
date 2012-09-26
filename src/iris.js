@@ -252,11 +252,16 @@
 			self.options.color = self.color.toString();
 			self.initError = self.color.error;
 
+			// prep 'em for re-use
 			self.controls = {
-				square: self.picker.find( '.iris-square' ),
-				horiz:  self.picker.find( '.iris-square-horiz'),
-				vert:   self.picker.find( '.iris-square-vert' ),
-				strip:  self.picker.find( '.iris.strip' )
+				square:      self.picker.find( '.iris-square' ),
+				squareDrag:  self.picker.find( '.iris-square-value' ),
+				horiz:       self.picker.find( '.iris-square-horiz' ),
+				horizSlider: self.picker.find( '.iris-horiz-slider' ),
+				vert:        self.picker.find( '.iris-square-vert' ),
+				vertSlider:  self.picker.find( '.iris-vert-slider' ),
+				strip:       self.picker.find( '.iris-strip' ),
+				stripSlider: self.picker.find( '.iris-strip .iris-slider-offset' )
 			};
 
 			// store it. HSL gets squirrely
@@ -287,12 +292,7 @@
 		_paintDimension: function( origin, control ) {
 			var self = this,
 				hsl = self.color.toHsl(),
-				selector = {
-					strip: '.iris-strip',
-					vert: '.iris-square-vert',
-					horiz: '.iris-square-horiz'
-				},
-				target = self.picker.find( selector[ control ] ),
+				target = self.controls[control],
 				stops;
 			switch ( self.options.controls[ control ] ) {
 				case 'h':
@@ -366,16 +366,15 @@
 
 		_initControls: function() {
 			var self = this,
-				square = self.controls.square,
+				controls = self.controls,
+				square = controls.square,
 				hue = self.color.h(),
 				controlOpts = self.options.controls,
 				stripScale = self._scale[controlOpts.strip];
 
-			/*self.controls.strip = */self.picker.find('.iris-strip .iris-slider-offset').slider({
+			controls.stripSlider.slider({
 				orientation: 'vertical',
 				max: stripScale,
-				min: 0,
-				value: stripScale - hue,
 				slide: function( event, ui ) {
 					self.active = 'strip';
 					// there does not appear to be a way to "reverse" this.
@@ -385,7 +384,26 @@
 				}
 			});
 
-			self.controls.squareDrag = self.picker.find( '.iris-square-value' ).draggable({
+			controls.horizSlider.slider({
+				max: self._scale[controlOpts.horiz],
+				slide: function( event, ui ) {
+					self.color[controlOpts.horiz]( ui.value );
+					self.active = 'horiz';
+					self._change.apply( self, arguments );
+				}
+			});
+
+			controls.vertSlider.slider({
+				max: self._scale[controlOpts.vert],
+				orientation: 'vertical',
+				slide: function( event, ui ) {
+					self.color[controlOpts.vert]( ui.value );
+					self.active = 'vert';
+					self._change.apply( self, arguments );
+				}
+			});
+
+			controls.squareDrag.draggable({
 				containment: 'parent',
 				zIndex: 1000,
 				cursor: 'move',
@@ -411,7 +429,7 @@
 				}
 			});
 
-			// allow clicking on the square to move there
+			// allow clicking on the square to move there and keep dragging
 			square.mousedown( function( event ) {
 				// only left click
 				if ( event.which !== 1 )
@@ -432,50 +450,27 @@
 				self.controls.squareDrag.css( pos ).trigger( event );
 			});
 
-			square.find( '.iris-horiz-slider').slider({
-				max: self._scale[controlOpts.horiz],
-				min: 0,
-				slide: function( event, ui ) {
-					self.color[controlOpts.horiz]( ui.value );
-					self.active = 'horiz';
-					self._change.apply( self, arguments );
-				}
-			});
-
-			square.find( '.iris-vert-slider').slider({
-				max: self._scale[controlOpts.vert],
-				min: 0,
-				orientation: 'vertical',
-				slide: function( event, ui ) {
-					self.color[controlOpts.vert]( ui.value );
-					self.active = 'vert';
-					self._change.apply( self, arguments );
-				}
-			});
-
 			// Hide top-right handles until you approach edges of square
-			self.controls.square.mousemove( function( e ) {
-				var me = $( this );
-				var offset = me.offset();
-				var x = e.pageX - offset.left;
-				var y = e.pageY - offset.top;
-				var handleX = me.find( '.iris-horiz-slider .ui-slider-handle' );
-				var handleY = me.find( '.iris-vert-slider .ui-slider-handle' );
+			controls.square.mousemove( function( e ) {
+				var me = $( this ),
+					offset = me.offset(),
+					x = e.pageX - offset.left,
+					y = e.pageY - offset.top,
+					handleX = me.find( '.iris-horiz-slider .ui-slider-handle' ),
+					handleY = me.find( '.iris-vert-slider .ui-slider-handle' );
 
-				if ( x > self.controls.square.width() - 20 )
+				if ( x > controls.square.width() - 20 )
 					handleY.addClass( 'active' );
 				else
 					handleY.removeClass( 'active' );
-
 
 				if ( y < 20 )
 					handleX.addClass( 'active' );
 				else
 					handleX.removeClass( 'active' );
-
 			});
 
-			self.controls.square.mouseleave( function() {
+			controls.square.mouseleave( function() {
 				$( this ).find( '.iris-square-slider .ui-slider-handle' ).removeClass( 'active' );
 			});
 		},
@@ -555,16 +550,16 @@
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
-							controls.strip.slider( 'value', self._scale[type] - hsl[type] );
+							controls.stripSlider.slider( 'value', self._scale[controlOpts.strip] - hsl[controlOpts.strip] );
 							break;
 						case 'vert':
 							if ( self.active !== 'horiz' ) {
-								controls.square.find('.iris-vert-slider').slider( 'value', hsl[controlOpts.vert] );
+								controls.vertSlider.slider( 'value', hsl[controlOpts.vert] );
 							}
 							break;
 						case 'horiz':
 							if ( self.active !== 'vert' ) {
-								controls.square.find('.iris-horiz-slider').slider( 'value', hsl[controlOpts.horiz] );
+								controls.horizSlider.slider( 'value', hsl[controlOpts.horiz] );
 							}
 							break;
 						case 'square':
