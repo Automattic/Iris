@@ -250,7 +250,6 @@
 
 			self.color = new Color( color );
 			self.options.color = self.color.toString();
-			self.initError = self.color.error;
 
 			// prep 'em for re-use
 			self.controls = {
@@ -272,11 +271,6 @@
 
 			if ( self.options.border )
 				self.picker.addClass( 'iris-border' );
-
-			// UX: If our color is empty/error, start S-L puck in middle
-			// It will be restored on first run of this._change()
-			if ( self.initError )
-				self.color.s(50).l(50);
 
 			self._initControls();
 			self.active = 'external';
@@ -585,13 +579,8 @@
 			self.options.color = self.color.toString();
 
 			// only run after the first time
-			if ( self._inited ) {
+			if ( self._inited )
 				self._trigger( 'change', { type: self.active }, { color: self.color } );
-			} else if ( self.initError ) {
-				// restore color error state if we did the UX S-L puck centering
-				self.color.error = true;
-				self.options.color = self.color.toString();
-			}
 
 			if ( self.element.is(":input") && ! self.color.error )
 				self.element.val( self.color.toString() ).removeClass( 'iris-error' );
