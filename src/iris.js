@@ -64,8 +64,6 @@
 		// GradientType: 0 vertical, 1 horizontal
 		var type = ( origin === 'top' ) ? 0 : 1;
 		var self = $( this );
-		//console.log( origin + " ", stops );
-
 		var lastIndex = stops.length - 1;
 		var filter = ( parseInt( $.browser.version, 10 ) >= 8 ) ? '-ms-filter' : 'filter';
 		filter = 'filter';
@@ -202,6 +200,7 @@
 	var Iris = {
 		options: {
 			color: false,
+			mode: 'hsl',
 			controls: {
 				horiz: 's', // horizontal defaults to saturation
 				vert: 'l', // vertical defaults to lightness
@@ -216,7 +215,8 @@
 		_scale: {
 			h: 359,
 			s: 100,
-			l: 100
+			l: 100,
+			v: 100
 		},
 		_create: function() {
 			var self = this,
@@ -248,7 +248,7 @@
 					self.picker.addClass( 'iris-ie-lt9' );
 			}
 
-			self.color = new Color( color );
+			self.color = new Color( color ).setHSpace( self.options.mode );
 			self.options.color = self.color.toString();
 
 			// prep 'em for re-use
@@ -263,8 +263,17 @@
 				stripSlider: self.picker.find( '.iris-strip .iris-slider-offset' )
 			};
 
+			// small sanity check - if we chose hsv, change default controls away from hsl
+			if ( self.options.mode === 'hsv' && self.options.controls.vert === 'l' ) {
+				self.options.controls = {
+					horiz: 'h',
+					vert: 'v',
+					strip: 's'
+				};
+			}
+
 			// store it. HSL gets squirrely
-			hue = self.hue = self.color.h();
+			self.hue = self.color.h();
 
 			if ( self.options.hide )
 				self.picker.hide();
@@ -285,35 +294,76 @@
 		},
 		_paintDimension: function( origin, control ) {
 			var self = this,
-				hsl = self.color.toHsl(),
+				c = self.color,
+				mode = self.options.mode,
+				color = self._getHSpaceColor(),
 				target = self.controls[control],
-				stops;
-			switch ( self.options.controls[ control ] ) {
+				controlOpts = self.options.controls,
+				stops, hue;
+
+			// don't paint the active control
+			if ( control === self.active || ( self.active === 'square' && control !== 'strip' ) )
+				return;
+
+			switch ( controlOpts[ control ] ) {
 				case 'h':
-					if ( control === 'strip' )
-						target.raninbowGradient( origin, {s: hsl.s, l: hsl.l } );
-					else
-						target.raninbowGradient( origin, {s: 100, l: hsl.l } );
+					if ( mode === 'hsv' ) {
+						color = c.clone();
+						switch ( control ) {
+							case 'horiz':
+								color[controlOpts.vert](100);
+								break;
+							case 'vert':
+								color[controlOpts.horiz](100);
+								break;
+							case 'strip':
+								color.setHSpace('hsl').s(100).l(100);
+								break;
+						}
+						stops = color.toHsl();
+					} else {
+						if ( control === 'strip' )
+							stops = { s: color.s, l: color.l };
+						else
+							stops = { s: 100, l: color.l };
+					}
+					target.raninbowGradient( origin, stops );
 					break;
 				case 's':
-					if ( control === 'vert' && self.options.controls.horiz === 'h' )
-						stops = ['hsla(0, 0%, ' + hsl.l + '%, 0)', 'hsla(0, 0%, ' + hsl.l + '%, 1)'];
-					else
-						stops = ['hsl('+ hsl.h +',0%,50%)', 'hsl(' + hsl.h + ',100%,50%)'];
-
+					if ( control === 'vert' && self.options.controls.horiz === 'h' && self.options.mode === 'hsl' ) {
+						stops = ['hsla(0, 0%, ' + color.l + '%, 0)', 'hsla(0, 0%, ' + color.l + '%, 1)'];
+					} else if ( control === 'vert' && self.options.mode === 'hsv' ) {
+						stops = [ c.clone().a(0).s(0).toCSS('rgba'), c.clone().a(1).s(0).toCSS('rgba') ];
+					} else if ( control === 'strip' && self.options.mode === 'hsv' ) {
+						stops = [ c.clone().s(100).toCSS('hsl'), c.clone().s(0).toCSS('hsl') ];
+					} else {
+						stops = ['hsl('+ color.h +',0%,50%)', 'hsl(' + color.h + ',100%,50%)'];
+					}
 					target.gradient( origin, stops );
 					break;
 				case 'l':
 					if ( control === 'strip' )
-						stops = ['hsl('+ hsl.h +',100%,0%)', 'hsl(' + hsl.h + ', ' + hsl.s + '%,50%)', 'hsl(' + hsl.h + ',100%,100%)'];
+						stops = ['hsl(' + color.h + ',100%,100%)', 'hsl(' + color.h + ', ' + color.s + '%,50%)', 'hsl('+ color.h +',100%,0%)'];
 					else
 						stops = ['#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)'];
 					target.gradient( origin, stops );
+					break;
+				case 'v':
+						if ( control === 'strip' )
+							stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
+						else
+							stops = ['rgba(0,0,0,0)', '#000'];
+						target.gradient( origin, stops );
 					break;
 				default:
 					break;
 			}
 		},
+
+		_getHSpaceColor: function() {
+			return ( this.options.mode === 'hsv' ) ? this.color.toHsv() : this.color.toHsl();
+		},
+
 		_dimensions: function( reset ) {
 			// whatever size
 			var inner = this.picker.find(".iris-picker-inner"),
@@ -362,7 +412,6 @@
 			var self = this,
 				controls = self.controls,
 				square = controls.square,
-				hue = self.color.h(),
 				controlOpts = self.options.controls,
 				stripScale = self._scale[controlOpts.strip];
 
@@ -371,8 +420,10 @@
 				max: stripScale,
 				slide: function( event, ui ) {
 					self.active = 'strip';
-					// there does not appear to be a way to "reverse" this.
-					ui.value = stripScale - ui.value;
+					// "reverse" for hue.
+					if ( controlOpts.strip === 'h' )
+						ui.value = stripScale - ui.value;
+
 					self.color[controlOpts.strip]( ui.value );
 					self._change.apply( self, arguments );
 				}
@@ -488,7 +539,7 @@
 				// cast to string in case we have a number
 				value = "" + value;
 				var hexLessColor = value.replace(/^#/, '');
-				var newColor = new Color( value );
+				var newColor = new Color( value ).setHSpace( this.options.mode );
 				if ( ! ( newColor.error ) ) {
 					this.color = newColor;
 					this.options.color = this.options[key] = this.color.toString();
@@ -517,54 +568,59 @@
 		_change: function( event, ui ) {
 			var self = this,
 				controls = self.controls,
-				hsl = self.color.toHsl(),
+				color = self._getHSpaceColor(),
 				hex = self.color.toString(),
-				actions = [ 'vert', 'horiz', 'strip', 'square' ],
+				actions = [ 'vert', 'horiz', 'square', 'strip' ],
 				controlOpts = self.options.controls,
 				type = controlOpts[self.active] || 'external';
 
 			// take no action on any of the square sliders if we adjusted the strip
 			if ( self.active === 'strip' )
 				actions = [];
+			else if ( self.active !== 'external' ) // for non-strip, non-external, strip should never change
+				actions.pop(); // conveniently the last item
 
 			if ( type === 'external' || type === 'h' ) {
 				// store h: it gets squirrely
-				self.hue = hsl.h;
+				self.hue = color.h;
 			} else {
 				// we're left with s, l, or square, which shouldn't affect hue, but sometimes does
 				// because hue can be weird like that
-				if ( hsl.h !== self.hue ) {
+				if ( color.h !== self.hue ) {
 					// set it
-					hsl.h = self.hue;
+					color.h = self.hue;
 					self.color.h( self.hue );
 				}
 			}
 
 			$.each( actions, function(index, item) {
+				var value;
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
-							controls.stripSlider.slider( 'value', self._scale[controlOpts.strip] - hsl[controlOpts.strip] );
+							// reverse for hue
+							value = ( controlOpts.strip === 'h' ) ? self._scale[controlOpts.strip] - color[controlOpts.strip] : color[controlOpts.strip];
+							controls.stripSlider.slider( 'value', value );
 							break;
 						case 'vert':
 							if ( self.active !== 'horiz' ) {
-								controls.vertSlider.slider( 'value', hsl[controlOpts.vert] );
+								controls.vertSlider.slider( 'value', color[controlOpts.vert] );
 							}
 							break;
 						case 'horiz':
 							if ( self.active !== 'vert' ) {
-								controls.horizSlider.slider( 'value', hsl[controlOpts.horiz] );
+								controls.horizSlider.slider( 'value', color[controlOpts.horiz] );
 							}
 							break;
 						case 'square':
 
 							var dimensions = self._squareDimensions(),
 								cssObj = {
-									left: hsl[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
-									top: dimensions.h - ( hsl[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
+									left: color[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
+									top: dimensions.h - ( color[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
 								};
 
-							// things go all squirrely if we do both. HSL is weird.
+							// things go all squirrely if we do both. HS[LV] is weird.
 							if ( self.active === 'horiz' )
 								delete cssObj.top;
 							else if ( self.active === 'vert' )
@@ -585,9 +641,9 @@
 			if ( self.element.is(":input") && ! self.color.error )
 				self.element.val( self.color.toString() ).removeClass( 'iris-error' );
 
+			self._paint();
 			self._inited = true;
 			self.active = false;
-			self._paint();
 		},
 		show: function() {
 			this.picker.show();

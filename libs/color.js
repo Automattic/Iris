@@ -1,4 +1,4 @@
-/*! Color.js - v0.9.3 - 2012-08-26
+/*! Color.js - v0.9.8 - 2012-10-04
 * https://github.com/Automattic/Color.js
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
 
@@ -11,27 +11,46 @@
 		return this._init( color, type );
 	};
 
-	Color.prototype = {
+	Color.fn = Color.prototype = {
 		_color: 0,
 		_alpha: 1,
 		error: false,
 		// for preserving hue/sat in fromHsl().toHsl() flows
-		__hsl: { h: 0, s: 0, l: 0 },
-
+		_hsl: { h: 0, s: 0, l: 0 },
+		// for preserving hue/sat in fromHsv().toHsv() flows
+		_hsv: { h: 0, s: 0, v: 0 },
+		// for setting hsl or hsv space - needed for .h() & .s() functions to function properly
+		_hSpace: 'hsl',
 		_init: function( color ) {
 			var func = 'noop';
 			switch ( typeof color ) {
 					case 'object':
 						// alpha?
-						this._alpha = color.a || 1;
+						if ( color.a !== undef )
+							this.a( color.a );
 						func = ( color.r !== undef ) ? 'fromRgb' :
-							( color.l !== undef ) ? 'fromHsl' : func;
+							( color.l !== undef ) ? 'fromHsl' :
+							( color.v !== undef ) ? 'fromHsv' : func;
 						return this[func]( color );
 					case 'string':
 						return this.fromCSS( color );
 					case 'number':
 						return this.fromInt( parseInt( color, 10 ) );
 			}
+			return this;
+		},
+
+		clone: function() {
+			var newColor = new Color( this.toInt() ),
+				copy = ['_alpha', '_hSpace', '_hsl', '_hsv', 'error'];
+			for ( var i = copy.length - 1; i >= 0; i-- ) {
+				newColor[ copy[i] ] = this[ copy[i] ];
+			}
+			return newColor;
+		},
+
+		setHSpace: function( space ) {
+			this._hSpace = ( space === 'hsv' ) ? 'hsv' : 'hsl';
 			return this;
 		},
 
@@ -45,7 +64,7 @@
 			if ( color.match(/^(rgb|hsl)a?/) ) {
 				list = color.replace(/(\s|%)/g, '').replace(/^(rgb|hsl)a?\(/, '').replace(/\);?$/, '').split(',');
 				if ( list.length === 4 ) {
-					this._alpha = parseFloat( list.pop() );
+					this.a( parseFloat( list.pop() ) );
 				}
 				if ( color.match(/^rgb/) ) {
 					return this.fromRgb( {
@@ -89,13 +108,15 @@
 		},
 
 		fromHsl: function( hsl ) {
+			var r, g, b, q, p, h, s, l;
+
 			if ( typeof hsl !== 'object' || hsl.h === undef || hsl.s === undef || hsl.l === undef ) {
 				this.error = true;
 				return this;
 			}
 
-			var r, g, b, q, p, h, s, l;
-			this.__hsl = hsl; // store it
+			this._hsl = hsl; // store it
+			this._hSpace = 'hsl'; // implicit
 			h = hsl.h / 360; s = hsl.s / 100; l = hsl.l / 100;
 			if ( s === 0 ) {
 				r = g = b = l; // achromatic
@@ -114,6 +135,51 @@
 			}, true ); // true preserves hue/sat
 		},
 
+		fromHsv: function( hsv ) {
+			var h, s, v, r, g, b, i, f, p, q, t;
+			if ( typeof hsv !== 'object' || hsv.h === undef || hsv.s === undef || hsv.v === undef ) {
+				this.error = true;
+				return this;
+			}
+
+			this._hsv = hsv; // store it
+			this._hSpace = 'hsv'; // implicit
+
+			h = hsv.h / 360; s = hsv.s / 100; v = hsv.v / 100;
+			i = Math.floor( h * 6 );
+			f = h * 6 - i;
+			p = v * ( 1 - s );
+			q = v * ( 1 - f * s );
+			t = v * ( 1 - ( 1 - f ) * s );
+
+			switch( i % 6 ) {
+				case 0:
+					r = v; g = t; b = p;
+					break;
+				case 1:
+					r = q; g = v; b = p;
+					break;
+				case 2:
+					r = p; g = v; b = t;
+					break;
+				case 3:
+					r = p; g = q; b = v;
+					break;
+				case 4:
+					r = t; g = p; b = v;
+					break;
+				case 5:
+					r = v; g = p; b = q;
+					break;
+			}
+
+			return this.fromRgb( {
+				r: r * 255,
+				g: g * 255,
+				b: b * 255
+			}, true ); // true preserves hue/sat
+
+		},
 		// everything comes down to fromInt
 		fromInt: function( color, preserve ) {
 			this._color = parseInt( color, 10 );
@@ -127,8 +193,9 @@
 			else if ( this._color < 0 )
 				this._color = 0;
 
+			// let's not do weird things
 			if ( preserve === undef ) {
-				this.__hsl.h = this.__hsl.s = 0;
+				this._hsv.h = this._hsv.s = this._hsl.h = this._hsl.s = 0;
 			}
 			// EVENT GOES HERE
 			return this;
@@ -184,10 +251,10 @@
 				case 'hsla':
 					var hsl = this.toHsl();
 					if ( alpha < 1 ) {
-						return "hsla( " + hsl.h + ", " + hsl.s + ", " + hsl.l + ", " + alpha + " )";
+						return "hsla( " + hsl.h + ", " + hsl.s + "%, " + hsl.l + "%, " + alpha + " )";
 					}
 					else {
-						return "hsl( " + hsl.h + ", " + hsl.s + ", " + hsl.l + " )";
+						return "hsl( " + hsl.h + ", " + hsl.s + "%, " + hsl.l + "% )";
 					}
 					break;
 				default:
@@ -211,8 +278,7 @@
 
 			if ( max === min ) {
 				h = s = 0; // achromatic
-			}
-			else {
+			} else {
 				var d = max - min;
 				s = l > 0.5 ? d / ( 2 - max - min ) : d / ( max + min );
 				switch ( max ) {
@@ -228,18 +294,61 @@
 
 			// maintain hue & sat if we've been manipulating things in the HSL space.
 			h = Math.round( h * 360 );
-			if ( h === 0 && this.__hsl.h !== h ) {
-				h = this.__hsl.h;
+			if ( h === 0 && this._hsl.h !== h ) {
+				h = this._hsl.h;
 			}
 			s = Math.round( s * 100 );
-			if ( s === 0 && this.__hsl.s ) {
-				s = this.__hsl.s;
+			if ( s === 0 && this._hsl.s ) {
+				s = this._hsl.s;
 			}
 
 			return {
 				h: h,
 				s: s,
 				l: Math.round( l * 100 )
+			};
+
+		},
+
+		toHsv: function() {
+			var rgb = this.toRgb();
+			var r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
+			var max = Math.max( r, g, b ), min = Math.min( r, g, b );
+			var h, s, v = max;
+			var d = max - min;
+			s = max === 0 ? 0 : d / max;
+
+			if ( max === min ) {
+				h = s = 0; // achromatic
+			} else {
+				switch( max ){
+					case r:
+						h = ( g - b ) / d + ( g < b ? 6 : 0 );
+						break;
+					case g:
+						h = ( b - r ) / d + 2;
+						break;
+					case b:
+						h = ( r - g ) / d + 4;
+						break;
+				}
+				h /= 6;
+			}
+
+			// maintain hue & sat if we've been manipulating things in the HSV space.
+			h = Math.round( h * 360 );
+			if ( h === 0 && this._hsv.h !== h ) {
+				h = this._hsv.h;
+			}
+			s = Math.round( s * 100 );
+			if ( s === 0 && this._hsv.s ) {
+				s = this._hsv.s;
+			}
+
+			return {
+				h: h,
+				s: s,
+				v: Math.round( v * 100 )
 			};
 		},
 
@@ -343,96 +452,133 @@
 
 		},
 
-		// GET / SET - to be moved into generative functions
-		h: function( val ) {
-			return this._hsl( 'h', val );
-		},
-		s: function( val ) {
-			return this._hsl( 's', val );
-		},
-		l: function( val ) {
-			return this._hsl( 'l', val );
-		},
-		_hsl: function( key, val ) {
-			var hsl = this.toHsl();
-			if ( val === undef ) {
-				return hsl[key];
-			}
-			if ( key === 'h' ) { // hue gets modded
-				hsl[key] = val % 360;
-			} else { // s & l get range'd
-				hsl[key] = ( val < 0 ) ? 0 : ( val > 100 ) ? 100 : val;
-			}
-			return this.fromHsl( hsl );
+		a: function( val ) {
+			if ( val === undef )
+				return this._alpha;
+			this._alpha = parseFloat( val );
+			return this;
 		},
 
 		// TRANSFORMS
 
 		darken: function( amount ) {
 			amount = amount || 5;
-			return this.incrementLightness( - amount );
+			return this.l( - amount, true );
 		},
 
 		lighten: function( amount ) {
 			amount = amount || 5;
-			return this.incrementLightness( amount );
-		},
-
-		incrementLightness: function( amount ) {
-			return this.l( this.l() + amount );
+			return this.l( amount, true );
 		},
 
 		saturate: function( amount ) {
 			amount = amount || 15;
-			return this.incrementSaturation( amount );
+			return this.s( amount, true );
 		},
 
 		desaturate: function( amount ) {
 			amount = amount || 15;
-			return this.incrementSaturation( - amount );
-		},
-
-		incrementSaturation: function( amount ) {
-			return this.s( this.s() + amount );
+			return this.s( - amount, true );
 		},
 
 		toGrayscale: function() {
-			return this.h( 0 );
+			return this.setHSpace('hsl').s( 0 );
 		},
 
 		getComplement: function() {
-			return this.incrementHue( 180 );
+			return this.h( 180, true );
 		},
 
 		getSplitComplement: function( step ) {
 			step = step || 1;
 			var incr = 180 + ( step * 30 );
-			return this.incrementHue( incr );
+			return this.h( incr, true );
 		},
 
 		getAnalog: function( step ) {
 			step = step || 1;
 			var incr = step * 30;
-			return this.incrementHue( incr );
+			return this.h( incr, true );
 		},
 
 		getTetrad: function( step ) {
 			step = step || 1;
 			var incr = step * 60;
-			return this.incrementHue( incr );
+			return this.h( incr, true );
 		},
 
 		getTriad: function( step ) {
 			step = step || 1;
 			var incr = step * 120;
-			return this.incrementHue( incr );
+			return this.h( incr, true );
 		},
 
-		incrementHue: function( amount ) {
-			return this.h( this.h() + amount );
-		}
+		_partial: function( key ) {
+			var prop = shortProps[key];
+			return function( val, incr ) {
+				var color = this._spaceFunc('to', prop.space);
 
+				// GETTER
+				if ( val === undef )
+					return color[key];
+
+				// INCREMENT
+				if ( incr === true )
+					val = color[key] + val;
+
+				// MOD & RANGE
+				if ( prop.mod )
+					val = val % prop.mod;
+				if ( prop.range )
+					val = ( val < prop.range[0] ) ? prop.range[0] : ( val > prop.range[1] ) ? prop.range[1] : val;
+
+				// NEW VALUE
+				color[key] = val;
+
+				return this._spaceFunc('from', prop.space, color);
+			};
+		},
+
+		_spaceFunc: function( dir, s, val ) {
+			var space = s || this._hSpace,
+				funcName = dir + space.charAt(0).toUpperCase() + space.substr(1);
+			return this[funcName](val);
+		}
 	};
+
+	var shortProps = {
+		h: {
+			mod: 360
+		},
+		s: {
+			range: [0,100]
+		},
+		l: {
+			space: 'hsl',
+			range: [0,100]
+		},
+		v: {
+			space: 'hsv',
+			range: [0,100]
+		},
+		r: {
+			space: 'rgb',
+			range: [0,255]
+		},
+		g: {
+			space: 'rgb',
+			range: [0,255]
+		},
+		b: {
+			space: 'rgb',
+			range: [0,255]
+		}
+	};
+
+	for ( var key in shortProps ) {
+		if ( shortProps.hasOwnProperty( key ) )
+			Color.fn[key] = Color.fn._partial(key);
+	}
 
 	exports.Color = Color;
 
