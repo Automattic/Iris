@@ -1,5 +1,5 @@
 (function( $, undef ){
-	var _html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-slider iris-horiz-slider"></div><div class="iris-square-slider iris-vert-slider"></div><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
+	var _html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
 	// Even IE9 dosen't support gradients. Elaborate sigh.
 	var nonGradientIE = !! ( $.browser.msie && parseInt( $.browser.version, 10 ) < 10 );
 	var gradientType = false;
@@ -256,9 +256,7 @@
 				square:      self.picker.find( '.iris-square' ),
 				squareDrag:  self.picker.find( '.iris-square-value' ),
 				horiz:       self.picker.find( '.iris-square-horiz' ),
-				horizSlider: self.picker.find( '.iris-horiz-slider' ),
 				vert:        self.picker.find( '.iris-square-vert' ),
-				vertSlider:  self.picker.find( '.iris-vert-slider' ),
 				strip:       self.picker.find( '.iris-strip' ),
 				stripSlider: self.picker.find( '.iris-strip .iris-slider-offset' )
 			};
@@ -429,25 +427,6 @@
 				}
 			});
 
-			controls.horizSlider.slider({
-				max: self._scale[controlOpts.horiz],
-				slide: function( event, ui ) {
-					self.color[controlOpts.horiz]( ui.value );
-					self.active = 'horiz';
-					self._change.apply( self, arguments );
-				}
-			});
-
-			controls.vertSlider.slider({
-				max: self._scale[controlOpts.vert],
-				orientation: 'vertical',
-				slide: function( event, ui ) {
-					self.color[controlOpts.vert]( ui.value );
-					self.active = 'vert';
-					self._change.apply( self, arguments );
-				}
-			});
-
 			controls.squareDrag.draggable({
 				containment: 'parent',
 				zIndex: 1000,
@@ -495,29 +474,6 @@
 				self.controls.squareDrag.css( pos ).trigger( event );
 			});
 
-			// Hide top-right handles until you approach edges of square
-			controls.square.mousemove( function( e ) {
-				var me = $( this ),
-					offset = me.offset(),
-					x = e.pageX - offset.left,
-					y = e.pageY - offset.top,
-					handleX = me.find( '.iris-horiz-slider .ui-slider-handle' ),
-					handleY = me.find( '.iris-vert-slider .ui-slider-handle' );
-
-				if ( x > controls.square.width() - 20 )
-					handleY.addClass( 'active' );
-				else
-					handleY.removeClass( 'active' );
-
-				if ( y < 20 )
-					handleX.addClass( 'active' );
-				else
-					handleX.removeClass( 'active' );
-			});
-
-			controls.square.mouseleave( function() {
-				$( this ).find( '.iris-square-slider .ui-slider-handle' ).removeClass( 'active' );
-			});
 		},
 
 		_squareDrag: function( event, ui ) {
