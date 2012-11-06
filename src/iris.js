@@ -315,7 +315,7 @@
 								color[controlOpts.horiz](100);
 								break;
 							case 'strip':
-								color.setHSpace('hsl').s(100).l(100);
+								color.setHSpace('hsl');
 								break;
 						}
 						stops = color.toHsl();
