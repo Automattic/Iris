@@ -565,33 +565,30 @@
 			return dimensions;
 		},
 
+		_isNonHueControl: function( active, type ) {
+			if ( active === 'square' && this.options.controls.strip === 'h' )
+				return true;
+			else if ( type === 'external' || ( type === 'h' && active === 'strip' ) )
+				return false;
+
+			return true;
+		},
+
 		_change: function( event, ui ) {
 			var self = this,
 				controls = self.controls,
 				color = self._getHSpaceColor(),
 				hex = self.color.toString(),
-				actions = [ 'vert', 'horiz', 'square', 'strip' ],
+				actions = [ 'square', 'strip' ],
 				controlOpts = self.options.controls,
-				type = controlOpts[self.active] || 'external';
+				type = controlOpts[self.active] || 'external',
+				oldHue = self.hue;
 
 			// take no action on any of the square sliders if we adjusted the strip
 			if ( self.active === 'strip' )
 				actions = [];
 			else if ( self.active !== 'external' ) // for non-strip, non-external, strip should never change
 				actions.pop(); // conveniently the last item
-
-			if ( type === 'external' || type === 'h' ) {
-				// store h: it gets squirrely
-				self.hue = color.h;
-			} else {
-				// we're left with s, l, or square, which shouldn't affect hue, but sometimes does
-				// because hue can be weird like that
-				if ( color.h !== self.hue ) {
-					// set it
-					color.h = self.hue;
-					self.color.h( self.hue );
-				}
-			}
 
 			$.each( actions, function(index, item) {
 				var value;
@@ -602,16 +599,6 @@
 							value = ( controlOpts.strip === 'h' ) ? self._scale[controlOpts.strip] - color[controlOpts.strip] : color[controlOpts.strip];
 							controls.stripSlider.slider( 'value', value );
 							break;
-						case 'vert':
-							if ( self.active !== 'horiz' ) {
-								controls.vertSlider.slider( 'value', color[controlOpts.vert] );
-							}
-							break;
-						case 'horiz':
-							if ( self.active !== 'vert' ) {
-								controls.horizSlider.slider( 'value', color[controlOpts.horiz] );
-							}
-							break;
 						case 'square':
 
 							var dimensions = self._squareDimensions(),
@@ -620,17 +607,18 @@
 									top: dimensions.h - ( color[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
 								};
 
-							// things go all squirrely if we do both. HS[LV] is weird.
-							if ( self.active === 'horiz' )
-								delete cssObj.top;
-							else if ( self.active === 'vert' )
-								delete cssObj.left;
-
 							self.controls.squareDrag.css( cssObj );
 							break;
 					}
 				}
 			});
+
+			// Ensure that we don't change hue if we triggered a hue reset
+			if ( color.h !== oldHue && self._isNonHueControl( self.active, type ) )
+				self.color.h(oldHue);
+
+			// store hue for repeating above check next time
+			self.hue = self.color.h();
 
 			self.options.color = self.color.toString();
 
