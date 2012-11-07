@@ -212,7 +212,7 @@
 			width: 200, // the width of the collection of UI elements
 			palettes: false // show a palette of basic colors beneath the square.
 		},
-		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#3d3', '#1e73be', '#8224e3' ],
+		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
 		_inited: false,
 		_scale: {
 			h: 360,
