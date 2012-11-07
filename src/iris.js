@@ -321,7 +321,6 @@
 
 			switch ( controlOpts[ control ] ) {
 				case 'h':
-
 					if ( mode === 'hsv' ) {
 						color = c.clone();
 						switch ( control ) {
@@ -346,15 +345,21 @@
 					target.raninbowGradient( origin, stops );
 					break;
 				case 's':
-					if ( control === 'vert' && self.options.controls.horiz === 'h' && self.options.mode === 'hsl' ) {
-						stops = ['hsla(0, 0%, ' + color.l + '%, 0)', 'hsla(0, 0%, ' + color.l + '%, 1)'];
-					} else if ( control === 'vert' && self.options.mode === 'hsv' ) {
-						stops = [ c.clone().a(0).s(0).toCSS('rgba'), c.clone().a(1).s(0).toCSS('rgba') ];
-					} else if ( control === 'strip' && self.options.mode === 'hsv' ) {
-						stops = [ c.clone().s(100).toCSS('hsl'), c.clone().s(0).toCSS('hsl') ];
-					} else {
-						stops = ['hsl('+ color.h +',0%,50%)', 'hsl(' + color.h + ',100%,50%)'];
+					if ( mode === 'hsv' ) {
+						if ( control === 'vert' )
+							stops = [ c.clone().a(0).s(0).toCSS('rgba'), c.clone().a(1).s(0).toCSS('rgba') ];
+						else if ( control === 'strip' )
+							stops = [ c.clone().s(100).toCSS('hsl'), c.clone().s(0).toCSS('hsl') ];
+						else if ( control === 'horiz' )
+							stops = [ '#fff', 'hsl(' + color.h + ',100%,50%)' ];
+					} else { // implicit mode === 'hsl'
+						if ( control === 'vert' && self.options.controls.horiz === 'h' )
+							stops = ['hsla(0, 0%, ' + color.l + '%, 0)', 'hsla(0, 0%, ' + color.l + '%, 1)'];
+						else
+							stops = ['hsl('+ color.h +',0%,50%)', 'hsl(' + color.h + ',100%,50%)'];
 					}
+
+
 					target.gradient( origin, stops );
 					break;
 				case 'l':
