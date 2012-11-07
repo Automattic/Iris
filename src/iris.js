@@ -212,6 +212,7 @@
 			width: 200, // the width of the collection of UI elements
 			palettes: false // show a palette of basic colors beneath the square.
 		},
+		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#3d3', '#1e73be', '#8224e3' ],
 		_inited: false,
 		_scale: {
 			h: 360,
@@ -291,7 +292,7 @@
 		_addPalettes: function () {
 			var container = $("<ul class='iris-palette-container' />"),
 				palette = $("<li class='iris-palette' />"),
-				colors = ['#000', '#fff', '#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f' ];
+				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
 			$.each(colors, function(index, val) {
 				palette.clone().data('color', val).css('backgroundColor', val).appendTo(container).height(10).width(10);
@@ -392,7 +393,7 @@
 				totalPadding = 20,
 				innerWidth = opts.border ? opts.width - totalPadding : opts.width,
 				controlsHeight,
-				paletteCount = 8,
+				paletteCount = $.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
 				paletteMargin, paletteWidth, paletteContainerWidth;
 
 			if ( reset ) {
