@@ -59,17 +59,23 @@
 }
 .iris-ie-9 .iris-square,
 .iris-ie-9 .iris-slider,
-.iris-ie-9 .iris-square-inner {
-	-webkit-box-shadow: none;
-	   -moz-box-shadow: none;
-	        box-shadow: none;
+.iris-ie-9 .iris-square-inner,
+.iris-ie-9 .iris-palette {
+	box-shadow: none;
 	border-radius: 0;
+}
+.iris-ie-9 .iris-square,
+.iris-ie-9 .iris-slider,
+.iris-ie-9 .iris-palette {
+	outline: 1px solid rgba(0,0,0,.1);
 }
 .iris-ie-lt9 .iris-square,
 .iris-ie-lt9 .iris-slider,
-.iris-ie-lt9 .iris-square-inner {
+.iris-ie-lt9 .iris-square-inner,
+.iris-ie-lt9 .iris-palette {
 	outline: 1px solid #aaa;
 }
+
 .iris-ie-lt9 .iris-square .ui-slider-handle {
 	outline: 1px solid #aaa;
 	background-color: #fff;
