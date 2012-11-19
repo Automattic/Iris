@@ -40,9 +40,7 @@
 .iris-picker .iris-square-inner,
 .iris-picker .iris-palette {
 	border-radius: 3px;
-	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-	   -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-	        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+	box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	height: 100%;
 	width: 12.5%;
 	float: left;
@@ -112,7 +110,6 @@
 	top:    -3px;
 	bottom: -3px;
 	border:  2px solid #fff;
-	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
 .iris-picker .iris-slider-offset {
@@ -125,9 +122,7 @@
 .iris-picker .iris-square-handle {
 	background: transparent;
 	border: 5px solid #aaa;
-	-webkit-border-radius: 6px;
-	   -moz-border-radius: 50%;
-	        border-radius: 50%;
+	border-radius: 50%;
 	border-color: rgba(128,128,128,.5);
 	box-shadow:none;
 	width:  12px;
@@ -144,6 +139,10 @@
 }
 .iris-picker .iris-square-handle:hover {
 	border-color: #999;
+}
+.iris-picker .iris-square-value:focus .iris-square-handle {
+	box-shadow: 0 0 2px rgba(0,0,0,.75);
+	opacity: .8;
 }
 .iris-picker .iris-square-handle:hover::after {
 	border-color: #fff;
