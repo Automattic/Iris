@@ -518,8 +518,8 @@
 
 				// Keep draggable within container
 				if (position.left >= 0 && position.top >= 0 &&
-					position.left + draggable.width() <= container.width() &&
-					position.top + draggable.height() <= container.height()) {
+					position.left <= container.width() &&
+					position.top <= container.height()) {
 					draggable.css(position);
 				}
 
