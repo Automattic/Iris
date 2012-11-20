@@ -1,4 +1,4 @@
-/*! Iris - v0.9.13 - 2012-11-20
+/*! Iris - v0.9.14 - 2012-11-20
 * https://github.com/Automattic/Iris
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL */
 
@@ -440,21 +440,23 @@
 
 		_addInputListeners: function( input ) {
 			var self = this,
-				debounceTimeout = 150,
+				debounceTimeout = 100,
 				callback = function( event ){
 					var color = new Color( input.val() ),
 						val = input.val().replace(/^#/, '');
 
 					input.removeClass( 'iris-error' );
-
 					// we gave a bad color
 					if ( color.error ) {
 						// don't error on an empty input - we want those allowed
 						if ( val !== '' )
 							input.addClass( 'iris-error' );
 					} else {
-						if ( color.toString() !== self.color.toString() )
-							self._setOption( 'color', color.toString() );
+						if ( color.toString() !== self.color.toString() ) {
+							// let's not do this on keyup for hex shortcodes
+							if ( ! ( event.type === 'keyup' && val.match(/^[0-9a-fA-F]{3}$/) ) )
+								self._setOption( 'color', color.toString() );
+						}
 					}
 				};
 
