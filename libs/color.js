@@ -1,4 +1,4 @@
-/*! Color.js - v0.9.8 - 2012-10-04
+/*! Color.js - v0.9.9 - 2012-11-20
 * https://github.com/Automattic/Color.js
 * Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
 
@@ -40,6 +40,11 @@
 			return this;
 		},
 
+		_error: function() {
+			this.error = true;
+			return this;
+		},
+
 		clone: function() {
 			var newColor = new Color( this.toInt() ),
 				copy = ['_alpha', '_hSpace', '_hsl', '_hsv', 'error'];
@@ -50,7 +55,7 @@
 		},
 
 		setHSpace: function( space ) {
-			this._hSpace = ( space === 'hsv' ) ? 'hsv' : 'hsl';
+			this._hSpace = ( space === 'hsv' ) ? space : 'hsl';
 			return this;
 		},
 
@@ -59,39 +64,61 @@
 		},
 
 		fromCSS: function( color ) {
-			var nums, list;
+			var nums, list,
+				leadingRE = /^(rgb|hs(l|v))a?\(/;
 			this.error = false;
-			if ( color.match(/^(rgb|hsl)a?/) ) {
-				list = color.replace(/(\s|%)/g, '').replace(/^(rgb|hsl)a?\(/, '').replace(/\);?$/, '').split(',');
+
+			// whitespace and semicolon trim
+			color = color.replace(/^\s+/, '').replace(/\s+$/, '').replace(/;$/, '');
+
+			if ( color.match(leadingRE) && color.match(/\)$/) ) {
+				list = color.replace(/(\s|%)/g, '').replace(leadingRE, '').replace(/,?\);?$/, '').split(',');
+
+				if ( list.length < 3 )
+					return this._error();
+
 				if ( list.length === 4 ) {
 					this.a( parseFloat( list.pop() ) );
+					// error state has been set to true in .a() if we passed NaN
+					if ( this.error )
+						return this;
 				}
+
+				for (var i = list.length - 1; i >= 0; i--) {
+					list[i] = parseInt(list[i], 10);
+					if ( isNaN( list[i] ) )
+						return this._error();
+				}
+
 				if ( color.match(/^rgb/) ) {
 					return this.fromRgb( {
-						r: parseInt(list[0], 10),
-						g: parseInt(list[1], 10),
-						b: parseInt(list[2], 10)
+						r: list[0],
+						g: list[1],
+						b: list[2]
 					} );
-				}
-				else {
+				} else if ( color.match(/^hsv/) ) {
+					return this.fromHsv( {
+						h: list[0],
+						s: list[1],
+						v: list[2]
+					} );
+				} else {
 					return this.fromHsl( {
-						h: parseInt(list[0], 10),
-						s: parseInt(list[1], 10),
-						l: parseInt(list[2], 10)
+						h: list[0],
+						s: list[1],
+						l: list[2]
 					} );
 				}
-			}
-			else {
+			} else {
 				// must be hex amirite?
 				return this.fromHex( color );
 			}
 		},
 
 		fromRgb: function( rgb, preserve ) {
-			if ( typeof rgb !== 'object' || rgb.r === undef || rgb.g === undef || rgb.b === undef ) {
-				this.error = true;
-				return this;
-			}
+			if ( typeof rgb !== 'object' || rgb.r === undef || rgb.g === undef || rgb.b === undef )
+				return this._error();
+
 			this.error = false;
 			return this.fromInt( parseInt( ( rgb.r << 16 ) + ( rgb.g << 8 ) + rgb.b, 10 ), preserve );
 		},
@@ -110,10 +137,8 @@
 		fromHsl: function( hsl ) {
 			var r, g, b, q, p, h, s, l;
 
-			if ( typeof hsl !== 'object' || hsl.h === undef || hsl.s === undef || hsl.l === undef ) {
-				this.error = true;
-				return this;
-			}
+			if ( typeof hsl !== 'object' || hsl.h === undef || hsl.s === undef || hsl.l === undef )
+				return this._error();
 
 			this._hsl = hsl; // store it
 			this._hSpace = 'hsl'; // implicit
@@ -137,10 +162,8 @@
 
 		fromHsv: function( hsv ) {
 			var h, s, v, r, g, b, i, f, p, q, t;
-			if ( typeof hsv !== 'object' || hsv.h === undef || hsv.s === undef || hsv.v === undef ) {
-				this.error = true;
-				return this;
-			}
+			if ( typeof hsv !== 'object' || hsv.h === undef || hsv.s === undef || hsv.v === undef )
+				return this._error();
 
 			this._hsv = hsv; // store it
 			this._hSpace = 'hsv'; // implicit
@@ -455,7 +478,13 @@
 		a: function( val ) {
 			if ( val === undef )
 				return this._alpha;
-			this._alpha = parseFloat( val );
+
+			var a = parseFloat( val );
+
+			if ( isNaN( a ) )
+				return this._error();
+
+			this._alpha = a;
 			return this;
 		},
 
