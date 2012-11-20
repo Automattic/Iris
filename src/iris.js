@@ -506,8 +506,7 @@
 				var container = controls.square,
 					draggable = controls.squareDrag,
 					position = draggable.position(),
-					distance = self.options.width / 100, // Distance in pixels the draggable should be moved: 1 "stop"
-					squareOffset, newPosition;
+					distance = self.options.width / 100; // Distance in pixels the draggable should be moved: 1 "stop"
 
 				// make alt key go "10"
 				if ( event.altKey )
@@ -523,19 +522,11 @@
 				}
 
 				// Keep draggable within container
-				if (position.left >= 0 && position.top >= 0 &&
-					position.left <= container.width() &&
-					position.top <= container.height()) {
-					draggable.css(position);
-				}
+				position.left = Math.max( 0, Math.min( position.left, container.width() ) );
+				position.top =  Math.max( 0, Math.min( position.top, container.height() ) );
 
-				squareOffset = container.offset();
-				newPosition = {
-					top: draggable.offset().top - squareOffset.top,
-					left: draggable.offset().left - squareOffset.left
-				};
-				self._squareDrag( event, { position: newPosition });
-
+				draggable.css(position);
+				self._squareDrag( event, { position: position });
 				event.preventDefault();
 			});
 
