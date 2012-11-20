@@ -435,20 +435,26 @@
 		},
 
 		_addInputListeners: function( input ) {
-			var self = this;
-			input.on('change', function( event ){
-				var color = new Color( input.val() );
-				var val = input.val().replace(/^#/, '');
-				input.removeClass( 'iris-error' );
-				// we gave a bad color
-				if ( color.error ) {
-					// don't error on an empty input - we want those allowed
-					if ( val !== '' )
-						input.addClass( 'iris-error' );
-				} else {
-					self._setOption( 'color', color.toString() );
-				}
-			});
+			var self = this,
+				debounceTimeout = 150,
+				callback = function( event ){
+					var color = new Color( input.val() ),
+						val = input.val().replace(/^#/, '');
+
+					input.removeClass( 'iris-error' );
+
+					// we gave a bad color
+					if ( color.error ) {
+						// don't error on an empty input - we want those allowed
+						if ( val !== '' )
+							input.addClass( 'iris-error' );
+					} else {
+						if ( color.toString() !== self.color.toString() )
+							self._setOption( 'color', color.toString() );
+					}
+				};
+
+			input.on('change', callback ).on('keyup', self._debounce(callback, debounceTimeout));
 		},
 
 		_initControls: function() {
@@ -675,12 +681,31 @@
 			if ( self._inited )
 				self._trigger( 'change', { type: self.active }, { color: self.color } );
 
-			if ( self.element.is(":input") && ! self.color.error )
-				self.element.val( self.color.toString() ).removeClass( 'iris-error' );
+			if ( self.element.is(":input") && ! self.color.error ) {
+				self.element.removeClass( 'iris-error' );
+				if ( self.element.val() !== self.color.toString() )
+					self.element.val( self.color.toString() );
+			}
 
 			self._paint();
 			self._inited = true;
 			self.active = false;
+		},
+		// taken from underscore.js _.debounce method
+		_debounce: function(func, wait, immediate) {
+			var timeout, result;
+			return function() {
+				var context = this, args = arguments;
+				var later = function() {
+					timeout = null;
+					if (!immediate) result = func.apply(context, args);
+				};
+				var callNow = immediate && !timeout;
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+				if (callNow) result = func.apply(context, args);
+				return result;
+			};
 		},
 		show: function() {
 			this.picker.show();
