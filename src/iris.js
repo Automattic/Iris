@@ -1,5 +1,5 @@
 (function( $, undef ){
-	var _html, nonGradientIE, gradientType, vendorPrefixes, _css;
+	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris;
 
 	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
 	// Even IE9 dosen't support gradients. Elaborate sigh.
@@ -216,7 +216,7 @@
 	};
 
 	// the colorpicker widget def.
-	var Iris = {
+	Iris = {
 		options: {
 			color: false,
 			mode: 'hsl',
