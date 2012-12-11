@@ -1,23 +1,27 @@
 (function( $, undef ){
-	var _html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
+	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris;
+
+	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
 	// Even IE9 dosen't support gradients. Elaborate sigh.
-	var nonGradientIE = !! ( $.browser.msie && parseInt( $.browser.version, 10 ) < 10 );
-	var gradientType = false;
-	var vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
+	nonGradientIE = !! ( $.browser.msie && parseInt( $.browser.version, 10 ) < 10 );
+	gradientType = false;
+	vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
 	// This is manually copied from iris.min.css until I can figure out how to do it without
-	var _css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:none;border:3px solid #fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:none;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}';
+	_css = '.iris-picker{display:block;position:relative}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:none;border:3px solid #fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:none;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}';
 	// Bail for IE <= 7
 	if ( nonGradientIE && parseInt( $.browser.version, 10 ) <= 7 ) {
 		return $.fn.iris = $.noop;
 	}
 
 	function testGradientType() {
+		var el, base;
+
 		if ( nonGradientIE ) {
 			gradientType = 'filter';
 		}
 		else {
-			var el = $('<div id="iris-gradtest" />');
-			var base = "linear-gradient(top,#fff,#000)";
+			el = $('<div id="iris-gradtest" />');
+			base = "linear-gradient(top,#fff,#000)";
 			$.each( vendorPrefixes, function( i, val ){
 				el.css( 'backgroundImage', val + base );
 				if ( el.css( 'backgroundImage').match('gradient') ) {
@@ -58,40 +62,44 @@
 	* Stupid gradients for a stupid browser.
 	*/
 	function stupidIEGradient( origin, stops ) {
+		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
+
 		origin = ( origin === 'top' ) ? 'top' : 'left';
 		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call(arguments, 1);
 		// 8 hex: AARRGGBB
 		// GradientType: 0 vertical, 1 horizontal
-		var type = ( origin === 'top' ) ? 0 : 1;
-		var self = $( this );
-		var lastIndex = stops.length - 1;
-		var filter = ( parseInt( $.browser.version, 10 ) >= 8 ) ? '-ms-filter' : 'filter';
+		type = ( origin === 'top' ) ? 0 : 1;
+		self = $( this );
+		lastIndex = stops.length - 1;
+		filter = ( parseInt( $.browser.version, 10 ) >= 8 ) ? '-ms-filter' : 'filter';
 		filter = 'filter';
-		var startPosProp = ( type === 1 ) ? 'left' : 'top';
-		var endPosProp = ( type === 1 ) ? 'right' : 'bottom';
-		var dimensionProp = ( type === 1 ) ? 'height' : 'width';
-		var template = '<div class="iris-ie-gradient-shim" style="position:absolute;' + dimensionProp + ':100%;' + startPosProp + ':%start%;' + endPosProp + ':%end%;' + filter + ':%filter%;" data-color:"%color%"></div>';
-		var html = "";
+		startPosProp = ( type === 1 ) ? 'left' : 'top';
+		endPosProp = ( type === 1 ) ? 'right' : 'bottom';
+		dimensionProp = ( type === 1 ) ? 'height' : 'width';
+		template = '<div class="iris-ie-gradient-shim" style="position:absolute;' + dimensionProp + ':100%;' + startPosProp + ':%start%;' + endPosProp + ':%end%;' + filter + ':%filter%;" data-color:"%color%"></div>';
+		html = "";
 		// need a positioning context
 		if ( self.css('position') === 'static' )
 			self.css( {position: 'relative' } );
 
 		stops = fillColorStops( stops );
 		$.each(stops, function( i, startColor ) {
+			var endColor, endStop, filterVal;
+
 			// we want two at a time. if we're on the last pair, bail.
 			if ( i === lastIndex )
 				return false;
 
-			var endColor = stops[ i + 1 ];
+			endColor = stops[ i + 1 ];
 			//if our pairs are at the same color stop, moving along.
 			if ( startColor.stop === endColor.stop )
 				return;
 
-			var endStop = 100 - parseFloat( endColor.stop ) + '%';
+			endStop = 100 - parseFloat( endColor.stop ) + '%';
 			startColor.octoHex = new Color( startColor.color ).toIEOctoHex();
 			endColor.octoHex = new Color( endColor.color ).toIEOctoHex();
 
-			var filterVal = "progid:DXImageTransform.Microsoft.Gradient(GradientType=" + type + ", StartColorStr='" + startColor.octoHex + "', EndColorStr='" + endColor.octoHex + "')";
+			filterVal = "progid:DXImageTransform.Microsoft.Gradient(GradientType=" + type + ", StartColorStr='" + startColor.octoHex + "', EndColorStr='" + endColor.octoHex + "')";
 			html += template.replace( '%start%', startColor.stop ).replace( '%end%', endStop ).replace( '%filter%', filterVal );
 		});
 		self.find(".iris-ie-gradient-shim").remove();
@@ -109,14 +117,16 @@
 	}
 
 	function fillColorStops( colorList ) {
-		var colors = [];
-		var percs = [];
-		var newColorList = [];
-		var lastIndex = colorList.length - 1;
+		var colors = [],
+			percs = [],
+			newColorList = [],
+			lastIndex = colorList.length - 1;
+
 		$.each( colorList, function( index, val ) {
-			var color = val;
-			var perc = false;
-			var match = val.match(/1?[0-9]{1,2}%$/);
+			var color = val,
+				perc = false,
+				match = val.match(/1?[0-9]{1,2}%$/);
+
 			if ( match ) {
 				color = val.replace(/\s?1?[0-9]{1,2}%$/, '');
 				perc = match.shift();
@@ -141,8 +151,15 @@
 	}
 
 	function backFillColorStops( stops ) {
-		var first = 0, last = stops.length - 1, i = 0, foundFirst = false;
-		var incr, steps, step, firstVal;
+		var first = 0,
+			last = stops.length - 1,
+			i = 0,
+			foundFirst = false,
+			incr,
+			steps,
+			step,
+			firstVal;
+
 		if ( stops.length <= 2 || $.inArray( false, stops ) < 0 ) {
 			return stops;
 		}
@@ -182,11 +199,13 @@
 	};
 
 	$.fn.raninbowGradient = function( origin, args ) {
+		var opts, template, i, steps;
+
 		origin = origin || 'top';
-		var opts = $.extend( {}, { s: 100, l: 50 }, args );
-		var template = 'hsl(%h%,' + opts.s + '%,' + opts.l + '%)';
-		var i = 0;
-		var steps = [];
+		opts = $.extend( {}, { s: 100, l: 50 }, args );
+		template = 'hsl(%h%,' + opts.s + '%,' + opts.l + '%)';
+		i = 0;
+		steps = [];
 		while ( i <= 360 ) {
 			steps.push( template.replace('%h%', i) );
 			i += 30;
@@ -197,7 +216,7 @@
 	};
 
 	// the colorpicker widget def.
-	var Iris = {
+	Iris = {
 		options: {
 			color: false,
 			mode: 'hsl',
@@ -224,7 +243,8 @@
 			var self = this,
 				el = self.element,
 				color = self.options.color || el.val(),
-				hue;
+				hue,
+				_IEVER;
 
 			if ( gradientType === false )
 				testGradientType();
@@ -243,7 +263,7 @@
 			if ( $.browser.mozilla ) {
 				self.picker.addClass( 'iris-mozilla' );
 			} else if ( $.browser.msie ) {
-				var _IEVER = parseInt( $.browser.version, 10 );
+				_IEVER = parseInt( $.browser.version, 10 );
 				if ( _IEVER === 9 )
 					self.picker.addClass( 'iris-ie-9' );
 				else if ( _IEVER <= 8 )
@@ -496,8 +516,8 @@
 					$(this).removeClass( 'ui-state-focus' );
 				}
 			}).on( 'mousedown mouseup', function( event ) {
-				event.preventDefault();
 				var focusClass = 'ui-state-focus';
+				event.preventDefault();
 				if (event.type === 'mousedown' ) {
 					self.picker.find( '.' + focusClass ).removeClass( focusClass ).blur();
 					$(this).addClass( focusClass ).focus();
@@ -534,6 +554,7 @@
 
 			// allow clicking on the square to move there and keep dragging
 			square.mousedown( function( event ) {
+				var squareOffset, pos;
 				// only left click
 				if ( event.which !== 1 )
 					return;
@@ -542,8 +563,8 @@
 				if ( ! $( event.target ).is("div") )
 					return;
 
-				var squareOffset = self.controls.square.offset();
-				var pos = {
+				squareOffset = self.controls.square.offset();
+				pos = {
 						top: event.pageY - squareOffset.top,
 						left: event.pageX - squareOffset.left
 				};
@@ -582,12 +603,14 @@
 		},
 
 		_setOption: function( key, value ) {
-			var oldValue = this.options[key];
+			var oldValue = this.options[key],
+				hexLessColor,
+				newColor;
 			if ( key === 'color' ) {
 				// cast to string in case we have a number
 				value = "" + value;
-				var hexLessColor = value.replace(/^#/, '');
-				var newColor = new Color( value ).setHSpace( this.options.mode );
+				hexLessColor = value.replace(/^#/, '');
+				newColor = new Color( value ).setHSpace( this.options.mode );
 				if ( ! ( newColor.error ) ) {
 					this.color = newColor;
 					this.options.color = this.options[key] = this.color.toString();
@@ -598,8 +621,9 @@
 		},
 
 		_squareDimensions: function( forceRefresh ) {
-			var square = this.controls.square;
-			var dimensions, control;
+			var square = this.controls.square,
+				dimensions,
+				control;
 
 			if ( forceRefresh !== undef && square.data('dimensions') )
 				return square.data('dimensions');
@@ -639,7 +663,8 @@
 				actions.pop(); // conveniently the last item
 
 			$.each( actions, function(index, item) {
-				var value;
+				var value,
+					dimensions;
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
@@ -649,7 +674,7 @@
 							break;
 						case 'square':
 
-							var dimensions = self._squareDimensions(),
+							dimensions = self._squareDimensions(),
 								cssObj = {
 									left: color[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
 									top: dimensions.h - ( color[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
@@ -688,18 +713,23 @@
 		_debounce: function(func, wait, immediate) {
 			var timeout, result;
 			return function() {
-				var context = this, args = arguments;
-				var later = function() {
+				var context = this,
+					args = arguments,
+					later,
+					callNow;
+
+				later = function() {
 					timeout = null;
 					if (!immediate) result = func.apply(context, args);
 				};
-				var callNow = immediate && !timeout;
+
+				callNow = immediate && !timeout;
 				clearTimeout(timeout);
 				timeout = setTimeout(later, wait);
 				if (callNow) result = func.apply(context, args);
 				return result;
 			};
-		},
+		},	
 		show: function() {
 			this.picker.show();
 		},
