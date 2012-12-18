@@ -478,6 +478,13 @@
 				};
 
 			input.on('change', callback ).on('keyup', self._debounce(callback, debounceTimeout));
+
+			// If we initialized hidden, show on first focus. The rest is up to you.
+			if ( self.options.hide ) {
+				input.one('focus', function() {
+					self.show();
+				});
+			}
 		},
 
 		_initControls: function() {
