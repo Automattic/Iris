@@ -664,8 +664,7 @@
 				actions.pop(); // conveniently the last item
 
 			$.each( actions, function(index, item) {
-				var value,
-					dimensions;
+				var value, dimensions, cssObj;
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
@@ -674,12 +673,11 @@
 							controls.stripSlider.slider( 'value', value );
 							break;
 						case 'square':
-
-							dimensions = self._squareDimensions(),
-								cssObj = {
-									left: color[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
-									top: dimensions.h - ( color[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
-								};
+							dimensions = self._squareDimensions();
+							cssObj = {
+								left: color[controlOpts.horiz] / self._scale[controlOpts.horiz] * dimensions.w,
+								top: dimensions.h - ( color[controlOpts.vert] / self._scale[controlOpts.vert] * dimensions.h )
+							};
 
 							self.controls.squareDrag.css( cssObj );
 							break;
