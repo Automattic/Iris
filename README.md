@@ -1,22 +1,8 @@
 # Iris
 
-Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for [Custom Colors](http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/) on [WordPress.com](http://wordpress.com/) and shipping with [WordPress][http://wordpress.org/] 3.5+.
+Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for [Custom Colors](http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/) on [WordPress.com](http://wordpress.com/) and shipping with [WordPress](http://wordpress.org/) 3.5+.
 
-## Getting Started
-Download the [production version][min] or the [development version][max].
-
-[min]: https://raw.github.com/Automattic/Iris/master/dist/iris.min.js
-[max]: https://raw.github.com/Automattic/Iris/master/dist/iris.js
-
-Or, if you already have [Color.js](https://github.com/Automattic/Color.js) installed, try the [basic production version][basicmin] or the [basic development version][basicmax] (doesn't bundle Color.js).
-
-[basicmin]: https://raw.github.com/Automattic/Iris/master/dist/iris-basic.min.js
-
-[basicmax]: https://raw.github.com/Automattic/Iris/master/dist/iris-basic.js
-
-You'll need to use [jQuery](http://jquery.com/), of course, and [jQuery UI](http://jqueryui.com/)'s `draggable` and `slider` components.
-
-## Documentation & Examples
+## Documentation
 
 See the [Iris project page](http://automattic.github.com/Iris/).
 
