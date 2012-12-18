@@ -6,17 +6,22 @@
 		<title>Iris by Automattic</title>
 
 		<link rel="stylesheet" href="stylesheets/styles.css">
-		<link rel="stylesheet" href="stylesheets/pygment_trac.css">
+		<link rel="stylesheet" href="stylesheets/prism.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+		<script src="javascripts/scale.fix.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<script src="javascripts/iris.min.js"></script>
+		<script src="javascripts/prism.js"></script>
 	</head>
 	<body>
 		<div class="wrapper">
 			<header>
 				<h1>Iris</h1>
-				<p>A(n awesome) Color Picker</p>
+				<p>A(n awesome) Color Picker.</p>
 
 				<p class="view"><a href="https://github.com/Automattic/Iris">View the Project on GitHub <small>Automattic/Iris</small></a></p>
 
@@ -28,48 +33,235 @@
 				</ul>
 			</header>
 			<section>
-				<p>Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays out of the box. Initially developed for <a href="http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/">Custom Colors</a> on WordPress.com</p>
+<!-- begin docs -->
 
-<h2>Documentation</h2>
+<p>Iris uses CSS3 Gradients for everything, so it&#8217;ll look awesome on HiDPI displays out of the box. Initially developed for <a href="http://en.blog.wordpress.com/2012/07/11/go-ahead-add-a-splash-of-color/">Custom Colors</a> on <a href="http://wordpress.com/">WordPress.com</a> and shipping with <a href="http://wordpress.org">WordPress</a> 3.5+.</p>
 
-<p>Coming soon. The example below has some basic code:</p>
+<h2 id="dependencies">Dependencies</h3>
 
-<h2 id="example">Example: (This title will change color)</h2>
+<p>Iris relies on <a href="http://jquery.com/">jQuery</a> 1.7 and up, and the <code>draggable</code> and <code>slider</code> <a href="http://jqueryui.com/">jQuery UI</a> components. (Those then presume jQuery UI <code>core</code>, <code>widget</code>, and <code>mouse</code> components. Just use the jQuery UI <a href="http://jqueryui.com/download/">download builder</a> and it&#8217;ll sort out your dependencies)</p>
 
-<p><input type="text" id="color" value="#393939" /></p>
+<p>Just use the latest version of both jQuery and jQuery UI and you&#8217;ll be golden.</p>
 
-<p>The code for the above is simple:</p>
+<h2 id="basicsetup">Basic Setup</h2>
 
-<pre><code>jQuery(document).ready(function($) {
-  $("#color").iris({
-    hide: false,
-    change: function( event, ui ) {
-      $("#example").css( "color", ui.color.toString() );
+<p>Download the zip on the the <a href="https://github.com/Automattic/Iris">repo</a> or clone it or pull it or whatever you&#8217;re most comfortable with. There are minified of full versions. The -basic versions do not contain the <a href="https://github.com/Automattic/Color.js">Color.js</a> dependency, which you would then have to include separately.</p>
+
+<p>Then do something like the following:</p>
+
+<pre><code class="lang-markup">&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/iris.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/my/javascript.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p><em>Note that the above example is just an example. Use your discretion. You may not need all of jQuery UI, for instance, and you probably want some kind of system concatenating/managing your scripts.</em></p>
+
+<h2 id="usage">Usage</h2>
+
+<p>Iris is easy to use. She&#8217;s cooperative that way. The easiest thing is to assign her to an <code>input</code> element. Say you have:</p>
+
+<pre><code class="lang-markup">&lt;input type=&quot;text&quot; id='color-picker' value=&quot;#bada55&quot; /&gt;
+</code></pre>
+
+<p>Now, assuming you have a JavaScript file like <code>path/to/my/javascript.js</code> above, just write the following:</p>
+
+<pre><code class="lang-javascript">jQuery(document).ready(function($){
+    $('#color-picker').iris();
+});
+</code></pre>
+
+<p>And now you&#8217;ll have a color picker on that element. Well, by default, it&#8217;ll only show once you click/focus on the input element. Like below:</p>
+
+<p><input type="text" id='color-picker' value="#bada55" />
+<script>
+    jQuery(document).ready(function($){
+        $('#color-picker').iris();
+    });
+</script></p>
+
+<h2 id="options">Options</h2>
+
+<p>Defaults are powerful, but they may also be wrong for the situation you want to use Iris in. Iris takes an options object when you call her. Like maybe a wider, show-by-default picker:</p>
+
+<pre><code class="lang-javascript">jQuery(document).ready(function($){
+    $('#wide-load').iris({
+        width: 400,
+        hide: false
+    });
+});
+</code></pre>
+
+<p>Produces:</p>
+
+<p><input type="text" id='wide-load' value="#bada55" />
+<script>
+    jQuery(document).ready(function($){
+        $('#wide-load').iris({
+            width: 400,
+            hide: false
+        });
+    });
+</script></p>
+
+<p>Okay, enough with the chit-chat. Here&#8217;s the list of default option keys followed by more details of what they do:</p>
+
+<pre><code class="lang-javascript">options = {
+        color: false,
+        mode: 'hsl',
+        controls: {
+            horiz: 's', // horizontal defaults to saturation
+            vert: 'l', // vertical defaults to lightness
+            strip: 'h' // right strip defaults to hue
+        },
+        hide: true, // hide the color picker by default
+        border: true, // draw a border around the collection of UI elements
+        target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
+        width: 200, // the width of the collection of UI elements
+        palettes: false // show a palette of basic colors beneath the square.
     }
-  });
-});</code></pre>
+</code></pre>
 
-<h2>Browser Support</h2>
-<p>Works in IE >= 8 and all other good browsers.</p>
+<h3 id="color">color</h3>
+
+<p>If Iris is attached to an <code>input</code> element, it will first try to pick up its <code>value</code> attribute. Otherwise, you can supply a color of any type that <a href="https://github.com/Automattic/Color.js">Color.js</a> supports. (Hex, rgb, and hsl are good bets.)</p>
+
+<h3 id="mode">mode</h3>
+
+<p>Iris can sport a variety of looks. She supports <code>hsl</code> and &#8216;hsv&#8217; modes depending on your needs.</p>
+
+<h3 id="controls">controls</h3>
+
+<p>Iris is flexible like a gymnast. You can change all 3 directions of her controls. Just make sure you cover all 3 aspects of <code>hsl</code> or <code>hsv</code> that you chose in the <a href="#mode">mode</a> option. <code>horiz</code> and &#8216;vert&#8217; sets the horizontal and vertical aspects of the square, respectively, while the <code>strip</code> options sets the rightmost strip.</p>
+
+<h3 id="hide">hide</h3>
+
+<p>Iris hides until you call on her by default. Set to <code>false</code> to show right away.</p>
+
+<h3 id="border">border</h3>
+
+<p>Set to <code>true</code> to display a border around the square and strip controls.</p>
+
+<h3 id="target">target</h3>
+
+<p>If you are not attaching Iris to an <code>input</code> element, you may wish to display her somewhere other than the element you are calling her on. Supply a DOM element or a jQuery selector. This will be ignored when called on an <code>input</code> element.</p>
+
+<h3 id="width">width</h3>
+
+<p>The width, in pixels, that the combined interface should take up. Because Iris is drawn with CSS gradients, you can make her any size.</p>
+
+<h3 id="palettes">palettes</h3>
+
+<p>Set to <code>true</code> to display a row of common palette colors. This is particularly useful in situations where the currently selected color seems to make no colors available. Example:</p>
+
+<pre><code class="lang-javascript">$('#palette-example').iris({
+    hide: false,
+    palettes: true
+});
+</code></pre>
+
+<p><input type="text" id="palette-example" value="#000" />
+<script>
+    jQuery(document).ready(function($){
+        $('#palette-example').iris({
+            hide: false,
+            palettes: true
+        });
+    });
+</script></p>
+
+<p>Or, you can supply an array of colors to use your own palette colors.</p>
+
+<pre><code class="lang-javascript">$('#palette-example2').iris({
+    hide: false,
+    palettes: ['#125', '#459', '#78b', '#ab0', '#de3', '#f0f']
+});
+</code></pre>
+
+<p><input type="text" id="palette-example2" value="#000" />
+<script>
+    jQuery(document).ready(function($){
+        $('#palette-example2').iris({
+            hide: false,
+            palettes: ['#125', '#459', '#78b', '#ab0', '#de3', '#f0f']
+        });
+    });
+</script></p>
+
+<h2 id="callbacks">Callbacks</h2>
+
+<h3 id="change">change</h3>
+
+<p>Supply a <code>change</code> function when calling Iris to do stuff when the color changes. In the example below, the headline will change colors when you modify Iris.</p>
+
+<pre><code class="lang-javascript">$('#change-example').iris({
+    hide: false,
+    change: function(event, ui) {
+        // event = standard jQuery event, produced by whichever control was changed.
+        // ui = standard jQuery UI object, with a color Color.js object attached
+
+        // change the headline color
+        $(&quot;#headlinethatchanges&quot;).css( 'color', ui.color.toString());
+    }
+});
+</code></pre>
+
+<p>See <a href="https://github.com/Automattic/Color.js">Color.js</a> documentation for what you can do with that <code>ui.color</code> object. In most cases, you&#8217;ll just want <code>ui.color.toString()</code> to produce a hex color string.</p>
+
+<h4 id="headlinethatchanges">Headline That Changes</h4>
+
+<p><input type="text" id="change-example" value="#000" />
+<script>
+    jQuery(document).ready(function($){
+        $('#change-example').iris({
+            hide: false,
+            change: function(event, ui) {
+                $("#headlinethatchanges").css( 'color', ui.color.toString());
+            }
+        });
+    });
+</script></p>
+
+<h3 id="methods">Methods</h3>
+
+<p>Iris supports a couple of methods out of the box.</p>
+
+<h3 id="option">Option</h3>
+
+<p>Like most jQuery UI-based widgets, you can get/set all of the options intitially passed to Iris. But, only <code>color</code> really takes effect when set at present.</p>
+
+<pre><code class="lang-javascript">$(element).iris('option', 'color'); // retrieve the current color
+$(element).iris('option', 'color', '#bada55'); // set the color to #bada55
+</code></pre>
+
+<h4 id="show">Show</h4>
+
+<p>Reveal a hidden Iris color picker</p>
+
+<pre><code class="lang-javascript">$(element).iris('show');
+</code></pre>
+
+<h4 id="hide">Hide</h4>
+
+<p>Hide a visible Iris color picker</p>
+
+<pre><code class="lang-javascript">$(element).iris('hide');
+</code></pre>
+
+<h4 id="toggle">Toggle</h4>
+
+<p>Toggle the visibility of an Iris color picker</p>
+
+<pre><code class="lang-javascript">$(element).iris('hide');
+</code></pre>
+
+
+<!-- end docs -->
 			</section>
 			<footer>
 				<p>This project is maintained by <a href="https://github.com/Automattic">Automattic</a></p>
 				<p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
 			</footer>
 		</div>
-		<script src="javascripts/scale.fix.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-		<script src="https://raw.github.com/Automattic/Iris/master/dist/iris.min.js"></script>
-		<script>
-			jQuery(document).ready(function($) {
-				$("#color").iris({
-					hide: false,
-					change: function( event, ui ) {
-						$("#example").css( "color", ui.color.toString() );
-					}
-				});
-			});
-		</script>
 	</body>
 </html>

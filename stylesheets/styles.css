@@ -25,6 +25,7 @@ h1 {
 }
 
 h2 {
+  margin-top:80px;
   color:#393939;
 }
 
@@ -60,15 +61,22 @@ blockquote {
 code, pre {
   font-family:"Source Code Pro", Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
   color:#333;
-  font-size:12px;
+  font-size:13px;
+  font-weight: 400;
 }
 
-pre {
+pre, p code {
   padding:8px 15px;
   background: #f8f8f8;
-  border-radius:5px;
+  border-radius:4px;
   border:1px solid #e5e5e5;
   overflow-x: auto;
+}
+
+p code {
+  font-size: 14px;
+  margin:0 .1em;
+  padding: .125em .33em;
 }
 
 table {
