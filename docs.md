@@ -8,7 +8,7 @@ Just use the latest version of both jQuery and jQuery UI and you'll be golden.
 
 ## Basic Setup
 
-Download the zip on the the [repo][] or clone it or pull it or whatever you're most comfortable with. There are minified of full versions. The -basic versions do not contain the [Color.js][] dependency, which you would then have to include separately.
+Download the zip on the the [repo][] or clone it or pull it or whatever you're most comfortable with. There are minified or full versions in the `dist` directory. The -basic versions do not bundle the [Color.js][] dependency, which you would then have to include separately.
 
 Then do something like the following:
 
@@ -17,7 +17,7 @@ Then do something like the following:
 	<script src="path/to/iris.min.js"></script>
 	<script src="path/to/my/javascript.js"></script>
 
-*Note that the above example is just an example. Use your discretion. You may not need all of jQuery UI, for instance, and you probably want some kind of system concatenating/managing your scripts.*
+*Note that the above example is just an example. Use your discretion. You may not need all of jQuery UI, for instance, and you probably want some kind of system for concatenating/managing your scripts.*
 
 ## Usage
 
