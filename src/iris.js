@@ -317,6 +317,10 @@
 				palette = $("<a class='iris-palette' tabindex='0' />"),
 				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
+			// do we have an existing container? reuse it.
+			if ( this.picker.find('.iris-palette-container').length )
+				container = this.picker.find('.iris-palette-container').detach().html('');
+
 			$.each(colors, function(index, val) {
 				palette.clone().data('color', val).css('backgroundColor', val).appendTo(container).height(10).width(10);
 			});
@@ -585,18 +589,22 @@
 			});
 
 			// palettes
-			if ( self.options.palettes ) {
-				self.picker.find('.iris-palette-container').on('click', '.iris-palette', function(event) {
-					self.color.fromCSS( $(this).data('color') );
-					self.active = 'external';
-					self._change();
-				}).on('keydown', '.iris-palette', function(event) {
-					if ( ! ( event.keyCode === 13 || event.keyCode === 32 ) )
-						return true;
-					event.stopPropagation();
-					$(this).click();
-				});
-			}
+			if ( self.options.palettes )
+				self._paletteListeners();
+		},
+
+		_paletteListeners: function() {
+			var self = this;
+			self.picker.find('.iris-palette-container').on('click.palette', '.iris-palette', function(event) {
+				self.color.fromCSS( $(this).data('color') );
+				self.active = 'external';
+				self._change();
+			}).on('keydown.palette', '.iris-palette', function(event) {
+				if ( ! ( event.keyCode === 13 || event.keyCode === 32 ) )
+					return true;
+				event.stopPropagation();
+				$(this).click();
+			});
 		},
 
 		_squareDrag: function( event, ui ) {
@@ -613,20 +621,35 @@
 		},
 
 		_setOption: function( key, value ) {
-			var oldValue = this.options[key],
+			var self = this,
+				oldValue = self.options[key],
 				hexLessColor,
 				newColor;
-			if ( key === 'color' ) {
-				// cast to string in case we have a number
-				value = "" + value;
-				hexLessColor = value.replace(/^#/, '');
-				newColor = new Color( value ).setHSpace( this.options.mode );
-				if ( ! ( newColor.error ) ) {
-					this.color = newColor;
-					this.options.color = this.options[key] = this.color.toString();
-					this.active = 'external';
-					this._change();
-				}
+
+			switch(key) {
+				case 'color':
+					// cast to string in case we have a number
+					value = "" + value;
+					hexLessColor = value.replace(/^#/, '');
+					newColor = new Color( value ).setHSpace( self.options.mode );
+					if ( ! ( newColor.error ) ) {
+						self.color = newColor;
+						self.options.color = self.options[key] = self.color.toString();
+						self.active = 'external';
+						self._change();
+					}
+					break;
+				case 'palettes':
+					self.options.palettes = value;
+					if ( value )
+						self._addPalettes();
+					else
+						self.picker.find('.iris-palette-container').remove();
+					self._dimensions(true);
+					// do we need to add events?
+					if ( ! oldValue )
+						self._paletteListeners();
+					break;
 			}
 		},
 
