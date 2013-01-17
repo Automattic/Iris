@@ -233,6 +233,7 @@
 			width: 200, // the width of the collection of UI elements
 			palettes: false // show a palette of basic colors beneath the square.
 		},
+		_color: '',
 		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
 		_inited: false,
 		_defaultHSLControls: {
@@ -286,8 +287,8 @@
 			if ( self.options.palettes )
 				self._addPalettes();
 
-			self.color = new Color( color ).setHSpace( self.options.mode );
-			self.options.color = self.color.toString();
+			self._color = new Color( color ).setHSpace( self.options.mode );
+			self.options.color = self._color.toString();
 
 			// prep 'em for re-use
 			self.controls = {
@@ -306,7 +307,7 @@
 				self.options.controls = self._defaultHSLControls;
 
 			// store it. HSL gets squirrely
-			self.hue = self.color.h();
+			self.hue = self._color.h();
 
 			if ( self.options.hide )
 				self.picker.hide();
@@ -353,7 +354,7 @@
 		},
 		_paintDimension: function( origin, control ) {
 			var self = this,
-				c = self.color,
+				c = self._color,
 				mode = self.options.mode,
 				color = self._getHSpaceColor(),
 				target = self.controls[control],
@@ -427,7 +428,7 @@
 		},
 
 		_getHSpaceColor: function() {
-			return ( this.options.mode === 'hsv' ) ? this.color.toHsv() : this.color.toHsl();
+			return ( this.options.mode === 'hsv' ) ? this._color.toHsv() : this._color.toHsl();
 		},
 
 		_dimensions: function( reset ) {
@@ -493,7 +494,7 @@
 						if ( val !== '' )
 							input.addClass( 'iris-error' );
 					} else {
-						if ( color.toString() !== self.color.toString() ) {
+						if ( color.toString() !== self._color.toString() ) {
 							// let's not do this on keyup for hex shortcodes
 							if ( ! ( event.type === 'keyup' && val.match(/^[0-9a-fA-F]{3}$/) ) )
 								self._setOption( 'color', color.toString() );
@@ -527,7 +528,7 @@
 					if ( controlOpts.strip === 'h' )
 						ui.value = stripScale - ui.value;
 
-					self.color[controlOpts.strip]( ui.value );
+					self._color[controlOpts.strip]( ui.value );
 					self._change.apply( self, arguments );
 				}
 			});
@@ -614,7 +615,7 @@
 		_paletteListeners: function() {
 			var self = this;
 			self.picker.find('.iris-palette-container').on('click.palette', '.iris-palette', function(event) {
-				self.color.fromCSS( $(this).data('color') );
+				self._color.fromCSS( $(this).data('color') );
 				self.active = 'external';
 				self._change();
 			}).on('keydown.palette', '.iris-palette', function(event) {
@@ -632,7 +633,7 @@
 				vertVal = Math.round( ( dimensions.h - ui.position.top ) / dimensions.h * self._scale[controlOpts.vert] ),
 				horizVal = self._scale[controlOpts.horiz] - Math.round( ( dimensions.w - ui.position.left ) / dimensions.w * self._scale[controlOpts.horiz] );
 
-			self.color[controlOpts.horiz]( horizVal )[controlOpts.vert]( vertVal );
+			self._color[controlOpts.horiz]( horizVal )[controlOpts.vert]( vertVal );
 
 			self.active = 'square';
 			self._change.apply( self, arguments );
@@ -658,8 +659,8 @@
 					if ( newColor.error ) {
 						self.options[key] = oldValue;
 					} else {
-						self.color = newColor;
-						self.options.color = self.options[key] = self.color.toString();
+						self._color = newColor;
+						self.options.color = self.options[key] = self._color.toString();
 						self.active = 'external';
 						self._change();
 					}
@@ -735,7 +736,7 @@
 			var self = this,
 				controls = self.controls,
 				color = self._getHSpaceColor(),
-				hex = self.color.toString(),
+				hex = self._color.toString(),
 				actions = [ 'square', 'strip' ],
 				controlOpts = self.options.controls,
 				type = controlOpts[self.active] || 'external',
@@ -771,21 +772,21 @@
 
 			// Ensure that we don't change hue if we triggered a hue reset
 			if ( color.h !== oldHue && self._isNonHueControl( self.active, type ) )
-				self.color.h(oldHue);
+				self._color.h(oldHue);
 
 			// store hue for repeating above check next time
-			self.hue = self.color.h();
+			self.hue = self._color.h();
 
-			self.options.color = self.color.toString();
+			self.options.color = self._color.toString();
 
 			// only run after the first time
 			if ( self._inited )
-				self._trigger( 'change', { type: self.active }, { color: self.color } );
+				self._trigger( 'change', { type: self.active }, { color: self._color } );
 
-			if ( self.element.is(":input") && ! self.color.error ) {
+			if ( self.element.is(":input") && ! self._color.error ) {
 				self.element.removeClass( 'iris-error' );
-				if ( self.element.val() !== self.color.toString() )
-					self.element.val( self.color.toString() );
+				if ( self.element.val() !== self._color.toString() )
+					self.element.val( self._color.toString() );
 			}
 
 			self._paint();
@@ -821,6 +822,13 @@
 		},
 		toggle: function() {
 			this.picker.toggle();
+		},
+		color: function(newColor) {
+			if ( newColor === true )
+				return this._color.clone();
+			else if ( newColor === undef )
+				return this._color.toString();
+			this.option('color', newColor);
 		}
 	};
 	// initialize the widget
