@@ -6,6 +6,9 @@
 	display: block;
 	position: relative;
 }
+input + .iris-picker {
+	margin-top: 4px;
+}
 .iris-error {
 	background-color: #ffafaf;
 }
