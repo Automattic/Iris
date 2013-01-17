@@ -107,19 +107,19 @@
 <p>Okay, enough with the chit-chat. Here&#8217;s the list of default option keys followed by more details of what they do:</p>
 
 <pre><code class="lang-javascript">options = {
-        color: false,
-        mode: 'hsl',
-        controls: {
-            horiz: 's', // horizontal defaults to saturation
-            vert: 'l', // vertical defaults to lightness
-            strip: 'h' // right strip defaults to hue
-        },
-        hide: true, // hide the color picker by default
-        border: true, // draw a border around the collection of UI elements
-        target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
-        width: 200, // the width of the collection of UI elements
-        palettes: false // show a palette of basic colors beneath the square.
-    }
+    color: false,
+    mode: 'hsl',
+    controls: {
+        horiz: 's', // horizontal defaults to saturation
+        vert: 'l', // vertical defaults to lightness
+        strip: 'h' // right strip defaults to hue
+    },
+    hide: true, // hide the color picker by default
+    border: true, // draw a border around the collection of UI elements
+    target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
+    width: 200, // the width of the collection of UI elements
+    palettes: false // show a palette of basic colors beneath the square.
+}
 </code></pre>
 
 <h3 id="color">color</h3>
@@ -198,7 +198,7 @@
     hide: false,
     change: function(event, ui) {
         // event = standard jQuery event, produced by whichever control was changed.
-        // ui = standard jQuery UI object, with a color Color.js object attached
+        // ui = standard jQuery UI object, with a color member containing a Color.js object
 
         // change the headline color
         $(&quot;#headlinethatchanges&quot;).css( 'color', ui.color.toString());
@@ -222,33 +222,43 @@
     });
 </script></p>
 
-<h3 id="methods">Methods</h3>
+<h2 id="methods">Methods</h2>
 
 <p>Iris supports a couple of methods out of the box.</p>
 
 <h3 id="option">Option</h3>
 
-<p>Like most jQuery UI-based widgets, you can get/set all of the options intitially passed to Iris. But, only <code>color</code> really takes effect when set at present.</p>
+<p>Like most jQuery UI-based widgets, you can get/set all of the options intitially passed to Iris. The <code>controls</code> option, as noted above, might be a bit squirrely.</p>
 
-<pre><code class="lang-javascript">$(element).iris('option', 'color'); // retrieve the current color
-$(element).iris('option', 'color', '#bada55'); // set the color to #bada55
+<pre><code class="lang-javascript">$(element).iris('option', 'width'); // retrieve the current width
+$(element).iris('option', 'width', 500); // set the width to 500px. Because reasons.
 </code></pre>
 
-<h4 id="show">Show</h4>
+<h3 id="color">Color</h3>
+
+<p>A get/set method for Iris&#8217;s color, with a twist: call <code>true</code> in the second argument to return the associated <code>Color.js</code> object.</p>
+
+<pre><code class="lang-javascript">$(element).iris('color'); // retrieve the current color
+$(element).iris('color', true); // retrieve the Color.js object
+$(element).iris('color', '#bada55'); // set the color to #bada55
+</code></pre>
+
+
+<h3 id="show">Show</h3>
 
 <p>Reveal a hidden Iris color picker</p>
 
 <pre><code class="lang-javascript">$(element).iris('show');
 </code></pre>
 
-<h4 id="hide">Hide</h4>
+<h3 id="hide">Hide</h3>
 
 <p>Hide a visible Iris color picker</p>
 
 <pre><code class="lang-javascript">$(element).iris('hide');
 </code></pre>
 
-<h4 id="toggle">Toggle</h4>
+<h3 id="toggle">Toggle</h3>
 
 <p>Toggle the visibility of an Iris color picker</p>
 

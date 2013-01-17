@@ -29,6 +29,10 @@ h2 {
   color:#393939;
 }
 
+h3 {
+  margin: 2em 0 .5em;
+}
+
 h3, h4, h5, h6 {
   color:#494949;
 }

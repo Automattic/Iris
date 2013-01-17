@@ -66,19 +66,19 @@ Produces:
 Okay, enough with the chit-chat. Here's the list of default option keys followed by more details of what they do:
 
 	options = {
-			color: false,
-			mode: 'hsl',
-			controls: {
-				horiz: 's', // horizontal defaults to saturation
-				vert: 'l', // vertical defaults to lightness
-				strip: 'h' // right strip defaults to hue
-			},
-			hide: true, // hide the color picker by default
-			border: true, // draw a border around the collection of UI elements
-			target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
-			width: 200, // the width of the collection of UI elements
-			palettes: false // show a palette of basic colors beneath the square.
-		}
+		color: false,
+		mode: 'hsl',
+		controls: {
+			horiz: 's', // horizontal defaults to saturation
+			vert: 'l', // vertical defaults to lightness
+			strip: 'h' // right strip defaults to hue
+		},
+		hide: true, // hide the color picker by default
+		border: true, // draw a border around the collection of UI elements
+		target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
+		width: 200, // the width of the collection of UI elements
+		palettes: false // show a palette of basic colors beneath the square.
+	}
 
 ### color
 
@@ -154,7 +154,7 @@ Supply a `change` function when calling Iris to do stuff when the color changes.
 		hide: false,
 		change: function(event, ui) {
 			// event = standard jQuery event, produced by whichever control was changed.
-			// ui = standard jQuery UI object, with a color Color.js object attached
+			// ui = standard jQuery UI object, with a color member containing a Color.js object
 
 			// change the headline color
 			$("#headlinethatchanges").css( 'color', ui.color.toString());
@@ -177,30 +177,38 @@ See [Color.js][] documentation for what you can do with that `ui.color` object. 
 	});
 </script>
 
-### Methods
+## Methods
 
 Iris supports a couple of methods out of the box.
 
 ### Option
 
-Like most jQuery UI-based widgets, you can get/set all of the options intitially passed to Iris. But, only `color` really takes effect when set at present.
+Like most jQuery UI-based widgets, you can get/set all of the options intitially passed to Iris. The `controls` option, as noted above, might be a bit squirrely.
 
-	$(element).iris('option', 'color'); // retrieve the current color
-	$(element).iris('option', 'color', '#bada55'); // set the color to #bada55
+	$(element).iris('option', 'width'); // retrieve the current width
+	$(element).iris('option', 'width', 500); // set the width to 500px. Because reasons.
 
-#### Show
+### Color
+
+A get/set method for Iris's color, with a twist: call `true` in the second argument to return the associated `Color.js` object.
+
+	$(element).iris('color'); // retrieve the current color
+	$(element).iris('color', true); // retrieve the Color.js object
+	$(element).iris('color', '#bada55'); // set the color to #bada55
+
+### Show
 
 Reveal a hidden Iris color picker
 
 	$(element).iris('show');
 
-#### Hide
+### Hide
 
 Hide a visible Iris color picker
 
 	$(element).iris('hide');
 
-#### Toggle
+### Toggle
 
 Toggle the visibility of an Iris color picker
 
