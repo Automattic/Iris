@@ -235,6 +235,16 @@
 		},
 		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
 		_inited: false,
+		_defaultHSLControls: {
+			horiz: 's',
+			vert: 'l',
+			strip: 'h'
+		},
+		_defaultHSVControls: {
+			horiz: 'h',
+			vert: 'v',
+			strip: 's'
+		},
 		_scale: {
 			h: 360,
 			s: 100,
@@ -290,13 +300,10 @@
 			};
 
 			// small sanity check - if we chose hsv, change default controls away from hsl
-			if ( self.options.mode === 'hsv' && self.options.controls.vert === 'l' ) {
-				self.options.controls = {
-					horiz: 'h',
-					vert: 'v',
-					strip: 's'
-				};
-			}
+			if ( self.options.mode === 'hsv' && self._has('l', self.options.controls) )
+				self.options.controls = self._defaultHSVControls;
+			else if ( self.options.mode === 'hsl' && self._has('v', self.options.controls) )
+				self.options.controls = self._defaultHSLControls;
 
 			// store it. HSL gets squirrely
 			self.hue = self.color.h();
@@ -312,12 +319,23 @@
 			self._dimensions();
 			self._change();
 		},
+		_has: function(needle, haystack) {
+			var ret = false;
+			$.each(haystack, function(i,v){
+				if ( needle === v ) {
+					ret = true;
+					// exit the loop
+					return false;
+				}
+			});
+			return ret;
+		},
 		_addPalettes: function () {
 			var container = $("<div class='iris-palette-container' />"),
 				palette = $("<a class='iris-palette' tabindex='0' />"),
 				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
-			// do we have an existing container? reuse it.
+			// do we have an existing container? Empty and reuse it.
 			if ( this.picker.find('.iris-palette-container').length )
 				container = this.picker.find('.iris-palette-container').detach().html('');
 
@@ -623,8 +641,13 @@
 		_setOption: function( key, value ) {
 			var self = this,
 				oldValue = self.options[key],
+				doDimensions = false,
 				hexLessColor,
-				newColor;
+				newColor,
+				method;
+
+			// ensure the new value is set. We can reset to oldValue if some check wasn't met.
+			self.options[key] = value;
 
 			switch(key) {
 				case 'color':
@@ -632,7 +655,9 @@
 					value = "" + value;
 					hexLessColor = value.replace(/^#/, '');
 					newColor = new Color( value ).setHSpace( self.options.mode );
-					if ( ! ( newColor.error ) ) {
+					if ( newColor.error ) {
+						self.options[key] = oldValue;
+					} else {
 						self.color = newColor;
 						self.options.color = self.options[key] = self.color.toString();
 						self.active = 'external';
@@ -640,17 +665,44 @@
 					}
 					break;
 				case 'palettes':
-					self.options.palettes = value;
+					doDimensions = true;
+
 					if ( value )
 						self._addPalettes();
 					else
 						self.picker.find('.iris-palette-container').remove();
-					self._dimensions(true);
+
 					// do we need to add events?
 					if ( ! oldValue )
 						self._paletteListeners();
 					break;
+				case 'width':
+					doDimensions = true;
+					break;
+				case 'border':
+					doDimensions = true;
+					method = value ? 'addClass' : 'removeClass';
+					self.picker[method]('iris-border');
+					break;
+				case 'mode':
+				case 'controls':
+					// if nothing's changed, let's bail, since this causes re-rendering the whole widget
+					if ( oldValue === value )
+						return;
+
+					// we're using these poorly named variables because they're already scoped.
+					// method is the element that Iris was called on. oldValue will be the options
+					method = self.element;
+					oldValue = self.options;
+					oldValue.hide = ! self.picker.is(":visible");
+					self.destroy();
+					self.picker.remove();
+					return $(self.element).iris(oldValue);
 			}
+
+			// Do we need to recalc dimensions?
+			if ( doDimensions )
+				self._dimensions(true);
 		},
 
 		_squareDimensions: function( forceRefresh ) {
