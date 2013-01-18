@@ -450,7 +450,7 @@
 			if ( reset ) {
 				square.css('width', '');
 				strip.css('width', '');
-				self.picker.removeAttr( 'style' );
+				self.picker.css({width: '', height: ''});
 			}
 
 			squareWidth = innerWidth * ( parseFloat( squareWidth ) / 100 );
