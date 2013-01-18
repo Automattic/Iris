@@ -1,6 +1,6 @@
-/*! Iris - v1.0.0 - 2013-01-16
+/*! Iris Color Picker - v1.0.1 - 2013-01-17
 * https://github.com/Automattic/Iris
-* Copyright (c) 2013 Matt Wiebe; Licensed GPL */
+* Copyright (c) 2013 Matt Wiebe; Licensed GPLv2 */
 
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
@@ -454,7 +454,7 @@
 			if ( reset ) {
 				square.css('width', '');
 				strip.css('width', '');
-				self.picker.removeAttr( 'style' );
+				self.picker.css({width: '', height: ''});
 			}
 
 			squareWidth = innerWidth * ( parseFloat( squareWidth ) / 100 );
