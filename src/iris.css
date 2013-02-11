@@ -5,6 +5,8 @@
 .iris-picker {
 	display: block;
 	position: relative;
+  -moz-box-sizing: content-box;
+       box-sizing: content-box;
 }
 input + .iris-picker {
 	margin-top: 4px;
