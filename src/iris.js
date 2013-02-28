@@ -467,7 +467,7 @@
 			self.picker.css( { width: opts.width, height: controlsHeight } );
 
 			if ( ! opts.palettes )
-				return;
+				return self.picker.css( 'paddingBottom', '' );
 
 			// single margin at 2%
 			paletteMargin = squareWidth * 2 / 100;
