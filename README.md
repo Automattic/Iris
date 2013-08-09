@@ -7,7 +7,7 @@ Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays
 See the [Iris project page](http://automattic.github.com/Iris/).
 
 ## License
-Copyright (c) 2012 Automattic.  
+Copyright (c) 2012–2013 Automattic.
 Licensed under the GPLv2 license.
 
 ## Contributing
@@ -22,20 +22,5 @@ While grunt can run the included unit tests via PhantomJS, this shouldn't be con
 _This assumes you have [node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed already._
 
 1. Test that grunt is installed globally by running `grunt --version` at the command-line.
-1. If grunt isn't installed globally, run `npm install -g grunt` to install the latest version. _You may need to run `sudo npm install -g grunt`._
+1. If grunt isn't installed globally, run `npm install -g grunt-cli` to install the latest version. _You may need to run `sudo npm install -g grunt-cli`._
 1. From the root directory of this project, run `npm install` to install the project's dependencies.
-
-### Installing PhantomJS
-
-In order for the qunit task to work properly, [PhantomJS](http://www.phantomjs.org/) must be installed and in the system PATH (if you can run "phantomjs" at the command line, this task should work).
-
-Unfortunately, PhantomJS cannot be installed automatically via npm or grunt, so you need to install it yourself. There are a number of ways to install PhantomJS.
-
-* [PhantomJS and Mac OS X](http://ariya.ofilabs.com/2012/02/phantomjs-and-mac-os-x.html)
-* [PhantomJS Installation](http://code.google.com/p/phantomjs/wiki/Installation) (PhantomJS wiki)
-
-Note that the `phantomjs` executable needs to be in the system `PATH` for grunt to see it.
-
-* [How to set the path and environment variables in Windows](http://www.computerhope.com/issues/ch000549.htm)
-* [Where does $PATH get set in OS X 10.6 Snow Leopard?](http://superuser.com/questions/69130/where-does-path-get-set-in-os-x-10-6-snow-leopard)
-* [How do I change the PATH variable in Linux](https://www.google.com/search?q=How+do+I+change+the+PATH+variable+in+Linux)
