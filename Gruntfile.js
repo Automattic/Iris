@@ -67,6 +67,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks( 'grunt-contrib-concat' );
 
   // Default task.
-  grunt.registerTask('default', 'jshint qunit uglify concat'.split(' ') );
+  grunt.registerTask('default', 'jshint qunit concat uglify'.split(' ') );
 
 };
