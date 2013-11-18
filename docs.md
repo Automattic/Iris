@@ -86,7 +86,7 @@ If Iris is attached to an `input` element, it will first try to pick up its `val
 
 ### mode
 
-Iris can sport a variety of looks. She supports `hsl` and 'hsv' modes depending on your needs.
+Iris can sport a variety of looks. She supports `hsl` and `hsv` modes depending on your needs.
 
 ### controls
 
