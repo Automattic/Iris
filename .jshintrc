@@ -1,17 +1,16 @@
 {
-    "curly": false,
-    "eqeqeq": true,
-    "immed": true,
-    "latedef": true,
-    "newcap": true,
-    "noarg": true,
-    "sub": true,
-    "undef": true,
     "boss": true,
+    "curly": true,
+    "eqeqeq": true,
     "eqnull": true,
-    "browser": true,
-    "globals": {
-        "jQuery": true,
-        "Color": true
-    }
+    "es3": true,
+    "expr": true,
+    "immed": true,
+    "noarg": true,
+    "onevar": true,
+    "quotmark": "single",
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "browser": true
 }
