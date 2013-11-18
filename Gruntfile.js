@@ -15,11 +15,11 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/<%= pkg.name %>.js>', 'libs/color.js'],
+        src: ['src/<%= pkg.name %>.js', 'libs/color.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
       basic: {
-        src: ['src/<%= pkg.name %>.js>'],
+        src: ['src/<%= pkg.name %>.js'],
         dest: 'dist/<%= pkg.name %>-basic.js'
       }
     },
@@ -67,6 +67,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks( 'grunt-contrib-concat' );
 
   // Default task.
-  grunt.registerTask('default', 'jshint qunit uglify concat'.split(' ') );
+  grunt.registerTask('default', 'jshint qunit concat uglify'.split(' ') );
 
 };
