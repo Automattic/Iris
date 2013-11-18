@@ -1,7 +1,6 @@
-/*! Iris Color Picker - v1.0.3 - 2013-02-15
+/*! Iris Color Picker - v1.0.4 - 2013-11-18
 * https://github.com/Automattic/Iris
 * Copyright (c) 2013 Matt Wiebe; Licensed GPLv2 */
-
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
 
@@ -13,9 +12,9 @@
 	nonGradientIE = ( isIE && IEVersion < 10 );
 	gradientType = false;
 	// we don't bother with an unprefixed version, as it has a different syntax
-	vendorPrefixes = ['-moz-', '-webkit-', '-o-', '-ms-' ];
+	vendorPrefixes = [ '-moz-', '-webkit-', '-o-', '-ms-' ];
 	// This is manually copied from iris.min.css until I can figure out how to do it without
-	_css = '.iris-picker{display:block;position:relative}.iris-picker,.iris-picker *{-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input + .iris-picker{margin-top:4px}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,0.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:none;border:3px solid #fff;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:none;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}';
+	_css = '.iris-picker{display:block;position:relative}.iris-picker,.iris-picker *{-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input+.iris-picker{margin-top:4px}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:0;border:3px solid #fff;-ms-filter:"alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:0;margin:0;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px;width:auto;height:auto;background:transparent;border:0;top:none;border-radius:0}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}';
 	// Bail for IE <= 7
 	if ( nonGradientIE && IEVersion <= 7 ) {
 		$.fn.iris = $.noop;
@@ -32,11 +31,11 @@
 			gradientType = 'filter';
 		}
 		else {
-			el = $('<div id="iris-gradtest" />');
-			base = "linear-gradient(top,#fff,#000)";
+			el = $( '<div id="iris-gradtest" />' );
+			base = 'linear-gradient(top,#fff,#000)';
 			$.each( vendorPrefixes, function( i, val ){
 				el.css( 'backgroundImage', val + base );
-				if ( el.css( 'backgroundImage').match('gradient') ) {
+				if ( el.css( 'backgroundImage').match( 'gradient' ) ) {
 					gradientType = i;
 					return false;
 				}
@@ -44,8 +43,9 @@
 			// check for legacy webkit gradient syntax
 			if ( gradientType === false ) {
 				el.css( 'background', '-webkit-gradient(linear,0% 0%,0% 100%,from(#fff),to(#000))' );
-				if ( el.css( 'backgroundImage').match('gradient') )
+				if ( el.css( 'backgroundImage').match( 'gradient' ) ) {
 					gradientType = 'webkit';
+				}
 			}
 			el.remove();
 		}
@@ -63,11 +63,12 @@
 	*/
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call(arguments, 1);
-		if ( gradientType === 'webkit' )
+		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		if ( gradientType === 'webkit' ) {
 			return legacyWebkitGradient( origin, stops );
-		else
-			return vendorPrefixes[gradientType] + 'linear-gradient(' + origin + ', ' + stops.join(', ') + ')';
+		} else {
+			return vendorPrefixes[ gradientType ] + 'linear-gradient(' + origin + ', ' + stops.join(', ') + ')';
+		}
 	}
 
 	/**
@@ -77,7 +78,7 @@
 		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
 
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call(arguments, 1);
+		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		// 8 hex: AARRGGBB
 		// GradientType: 0 vertical, 1 horizontal
 		type = ( origin === 'top' ) ? 0 : 1;
@@ -88,32 +89,35 @@
 		endPosProp = ( type === 1 ) ? 'right' : 'bottom';
 		dimensionProp = ( type === 1 ) ? 'height' : 'width';
 		template = '<div class="iris-ie-gradient-shim" style="position:absolute;' + dimensionProp + ':100%;' + startPosProp + ':%start%;' + endPosProp + ':%end%;' + filter + ':%filter%;" data-color:"%color%"></div>';
-		html = "";
+		html = '';
 		// need a positioning context
-		if ( self.css('position') === 'static' )
+		if ( self.css('position') === 'static' ) {
 			self.css( {position: 'relative' } );
+		}
 
 		stops = fillColorStops( stops );
 		$.each(stops, function( i, startColor ) {
 			var endColor, endStop, filterVal;
 
 			// we want two at a time. if we're on the last pair, bail.
-			if ( i === lastIndex )
+			if ( i === lastIndex ) {
 				return false;
+			}
 
 			endColor = stops[ i + 1 ];
 			//if our pairs are at the same color stop, moving along.
-			if ( startColor.stop === endColor.stop )
+			if ( startColor.stop === endColor.stop ) {
 				return;
+			}
 
 			endStop = 100 - parseFloat( endColor.stop ) + '%';
 			startColor.octoHex = new Color( startColor.color ).toIEOctoHex();
 			endColor.octoHex = new Color( endColor.color ).toIEOctoHex();
 
-			filterVal = "progid:DXImageTransform.Microsoft.Gradient(GradientType=" + type + ", StartColorStr='" + startColor.octoHex + "', EndColorStr='" + endColor.octoHex + "')";
+			filterVal = 'progid:DXImageTransform.Microsoft.Gradient(GradientType=' + type + ', StartColorStr=\'' + startColor.octoHex + '\', EndColorStr=\'' + endColor.octoHex + '\')';
 			html += template.replace( '%start%', startColor.stop ).replace( '%end%', endStop ).replace( '%filter%', filterVal );
 		});
-		self.find(".iris-ie-gradient-shim").remove();
+		self.find( '.iris-ie-gradient-shim' ).remove();
 		$( html ).prependTo( self );
 	}
 
@@ -136,10 +140,10 @@
 		$.each( colorList, function( index, val ) {
 			var color = val,
 				perc = false,
-				match = val.match(/1?[0-9]{1,2}%$/);
+				match = val.match( /1?[0-9]{1,2}%$/ );
 
 			if ( match ) {
-				color = val.replace(/\s?1?[0-9]{1,2}%$/, '');
+				color = val.replace( /\s?1?[0-9]{1,2}%$/, '' );
 				perc = match.shift();
 			}
 			colors.push( color );
@@ -147,11 +151,13 @@
 		});
 
 		// back fill first and last
-		if ( percs[0] === false )
+		if ( percs[0] === false ) {
 			percs[0] = '0%';
+		}
 
-		if ( percs[lastIndex] === false )
+		if ( percs[lastIndex] === false ) {
 			percs[lastIndex] = '100%';
+		}
 
 		percs = backFillColorStops( percs );
 
@@ -197,15 +203,16 @@
 		return backFillColorStops( stops );
 	}
 
-	$.fn.gradient = function( origin ) {
+	$.fn.gradient = function() {
 		var args = arguments;
 		return this.each( function() {
 			// this'll be oldishIE
-			if ( nonGradientIE )
+			if ( nonGradientIE ) {
 				stupidIEGradient.apply( this, args );
-			else // new hotness
+			} else {
+				// new hotness
 				$( this ).css( 'backgroundImage', createGradient.apply( this, args ) );
-
+			}
 		});
 	};
 
@@ -243,7 +250,7 @@
 			palettes: false // show a palette of basic colors beneath the square.
 		},
 		_color: '',
-		_palettes: ['#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
+		_palettes: [ '#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
 		_inited: false,
 		_defaultHSLControls: {
 			horiz: 's',
@@ -264,17 +271,18 @@
 		_create: function() {
 			var self = this,
 				el = self.element,
-				color = self.options.color || el.val(),
-				hue;
+				color = self.options.color || el.val();
 
-			if ( gradientType === false )
+			if ( gradientType === false ) {
 				testGradientType();
+			}
 
-			if ( el.is("input") ) {
-				if ( self.options.target )
+			if ( el.is( 'input' ) ) {
+				if ( self.options.target ) {
 					self.picker = $( _html ).appendTo( self.options.target );
-				else
+				} else {
 					self.picker = $( _html ).insertAfter( el );
+				}
 
 				self._addInputListeners( el );
 			} else {
@@ -285,16 +293,18 @@
 			// Browsers / Versions
 			// Feature detection doesn't work for these, and $.browser is deprecated
 			if ( isIE ) {
-				if ( IEVersion === 9 )
+				if ( IEVersion === 9 ) {
 					self.picker.addClass( 'iris-ie-9' );
-				else if ( IEVersion <= 8 )
+				} else if ( IEVersion <= 8 ) {
 					self.picker.addClass( 'iris-ie-lt9' );
-			} else if ( UA.indexOf('compatible') < 0 && UA.indexOf('khtml') < 0 && UA.match(/mozilla/) ) {
+				}
+			} else if ( UA.indexOf('compatible') < 0 && UA.indexOf('khtml') < 0 && UA.match( /mozilla/ ) ) {
 				self.picker.addClass( 'iris-mozilla' );
 			}
 
-			if ( self.options.palettes )
+			if ( self.options.palettes ) {
 				self._addPalettes();
+			}
 
 			self._color = new Color( color ).setHSpace( self.options.mode );
 			self.options.color = self._color.toString();
@@ -310,19 +320,22 @@
 			};
 
 			// small sanity check - if we chose hsv, change default controls away from hsl
-			if ( self.options.mode === 'hsv' && self._has('l', self.options.controls) )
+			if ( self.options.mode === 'hsv' && self._has('l', self.options.controls) ) {
 				self.options.controls = self._defaultHSVControls;
-			else if ( self.options.mode === 'hsl' && self._has('v', self.options.controls) )
+			} else if ( self.options.mode === 'hsl' && self._has('v', self.options.controls) ) {
 				self.options.controls = self._defaultHSLControls;
+			}
 
 			// store it. HSL gets squirrely
 			self.hue = self._color.h();
 
-			if ( self.options.hide )
+			if ( self.options.hide ) {
 				self.picker.hide();
+			}
 
-			if ( self.options.border )
+			if ( self.options.border ) {
 				self.picker.addClass( 'iris-border' );
+			}
 
 			self._initControls();
 			self.active = 'external';
@@ -341,16 +354,19 @@
 			return ret;
 		},
 		_addPalettes: function () {
-			var container = $("<div class='iris-palette-container' />"),
-				palette = $("<a class='iris-palette' tabindex='0' />"),
+			var container = $( '<div class="iris-palette-container" />' ),
+				palette = $( '<a class="iris-palette" tabindex="0" />' ),
 				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
 			// do we have an existing container? Empty and reuse it.
-			if ( this.picker.find('.iris-palette-container').length )
-				container = this.picker.find('.iris-palette-container').detach().html('');
+			if ( this.picker.find( '.iris-palette-container' ).length ) {
+				container = this.picker.find( '.iris-palette-container' ).detach().html( '' );
+			}
 
 			$.each(colors, function(index, val) {
-				palette.clone().data('color', val).css('backgroundColor', val).appendTo(container).height(10).width(10);
+				palette.clone().data( 'color', val )
+					.css( 'backgroundColor', val ).appendTo( container )
+					.height( 10 ).width( 10 );
 			});
 
 			this.picker.append(container);
@@ -366,13 +382,14 @@
 				c = self._color,
 				mode = self.options.mode,
 				color = self._getHSpaceColor(),
-				target = self.controls[control],
+				target = self.controls[ control ],
 				controlOpts = self.options.controls,
 				stops;
 
 			// don't paint the active control
-			if ( control === self.active || ( self.active === 'square' && control !== 'strip' ) )
+			if ( control === self.active || ( self.active === 'square' && control !== 'strip' ) ) {
 				return;
+			}
 
 			switch ( controlOpts[ control ] ) {
 				case 'h':
@@ -391,44 +408,49 @@
 						}
 						stops = color.toHsl();
 					} else {
-						if ( control === 'strip' )
+						if ( control === 'strip' ) {
 							stops = { s: color.s, l: color.l };
-						else
+						} else {
 							stops = { s: 100, l: color.l };
+						}
 					}
 
 					target.raninbowGradient( origin, stops );
 					break;
 				case 's':
 					if ( mode === 'hsv' ) {
-						if ( control === 'vert' )
+						if ( control === 'vert' ) {
 							stops = [ c.clone().a(0).s(0).toCSS('rgba'), c.clone().a(1).s(0).toCSS('rgba') ];
-						else if ( control === 'strip' )
+						} else if ( control === 'strip' ) {
 							stops = [ c.clone().s(100).toCSS('hsl'), c.clone().s(0).toCSS('hsl') ];
-						else if ( control === 'horiz' )
+						} else if ( control === 'horiz' ) {
 							stops = [ '#fff', 'hsl(' + color.h + ',100%,50%)' ];
+						}
 					} else { // implicit mode === 'hsl'
-						if ( control === 'vert' && self.options.controls.horiz === 'h' )
+						if ( control === 'vert' && self.options.controls.horiz === 'h' ) {
 							stops = ['hsla(0, 0%, ' + color.l + '%, 0)', 'hsla(0, 0%, ' + color.l + '%, 1)'];
-						else
+						} else {
 							stops = ['hsl('+ color.h +',0%,50%)', 'hsl(' + color.h + ',100%,50%)'];
+						}
 					}
 
 
 					target.gradient( origin, stops );
 					break;
 				case 'l':
-					if ( control === 'strip' )
+					if ( control === 'strip' ) {
 						stops = ['hsl(' + color.h + ',100%,100%)', 'hsl(' + color.h + ', ' + color.s + '%,50%)', 'hsl('+ color.h +',100%,0%)'];
-					else
+					} else {
 						stops = ['#fff', 'rgba(255,255,255,0) 50%', 'rgba(0,0,0,0) 50%', 'rgba(0,0,0,1)'];
+					}
 					target.gradient( origin, stops );
 					break;
 				case 'v':
-						if ( control === 'strip' )
+						if ( control === 'strip' ) {
 							stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
-						else
+						} else {
 							stops = ['rgba(0,0,0,0)', '#000'];
+						}
 						target.gradient( origin, stops );
 					break;
 				default:
@@ -444,10 +466,9 @@
 			// whatever size
 			var self = this,
 				opts = self.options,
-				inner = self.picker.find(".iris-picker-inner"),
 				controls = self.controls,
 				square = controls.square,
-				strip = self.picker.find('.iris-strip'),
+				strip = self.picker.find( '.iris-strip' ),
 				squareWidth = '77.5%',
 				stripWidth = '12%',
 				totalPadding = 20,
@@ -457,9 +478,9 @@
 				paletteMargin, paletteWidth, paletteContainerWidth;
 
 			if ( reset ) {
-				square.css('width', '');
-				strip.css('width', '');
-				self.picker.css({width: '', height: ''});
+				square.css( 'width', '' );
+				strip.css( 'width', '' );
+				self.picker.css( {width: '', height: ''} );
 			}
 
 			squareWidth = innerWidth * ( parseFloat( squareWidth ) / 100 );
@@ -470,22 +491,23 @@
 			strip.height( squareWidth ).width( stripWidth );
 			self.picker.css( { width: opts.width, height: controlsHeight } );
 
-			if ( ! opts.palettes )
-				return;
+			if ( ! opts.palettes ) {
+				return self.picker.css( 'paddingBottom', '' );
+			}
 
 			// single margin at 2%
 			paletteMargin = squareWidth * 2 / 100;
 			paletteContainerWidth = squareWidth - ( ( paletteCount - 1 ) * paletteMargin );
 			paletteWidth = paletteContainerWidth / paletteCount;
-			self.picker.find('.iris-palette').each(function(i, val) {
+			self.picker.find('.iris-palette').each( function( i ) {
 				var margin = i === 0 ? 0 : paletteMargin;
-				$(this).css({
+				$( this ).css({
 					width: paletteWidth,
 					height: paletteWidth,
 					marginLeft: margin
 				});
 			});
-			self.picker.css('paddingBottom', paletteWidth + paletteMargin );
+			self.picker.css( 'paddingBottom', paletteWidth + paletteMargin );
 			strip.height( paletteWidth + paletteMargin + squareWidth );
 		},
 
@@ -494,28 +516,30 @@
 				debounceTimeout = 100,
 				callback = function( event ){
 					var color = new Color( input.val() ),
-						val = input.val().replace(/^#/, '');
+						val = input.val().replace( /^#/, '' );
 
 					input.removeClass( 'iris-error' );
 					// we gave a bad color
 					if ( color.error ) {
 						// don't error on an empty input - we want those allowed
-						if ( val !== '' )
+						if ( val !== '' ) {
 							input.addClass( 'iris-error' );
+						}
 					} else {
 						if ( color.toString() !== self._color.toString() ) {
 							// let's not do this on keyup for hex shortcodes
-							if ( ! ( event.type === 'keyup' && val.match(/^[0-9a-fA-F]{3}$/) ) )
+							if ( ! ( event.type === 'keyup' && val.match( /^[0-9a-fA-F]{3}$/ ) ) ) {
 								self._setOption( 'color', color.toString() );
+							}
 						}
 					}
 				};
 
-			input.on('change', callback ).on('keyup', self._debounce(callback, debounceTimeout));
+			input.on( 'change', callback ).on( 'keyup', self._debounce( callback, debounceTimeout ) );
 
 			// If we initialized hidden, show on first focus. The rest is up to you.
 			if ( self.options.hide ) {
-				input.one('focus', function() {
+				input.one( 'focus', function() {
 					self.show();
 				});
 			}
@@ -534,8 +558,9 @@
 				slide: function( event, ui ) {
 					self.active = 'strip';
 					// "reverse" for hue.
-					if ( controlOpts.strip === 'h' )
+					if ( controlOpts.strip === 'h' ) {
 						ui.value = stripScale - ui.value;
+					}
 
 					self._color[controlOpts.strip]( ui.value );
 					self._change.apply( self, arguments );
@@ -566,15 +591,16 @@
 				} else {
 					$(this).removeClass( focusClass );
 				}
-			}).on("keydown", function( event ) {
+			}).on( 'keydown', function( event ) {
 				var container = controls.square,
 					draggable = controls.squareDrag,
 					position = draggable.position(),
 					distance = self.options.width / 100; // Distance in pixels the draggable should be moved: 1 "stop"
 
 				// make alt key go "10"
-				if ( event.altKey )
+				if ( event.altKey ) {
 					distance *= 10;
+				}
 
 				// Reposition if one of the directional keys is pressed
 				switch ( event.keyCode ) {
@@ -598,12 +624,14 @@
 			square.mousedown( function( event ) {
 				var squareOffset, pos;
 				// only left click
-				if ( event.which !== 1 )
+				if ( event.which !== 1 ) {
 					return;
+				}
 
 				// prevent bubbling from the handle: no infinite loops
-				if ( ! $( event.target ).is("div") )
+				if ( ! $( event.target ).is( 'div' ) ) {
 					return;
+				}
 
 				squareOffset = self.controls.square.offset();
 				pos = {
@@ -617,21 +645,23 @@
 			});
 
 			// palettes
-			if ( self.options.palettes )
+			if ( self.options.palettes ) {
 				self._paletteListeners();
+			}
 		},
 
 		_paletteListeners: function() {
 			var self = this;
-			self.picker.find('.iris-palette-container').on('click.palette', '.iris-palette', function(event) {
+			self.picker.find('.iris-palette-container').on('click.palette', '.iris-palette', function() {
 				self._color.fromCSS( $(this).data('color') );
 				self.active = 'external';
 				self._change();
-			}).on('keydown.palette', '.iris-palette', function(event) {
-				if ( ! ( event.keyCode === 13 || event.keyCode === 32 ) )
+			}).on( 'keydown.palette', '.iris-palette', function( event ) {
+				if ( ! ( event.keyCode === 13 || event.keyCode === 32 ) ) {
 					return true;
+				}
 				event.stopPropagation();
-				$(this).click();
+				$( this ).click();
 			});
 		},
 
@@ -662,8 +692,8 @@
 			switch(key) {
 				case 'color':
 					// cast to string in case we have a number
-					value = "" + value;
-					hexLessColor = value.replace(/^#/, '');
+					value = '' + value;
+					hexLessColor = value.replace( /^#/, '' );
 					newColor = new Color( value ).setHSpace( self.options.mode );
 					if ( newColor.error ) {
 						self.options[key] = oldValue;
@@ -677,14 +707,16 @@
 				case 'palettes':
 					doDimensions = true;
 
-					if ( value )
+					if ( value ) {
 						self._addPalettes();
-					else
+					} else {
 						self.picker.find('.iris-palette-container').remove();
+					}
 
 					// do we need to add events?
-					if ( ! oldValue )
+					if ( ! oldValue ) {
 						self._paletteListeners();
+					}
 					break;
 				case 'width':
 					doDimensions = true;
@@ -697,22 +729,24 @@
 				case 'mode':
 				case 'controls':
 					// if nothing's changed, let's bail, since this causes re-rendering the whole widget
-					if ( oldValue === value )
+					if ( oldValue === value ) {
 						return;
+					}
 
 					// we're using these poorly named variables because they're already scoped.
 					// method is the element that Iris was called on. oldValue will be the options
 					method = self.element;
 					oldValue = self.options;
-					oldValue.hide = ! self.picker.is(":visible");
+					oldValue.hide = ! self.picker.is( ':visible' );
 					self.destroy();
 					self.picker.remove();
 					return $(self.element).iris(oldValue);
 			}
 
 			// Do we need to recalc dimensions?
-			if ( doDimensions )
+			if ( doDimensions ) {
 				self._dimensions(true);
+			}
 		},
 
 		_squareDimensions: function( forceRefresh ) {
@@ -720,8 +754,9 @@
 				dimensions,
 				control;
 
-			if ( forceRefresh !== undef && square.data('dimensions') )
+			if ( forceRefresh !== undef && square.data('dimensions') ) {
 				return square.data('dimensions');
+			}
 
 			control = this.controls.squareDrag;
 			dimensions = {
@@ -733,29 +768,31 @@
 		},
 
 		_isNonHueControl: function( active, type ) {
-			if ( active === 'square' && this.options.controls.strip === 'h' )
+			if ( active === 'square' && this.options.controls.strip === 'h' ) {
 				return true;
-			else if ( type === 'external' || ( type === 'h' && active === 'strip' ) )
+			} else if ( type === 'external' || ( type === 'h' && active === 'strip' ) ) {
 				return false;
+			}
 
 			return true;
 		},
 
-		_change: function( event, ui ) {
+		_change: function() {
 			var self = this,
 				controls = self.controls,
 				color = self._getHSpaceColor(),
-				hex = self._color.toString(),
 				actions = [ 'square', 'strip' ],
 				controlOpts = self.options.controls,
 				type = controlOpts[self.active] || 'external',
 				oldHue = self.hue;
 
-			// take no action on any of the square sliders if we adjusted the strip
-			if ( self.active === 'strip' )
+			if ( self.active === 'strip' ) {
+				// take no action on any of the square sliders if we adjusted the strip
 				actions = [];
-			else if ( self.active !== 'external' ) // for non-strip, non-external, strip should never change
+			} else if ( self.active !== 'external' ) {
+				// for non-strip, non-external, strip should never change
 				actions.pop(); // conveniently the last item
+			}
 
 			$.each( actions, function(index, item) {
 				var value, dimensions, cssObj;
@@ -780,8 +817,9 @@
 			});
 
 			// Ensure that we don't change hue if we triggered a hue reset
-			if ( color.h !== oldHue && self._isNonHueControl( self.active, type ) )
+			if ( color.h !== oldHue && self._isNonHueControl( self.active, type ) ) {
 				self._color.h(oldHue);
+			}
 
 			// store hue for repeating above check next time
 			self.hue = self._color.h();
@@ -789,13 +827,15 @@
 			self.options.color = self._color.toString();
 
 			// only run after the first time
-			if ( self._inited )
+			if ( self._inited ) {
 				self._trigger( 'change', { type: self.active }, { color: self._color } );
+			}
 
-			if ( self.element.is(":input") && ! self._color.error ) {
+			if ( self.element.is( ':input' ) && ! self._color.error ) {
 				self.element.removeClass( 'iris-error' );
-				if ( self.element.val() !== self._color.toString() )
+				if ( self.element.val() !== self._color.toString() ) {
 					self.element.val( self._color.toString() );
+				}
 			}
 
 			self._paint();
@@ -803,7 +843,7 @@
 			self.active = false;
 		},
 		// taken from underscore.js _.debounce method
-		_debounce: function(func, wait, immediate) {
+		_debounce: function( func, wait, immediate ) {
 			var timeout, result;
 			return function() {
 				var context = this,
@@ -813,13 +853,17 @@
 
 				later = function() {
 					timeout = null;
-					if (!immediate) result = func.apply(context, args);
+					if ( ! immediate) {
+						result = func.apply( context, args );
+					}
 				};
 
 				callNow = immediate && !timeout;
-				clearTimeout(timeout);
-				timeout = setTimeout(later, wait);
-				if (callNow) result = func.apply(context, args);
+				clearTimeout( timeout );
+				timeout = setTimeout( later, wait );
+				if ( callNow ) {
+					result = func.apply( context, args );
+				}
 				return result;
 			};
 		},
@@ -833,17 +877,18 @@
 			this.picker.toggle();
 		},
 		color: function(newColor) {
-			if ( newColor === true )
+			if ( newColor === true ) {
 				return this._color.clone();
-			else if ( newColor === undef )
+			} else if ( newColor === undef ) {
 				return this._color.toString();
+			}
 			this.option('color', newColor);
 		}
 	};
 	// initialize the widget
 	$.widget( 'a8c.iris', Iris );
 	// add CSS
-	$('<style id="iris-css">' + _css + '</style>').appendTo( 'head' );
+	$( '<style id="iris-css">' + _css + '</style>' ).appendTo( 'head' );
 
 }( jQuery ));
 /*! Color.js - v0.9.9 - 2012-11-20
