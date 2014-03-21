@@ -47,7 +47,7 @@ Defaults are powerful, but they may also be wrong for the situation you want to 
 	jQuery(document).ready(function($){
 		$('#wide-load').iris({
 			width: 400,
-			hide: false 
+			hide: false
 		});
 	});
 
@@ -58,7 +58,7 @@ Produces:
 	jQuery(document).ready(function($){
 		$('#wide-load').iris({
 			width: 400,
-			hide: false 
+			hide: false
 		});
 	});
 </script>
@@ -102,7 +102,7 @@ Set to `true` to display a border around the square and strip controls.
 
 ### target
 
-If you are not attaching Iris to an `input` element, you may wish to display her somewhere other than the element you are calling her on. Supply a DOM element or a jQuery selector. This will be ignored when called on an `input` element.
+If you are attaching Iris to an `input` element, you may wish to display her somewhere other than directly after the element you are calling her on. Supply a DOM element or a jQuery selector. This will be ignored when not called on an `input` element.
 
 ### width
 
