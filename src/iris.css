@@ -132,7 +132,6 @@ input + .iris-picker {
 	height: auto;
 	background: transparent;
 	border: none;
-	top: none;
 	border-radius: 0;
 }
 .iris-picker .iris-square-handle {
