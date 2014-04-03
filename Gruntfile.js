@@ -1,6 +1,6 @@
-/*global module:false*/
-module.exports = function(grunt) {
+/*global module,require*/
 
+module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('iris.jquery.json'),
@@ -56,17 +56,31 @@ module.exports = function(grunt) {
         src: ['src/iris.css'],
         dest: 'src/iris.min.css'
       }
+    },
+    replace: {
+      dist: {
+        options: {
+          patterns: [{
+            match:  /_css = '.+';$/m,
+            replacement: function() {
+              var css = grunt.file.read( 'src/iris.min.css' );
+              return '_css = \'' + css + '\';';
+            }
+          }]
+        },
+        files: [{
+          src: [ 'src/iris.js' ],
+          dest: 'src/iris.js'
+        }]
+      }
     }
   });
 
-  grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-  grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-  grunt.loadNpmTasks( 'grunt-contrib-watch' );
-  grunt.loadNpmTasks( 'grunt-contrib-qunit' );
-  grunt.loadNpmTasks( 'grunt-contrib-jshint' );
-  grunt.loadNpmTasks( 'grunt-contrib-concat' );
+  require( 'load-grunt-tasks' )( grunt );
+
+  grunt.registerTask('css', ['cssmin', 'replace']);
 
   // Default task.
-  grunt.registerTask('default', 'jshint qunit concat uglify'.split(' ') );
+  grunt.registerTask('default', 'css jshint qunit concat uglify'.split(' ') );
 
 };
