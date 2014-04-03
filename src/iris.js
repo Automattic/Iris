@@ -25,7 +25,8 @@
 	$.support.iris = true;
 
 	function testGradientType() {
-		var el, base;
+		var el, base,
+			bgImageString = 'backgroundImage';
 
 		if ( nonGradientIE ) {
 			gradientType = 'filter';
@@ -34,8 +35,8 @@
 			el = $( '<div id="iris-gradtest" />' );
 			base = 'linear-gradient(top,#fff,#000)';
 			$.each( vendorPrefixes, function( i, val ){
-				el.css( 'backgroundImage', val + base );
-				if ( el.css( 'backgroundImage').match( 'gradient' ) ) {
+				el.css( bgImageString, val + base );
+				if ( el.css( bgImageString ).match( 'gradient' ) ) {
 					gradientType = i;
 					return false;
 				}
@@ -43,7 +44,7 @@
 			// check for legacy webkit gradient syntax
 			if ( gradientType === false ) {
 				el.css( 'background', '-webkit-gradient(linear,0% 0%,0% 100%,from(#fff),to(#000))' );
-				if ( el.css( 'backgroundImage').match( 'gradient' ) ) {
+				if ( el.css( bgImageString ).match( 'gradient' ) ) {
 					gradientType = 'webkit';
 				}
 			}
