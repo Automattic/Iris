@@ -7,7 +7,7 @@ Iris uses CSS3 Gradients for everything, so it'll look awesome on HiDPI displays
 See the [Iris project page](http://automattic.github.io/Iris/).
 
 ## License
-Copyright (c) 2012–2013 Automattic.
+Copyright (c) 2012–2014 Automattic.
 Licensed under the GPLv2 license.
 
 ## Contributing
