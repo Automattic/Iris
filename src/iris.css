@@ -198,3 +198,58 @@ input + .iris-picker {
 	margin: 0;
 	cursor: pointer;
 }
+.iris-alpha-slider-container {
+	-webkit-border-radius: 0px 0px 4px 4px;
+		 -moz-border-radius: 0px 0px 4px 4px;
+		  -ie-border-radius: 0px 0px 4px 4px;
+		   -o-border-radius: 0px 0px 4px 4px;
+					border-radius: 0px 0px 4px 4px;
+
+	position: absolute;
+	width: 	96%;
+	left: 	-1px;
+	bottom: -14px;
+	background: #fff;
+	height: 6px;
+	border: 1px solid #aaa;
+	padding: 4px;
+	border-top: 0;
+	padding-bottom: 8px;
+}
+.iris-alpha-slider-container .alphaSlider {
+	-webkit-box-shadow: inset 1px 1px 1px #DDD, inset -1px -1px 1px #FFF;
+		 -moz-box-shadow: inset 1px 1px 1px #DDD, inset -1px -1px 1px #FFF;
+		  -ie-box-shadow: inset 1px 1px 1px #DDD, inset -1px -1px 1px #FFF;
+		   -o-box-shadow: inset 1px 1px 1px #DDD, inset -1px -1px 1px #FFF;
+	height: 3px;
+	background: #C5C5C5;
+	width: 59%;
+	margin: auto;
+	margin-left: 25px;
+}
+
+.iris-alpha-slider-container .alphaSlider a {
+	-webkit-border-radius: 15px;
+		 -moz-border-radius: 15px;
+		  -ie-border-radius: 15px;
+			 -o-border-radius: 15px;
+					border-radius: 15px;
+
+	width: 		10px;
+	height: 	10px;
+	color: white;
+	border: 	1px solid rgb(204, 204, 204);
+	box-shadow: rgb(221, 221, 221) -1px -1px 1px inset, rgb(255, 255, 255) 1px 1px 1px inset;
+	background: rgb(243, 243, 243);
+	margin-left: -.3em;
+}
+
+.iris-alpha-slider-container .alphaSlider:before {
+	content: "α:";
+	position: absolute;
+	left: -19px;
+	top: -6px;
+	font-size: 10px;
+	font-family: verdana;
+	color: #929292;
+}
