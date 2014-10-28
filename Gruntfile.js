@@ -47,10 +47,6 @@ module.exports = function(grunt) {
         src: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
       }
     },
-    watch: {
-      files: '<config:lint.files>',
-      tasks: 'jshint qunit'
-    },
     cssmin: {
       dist: {
         src: ['src/iris.css'],
@@ -72,6 +68,16 @@ module.exports = function(grunt) {
           src: [ 'src/iris.js' ],
           dest: 'src/iris.js'
         }]
+      }
+    },
+    watch: {
+      js: {
+        files: [ 'src/iris.js' ],
+        tasks: [ 'jshint', 'concat', 'uglify' ]
+      },
+      css: {
+        files: [ 'src/iris.css' ],
+        tasks: [ 'css' ]
       }
     }
   });
