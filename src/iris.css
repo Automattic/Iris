@@ -198,3 +198,7 @@ input + .iris-picker {
 	margin: 0;
 	cursor: pointer;
 }
+.iris-square-handle,.ui-slider-handle {
+	border: 0;
+	outline: 0;
+}
