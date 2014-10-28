@@ -22,5 +22,5 @@ While grunt can run the included unit tests via PhantomJS, this shouldn't be con
 _This assumes you have [node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed already._
 
 1. Test that grunt is installed globally by running `grunt --version` at the command-line.
-1. If grunt isn't installed globally, run `npm install -g grunt-cli` to install the latest version. _You may need to run `sudo npm install -g grunt-cli`._
-1. From the root directory of this project, run `npm install` to install the project's dependencies.
+2. If grunt isn't installed globally, run `npm install -g grunt-cli` to install the latest version. _You may need to run `sudo npm install -g grunt-cli`._
+3. From the root directory of this project, run `npm install` to install the project's dependencies.
