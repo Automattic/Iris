@@ -1,4 +1,4 @@
-/*! Iris Color Picker - v1.0.5 - 2014-10-28
+/*! Iris Color Picker - v1.0.6 - 2014-11-17
 * https://github.com/Automattic/Iris
 * Copyright (c) 2014 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
@@ -894,11 +894,10 @@
 	$( '<style id="iris-css">' + _css + '</style>' ).appendTo( 'head' );
 
 }( jQuery ));
-/*! Color.js - v0.9.9 - 2012-11-20
+/*! Color.js - v0.9.11 - 2013-08-09
 * https://github.com/Automattic/Color.js
-* Copyright (c) 2012 Matt Wiebe; Licensed GPL v2 */
-
-(function(exports, undef) {
+* Copyright (c) 2013 Matt Wiebe; Licensed GPLv2 */
+(function(global, undef) {
 
 	var Color = function( color, type ) {
 		if ( ! ( this instanceof Color ) )
@@ -960,7 +959,7 @@
 		},
 
 		fromCSS: function( color ) {
-			var nums, list,
+			var list,
 				leadingRE = /^(rgb|hs(l|v))a?\(/;
 			this.error = false;
 
@@ -1310,31 +1309,6 @@
 			return new Color( hex );
 		},
 
-		getGrayscaleContrastingColor: function( contrast ) {
-			if ( ! contrast ) {
-				return this.getMaxContrastColor();
-			}
-
-			// don't allow less than 5
-			var target_contrast = ( contrast < 5 ) ? 5 : contrast;
-			var color = this.getMaxContrastColor();
-			contrast = color.getDistanceLuminosityFrom( this );
-
-			// if current max contrast is less than the target contrast, we had wishful thinking.
-			if ( contrast <= target_contrast ) {
-				return color;
-			}
-
-			var incr = ( 0 === color.toInt() ) ? 1 : -1;
-
-			while ( contrast > target_contrast ) {
-				color = color.incrementLightness( incr );
-				contrast = color.getDistanceLuminosityFrom( this );
-			}
-
-			return color;
-		},
-
 		getReadableContrastingColor: function( bgColor, minContrast ) {
 			if ( ! bgColor instanceof Color ) {
 				return this;
@@ -1359,7 +1333,7 @@
 
 			var incr = ( 0 === maxContrastColor.toInt() ) ? -1 : 1;
 			while ( contrast < targetContrast ) {
-				this.incrementLightness( incr );
+				this.l( incr, true ); // 2nd arg turns this into an incrementer
 				contrast = this.getDistanceLuminosityFrom( bgColor );
 				// infininite loop prevention: you never know.
 				if ( this._color === 0 || this._color === 16777215 ) {
@@ -1505,6 +1479,10 @@
 			Color.fn[key] = Color.fn._partial(key);
 	}
 
-	exports.Color = Color;
+	// play nicely with Node + browser
+	if ( typeof exports === 'object' )
+		module.exports = Color;
+	else
+		global.Color = Color;
 
-}(typeof exports === 'object' && exports || this));
+}(this));
