@@ -1,4 +1,4 @@
-/*! Iris Color Picker - v1.0.6 - 2014-11-17
+/*! Iris Color Picker - v1.0.6 - 2014-11-28
 * https://github.com/Automattic/Iris
 * Copyright (c) 2014 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
@@ -571,7 +571,7 @@
 			});
 
 			controls.squareDrag.draggable({
-				containment: 'div.iris-square-inner',
+				containment: controls.square.find( '.iris-square-inner' ),
 				zIndex: 1000,
 				cursor: 'move',
 				drag: function( event, ui ) {
