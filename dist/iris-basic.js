@@ -1,4 +1,4 @@
-/*! Iris Color Picker - v1.0.6 - 2014-11-28
+/*! Iris Color Picker - v1.0.7 - 2014-11-28
 * https://github.com/Automattic/Iris
 * Copyright (c) 2014 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
