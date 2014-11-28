@@ -569,7 +569,7 @@
 			});
 
 			controls.squareDrag.draggable({
-				containment: 'div.iris-square-inner',
+				containment: 'parent',
 				zIndex: 1000,
 				cursor: 'move',
 				drag: function( event, ui ) {
