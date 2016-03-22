@@ -217,7 +217,7 @@
 		});
 	};
 
-	$.fn.raninbowGradient = function( origin, args ) {
+	$.fn.rainbowGradient = function( origin, args ) {
 		var opts, template, i, steps;
 
 		origin = origin || 'top';
@@ -416,7 +416,7 @@
 						}
 					}
 
-					target.raninbowGradient( origin, stops );
+					target.rainbowGradient( origin, stops );
 					break;
 				case 's':
 					if ( mode === 'hsv' ) {
