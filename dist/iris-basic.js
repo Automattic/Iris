@@ -1,6 +1,6 @@
-/*! Iris Color Picker - v1.0.7 - 2014-11-28
+/*! Iris Color Picker - v1.0.7 - 2015-03-11
 * https://github.com/Automattic/Iris
-* Copyright (c) 2014 Matt Wiebe; Licensed GPLv2 */
+* Copyright (c) 2015 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
 
@@ -763,8 +763,8 @@
 
 			control = this.controls.squareDrag;
 			dimensions = {
-				w: square.width(),
-				h: square.height()
+				w: square.width() - control.width(),
+				h: square.height() - control.height()
 			};
 			square.data( 'dimensions', dimensions );
 			return dimensions;
