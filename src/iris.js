@@ -479,13 +479,10 @@
 			return ( this.options.mode === 'hsv' ) ? this._color.toHsv() : this._color.toHsl();
 		},
 
-		_stripOnlyDimensions: function( reset ) {
+		_stripOnlyDimensions: function() {
 			var self = this,
-				strip = self.controls.strip,
-				isHorizontal = self.options.slider === 'horizontal',
-				isVertical = ! isHorizontal,
 				width = this.options.width,
-				height = width * .12;
+				height = width * 0.12;
 
 			// "width" = long dimension, "height" = short dimension
 			if ( self.horizontalSlider ) {
@@ -497,7 +494,7 @@
 
 		_dimensions: function( reset ) {
 			if ( this.options.type === 'hue' ) {
-				return this._stripOnlyDimensions( reset );
+				return this._stripOnlyDimensions();
 			}
 			// whatever size
 			var self = this,
