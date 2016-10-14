@@ -1,11 +1,11 @@
-/*! Iris Color Picker - v1.0.7 - 2014-11-28
+/*! Iris Color Picker - v1.1.0-alpha - 2016-10-14
 * https://github.com/Automattic/Iris
-* Copyright (c) 2014 Matt Wiebe; Licensed GPLv2 */
+* Copyright (c) 2016 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
 
 	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><div class="iris-slider-offset"></div></div></div></div>';
-	_css = '.iris-picker{display:block;position:relative}.iris-picker,.iris-picker *{-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input+.iris-picker{margin-top:4px}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:0;border:3px solid #fff;-ms-filter:"alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:0;margin:0;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px;width:auto;height:auto;background:transparent;border:0;border-radius:0}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}.iris-square-handle,.ui-slider-handle{border:0;outline:0}';
+	_css = '.iris-picker{display:block;position:relative}.iris-picker,.iris-picker *{-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input+.iris-picker{margin-top:4px}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-only-strip .iris-slider{width:100%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-only-strip .iris-square{display:none}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:0 0;border:3px solid #fff;-ms-filter:"alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:0 0;margin:0;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip-horiz .iris-strip .ui-slider-handle{right:auto;left:auto;bottom:-3px;top:-3px;height:auto;width:6px;cursor:ew-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px;width:auto;height:auto;background:transparent;border:0;border-radius:0}.iris-strip-horiz .iris-slider-offset{top:0;bottom:0;right:11px;left:-3px}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}.iris-square-handle,.ui-slider-handle{border:0;outline:0}';
 
 	// Even IE9 dosen't support gradients. Elaborate sigh.
 	UA = navigator.userAgent.toLowerCase();
@@ -219,7 +219,7 @@
 		});
 	};
 
-	$.fn.raninbowGradient = function( origin, args ) {
+	$.fn.rainbowGradient = function( origin, args ) {
 		var opts, template, i, steps;
 
 		origin = origin || 'top';
@@ -250,7 +250,9 @@
 			border: true, // draw a border around the collection of UI elements
 			target: false, // a DOM element / jQuery selector that the element will be appended within. Only used when called on an input.
 			width: 200, // the width of the collection of UI elements
-			palettes: false // show a palette of basic colors beneath the square.
+			palettes: false, // show a palette of basic colors beneath the square.
+			type: 'full', // use `hue` to show a hue-only slider.
+			slider: 'horizontal' // or vertical. only applies when type = 'hue'
 		},
 		_color: '',
 		_palettes: [ '#000', '#fff', '#d33', '#d93', '#ee2', '#81d742', '#1e73be', '#8224e3' ],
@@ -309,6 +311,16 @@
 				self._addPalettes();
 			}
 
+			self.onlySlider = self.options.type === 'hue';
+			self.horizontalSlider = self.onlySlider && self.options.slider === 'horizontal';
+			if ( self.onlySlider ) {
+				self.options.controls.strip = 'h';
+				if ( ! color ) {
+					// set a color for a hue-only slider if one wasn't provided
+					color = 'hsl(10,100,50)';
+				}
+			}
+
 			self._color = new Color( color ).setHSpace( self.options.mode );
 			self.options.color = self._color.toString();
 
@@ -336,7 +348,7 @@
 				self.picker.hide();
 			}
 
-			if ( self.options.border ) {
+			if ( self.options.border && ! self.onlySlider ) {
 				self.picker.addClass( 'iris-border' );
 			}
 
@@ -376,7 +388,11 @@
 		},
 		_paint: function() {
 			var self = this;
-			self._paintDimension( 'top', 'strip' );
+			if ( self.horizontalSlider ) {
+				self._paintDimension( 'left', 'strip' );
+			} else {
+				self._paintDimension( 'top', 'strip' );
+			}
 			self._paintDimension( 'top', 'vert' );
 			self._paintDimension( 'left', 'horiz' );
 		},
@@ -418,7 +434,7 @@
 						}
 					}
 
-					target.raninbowGradient( origin, stops );
+					target.rainbowGradient( origin, stops );
 					break;
 				case 's':
 					if ( mode === 'hsv' ) {
@@ -465,7 +481,23 @@
 			return ( this.options.mode === 'hsv' ) ? this._color.toHsv() : this._color.toHsl();
 		},
 
+		_stripOnlyDimensions: function() {
+			var self = this,
+				width = this.options.width,
+				height = width * 0.12;
+
+			// "width" = long dimension, "height" = short dimension
+			if ( self.horizontalSlider ) {
+				self.picker.css( { width: width, height: height } ).addClass( 'iris-only-strip iris-strip-horiz' );
+			} else {
+				self.picker.css( { width: height, height: width } ).addClass( 'iris-only-strip iris-strip-vert' );
+			}
+		},
+
 		_dimensions: function( reset ) {
+			if ( this.options.type === 'hue' ) {
+				return this._stripOnlyDimensions();
+			}
 			// whatever size
 			var self = this,
 				opts = self.options,
@@ -553,15 +585,16 @@
 				controls = self.controls,
 				square = controls.square,
 				controlOpts = self.options.controls,
-				stripScale = self._scale[controlOpts.strip];
+				stripScale = self._scale[controlOpts.strip],
+				stripOrientation = self.horizontalSlider ? 'horizontal' : 'vertical';
 
 			controls.stripSlider.slider({
-				orientation: 'vertical',
+				orientation: stripOrientation,
 				max: stripScale,
 				slide: function( event, ui ) {
 					self.active = 'strip';
-					// "reverse" for hue.
-					if ( controlOpts.strip === 'h' ) {
+					// "reverse" for vertical hue.
+					if ( controlOpts.strip === 'h' && stripOrientation === 'vertical' ) {
 						ui.value = stripScale - ui.value;
 					}
 
@@ -894,9 +927,10 @@
 	$( '<style id="iris-css">' + _css + '</style>' ).appendTo( 'head' );
 
 }( jQuery ));
-/*! Color.js - v0.9.11 - 2013-08-09
+
+/*! Color.js - v1.1.0 - 2015-12-17
 * https://github.com/Automattic/Color.js
-* Copyright (c) 2013 Matt Wiebe; Licensed GPLv2 */
+* Copyright (c) 2015 Matt Wiebe; Licensed GPLv2 */
 (function(global, undef) {
 
 	var Color = function( color, type ) {
@@ -1284,11 +1318,22 @@
 			return '#' + AA + hex.replace(/^#/, '' );
 		},
 
+		// http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
 		toLuminosity: function() {
 			var rgb = this.toRgb();
-			return 0.2126 * Math.pow( rgb.r / 255, 2.2 ) + 0.7152 * Math.pow( rgb.g / 255, 2.2 ) + 0.0722 * Math.pow( rgb.b / 255, 2.2);
+			var lum = {};
+			for ( var i in rgb ) {
+				if ( ! rgb.hasOwnProperty( i ) ) {
+					continue;
+				}
+				var chan = rgb[ i ] / 255;
+				lum[ i ] = ( chan <= 0.03928 ) ? chan / 12.92 : Math.pow( ( ( chan + 0.055 ) / 1.055 ), 2.4 );
+			}
+
+			return 0.2126 * lum.r + 0.7152 * lum.g + 0.0722 * lum.b;
 		},
 
+		// http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef
 		getDistanceLuminosityFrom: function( color ) {
 			if ( ! ( color instanceof Color ) ) {
 				throw 'getDistanceLuminosityFrom requires a Color object';
@@ -1304,34 +1349,38 @@
 		},
 
 		getMaxContrastColor: function() {
-			var lum = this.toLuminosity();
-			var hex = ( lum >= 0.5 ) ? '000000' : 'ffffff';
+			var withBlack = this.getDistanceLuminosityFrom( new Color( '#000' ) );
+			var withWhite = this.getDistanceLuminosityFrom( new Color( '#fff' ) );
+			var hex = ( withBlack >= withWhite ) ? '#000' : '#fff';
 			return new Color( hex );
 		},
 
 		getReadableContrastingColor: function( bgColor, minContrast ) {
-			if ( ! bgColor instanceof Color ) {
+			if ( ! ( bgColor instanceof Color ) ) {
 				return this;
 			}
 
 			// you shouldn't use less than 5, but you might want to.
-			var targetContrast = ( minContrast === undef ) ? 5 : minContrast;
-			// working things
-			var contrast = bgColor.getDistanceLuminosityFrom( this );
-			var maxContrastColor = bgColor.getMaxContrastColor();
-			var maxContrast = maxContrastColor.getDistanceLuminosityFrom( bgColor );
+			var targetContrast = ( minContrast === undef ) ? 5 : minContrast,
+				contrast = bgColor.getDistanceLuminosityFrom( this ),
+				maxContrastColor, maxContrast, incr;
+
+			// if we have sufficient contrast already, cool
+			if ( contrast >= targetContrast ) {
+				return this;
+			}
+
+
+			maxContrastColor = bgColor.getMaxContrastColor();
+			maxContrast = maxContrastColor.getDistanceLuminosityFrom( bgColor );
 
 			// if current max contrast is less than the target contrast, we had wishful thinking.
 			// still, go max
 			if ( maxContrast <= targetContrast ) {
 				return maxContrastColor;
 			}
-			// or, we might already have sufficient contrast
-			else if ( contrast >= targetContrast ) {
-				return this;
-			}
 
-			var incr = ( 0 === maxContrastColor.toInt() ) ? -1 : 1;
+			incr = ( 0 === maxContrastColor.toInt() ) ? -1 : 1;
 			while ( contrast < targetContrast ) {
 				this.l( incr, true ); // 2nd arg turns this into an incrementer
 				contrast = this.getDistanceLuminosityFrom( bgColor );
@@ -1342,7 +1391,6 @@
 			}
 
 			return this;
-
 		},
 
 		a: function( val ) {
