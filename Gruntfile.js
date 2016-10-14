@@ -36,9 +36,6 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>-basic.min.js'
       }
     },
-    qunit: {
-      files: ['test/**/*.html']
-    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -73,7 +70,7 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: [ 'src/iris.js' ],
-        tasks: [ 'jshint', 'concat', 'uglify' ]
+        tasks: [ 'concat', 'uglify' ]
       },
       css: {
         files: [ 'src/iris.css' ],
@@ -87,6 +84,6 @@ module.exports = function(grunt) {
   grunt.registerTask('css', ['cssmin', 'replace']);
 
   // Default task.
-  grunt.registerTask('default', 'css jshint qunit concat uglify'.split(' ') );
+  grunt.registerTask('default', 'css jshint concat uglify'.split(' ') );
 
 };
