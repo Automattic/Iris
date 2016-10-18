@@ -1,4 +1,4 @@
-/*! Iris Color Picker - v1.1.0-alpha - 2016-10-14
+/*! Iris Color Picker - v1.1.0-alpha.2 - 2016-10-18
 * https://github.com/Automattic/Iris
 * Copyright (c) 2016 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
@@ -835,8 +835,8 @@
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
-							// reverse for hue
-							value = ( controlOpts.strip === 'h' ) ? self._scale[controlOpts.strip] - color[controlOpts.strip] : color[controlOpts.strip];
+							// reverse for hue if vertical
+							value = ( controlOpts.strip === 'h' && ! self.horizontalSlider ) ? self._scale[ controlOpts.strip ] - color[ controlOpts.strip ] : color[controlOpts.strip];
 							controls.stripSlider.slider( 'value', value );
 							break;
 						case 'square':
@@ -869,8 +869,15 @@
 
 			if ( self.element.is( ':input' ) && ! self._color.error ) {
 				self.element.removeClass( 'iris-error' );
-				if ( self.element.val() !== self._color.toString() ) {
-					self.element.val( self._color.toString() );
+
+				if ( self.onlySlider ) {
+					if ( self.element.val() !== self.hue ) {
+						self.element.val( self.hue );
+					}
+				} else {
+					if ( self.element.val() !== self._color.toString() ) {
+						self.element.val( self._color.toString() );
+					}
 				}
 			}
 
