@@ -833,8 +833,8 @@
 				if ( item !== self.active ) {
 					switch ( item ) {
 						case 'strip':
-							// reverse for hue
-							value = ( controlOpts.strip === 'h' ) ? self._scale[controlOpts.strip] - color[controlOpts.strip] : color[controlOpts.strip];
+							// reverse for hue if vertical
+							value = ( controlOpts.strip === 'h' && ! self.horizontalSlider ) ? self._scale[ controlOpts.strip ] - color[ controlOpts.strip ] : color[controlOpts.strip];
 							controls.stripSlider.slider( 'value', value );
 							break;
 						case 'square':
