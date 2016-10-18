@@ -867,8 +867,15 @@
 
 			if ( self.element.is( ':input' ) && ! self._color.error ) {
 				self.element.removeClass( 'iris-error' );
-				if ( self.element.val() !== self._color.toString() ) {
-					self.element.val( self._color.toString() );
+
+				if ( self.onlySlider ) {
+					if ( self.element.val() !== self.hue ) {
+						self.element.val( self.hue );
+					}
+				} else {
+					if ( self.element.val() !== self._color.toString() ) {
+						self.element.val( self._color.toString() );
+					}
 				}
 			}
 
