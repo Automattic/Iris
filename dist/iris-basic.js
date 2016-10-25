@@ -1,4 +1,4 @@
-/*! Iris Color Picker - v1.1.0-alpha.2 - 2016-10-18
+/*! Iris Color Picker - v1.1.0-beta - 2016-10-25
 * https://github.com/Automattic/Iris
 * Copyright (c) 2016 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
@@ -727,18 +727,32 @@
 
 			switch(key) {
 				case 'color':
-					// cast to string in case we have a number
-					value = '' + value;
-					hexLessColor = value.replace( /^#/, '' );
-					newColor = new Color( value ).setHSpace( self.options.mode );
-					if ( newColor.error ) {
-						self.options[key] = oldValue;
-					} else {
-						self._color = newColor;
-						self.options.color = self.options[key] = self._color.toString();
+					if ( self.onlySlider ) {
+						value = parseInt( value, 10 );
+						if ( isNaN( value ) || value < 0 || value > 359 ) {
+							value = oldValue;
+						} else {
+							value = 'hsl(' + value + ',100,50)';
+						}
+						self.options.color = self.options[key] = value;
+						self._color = new Color( value ).setHSpace( self.options.mode );
 						self.active = 'external';
 						self._change();
+					} else {
+						// cast to string in case we have a number
+						value = '' + value;
+						hexLessColor = value.replace( /^#/, '' );
+						newColor = new Color( value ).setHSpace( self.options.mode );
+						if ( newColor.error ) {
+							self.options[key] = oldValue;
+						} else {
+							self._color = newColor;
+							self.options.color = self.options[key] = self._color.toString();
+							self.active = 'external';
+							self._change();
+						}
 					}
+
 					break;
 				case 'palettes':
 					doDimensions = true;
