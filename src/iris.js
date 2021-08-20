@@ -73,8 +73,8 @@
 	}
 
 	/**
-	 * Stupid gradients for a stupid browser.
-	 */
+	* Stupid gradients for a stupid browser.
+	*/
 	function stupidIEGradient( origin, stops ) {
 		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
 
