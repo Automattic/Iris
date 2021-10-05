@@ -54,17 +54,17 @@
 	}
 
 	/**
-	* Only for CSS3 gradients. oldIE will use a separate function.
-	*
-	* Accepts as many color stops as necessary from 2nd arg on, or 2nd
-	* arg can be an array of color stops
-	*
-	* @param  {string} origin Gradient origin - top or left, defaults to left.
-	* @return {string}        Appropriate CSS3 gradient string for use in
-	*/
+	 * Only for CSS3 gradients. oldIE will use a separate function.
+	 *
+	 * Accepts as many color stops as necessary from 2nd arg on, or 2nd
+	 * arg can be an array of color stops
+	 *
+	 * @param  {string} origin Gradient origin - top or left, defaults to left.
+	 * @return {string}        Appropriate CSS3 gradient string for use in
+	 */
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		if ( gradientType === 'webkit' ) {
 			return legacyWebkitGradient( origin, stops );
 		} else {
@@ -73,13 +73,13 @@
 	}
 
 	/**
-	* Stupid gradients for a stupid browser.
-	*/
+	 * Stupid gradients for a stupid browser.
+	 */
 	function stupidIEGradient( origin, stops ) {
 		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
 
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		// 8 hex: AARRGGBB
 		// GradientType: 0 vertical, 1 horizontal
 		type = ( origin === 'top' ) ? 0 : 1;
@@ -369,7 +369,7 @@
 		_addPalettes: function () {
 			var container = $( '<div class="iris-palette-container" />' ),
 				palette = $( '<a class="iris-palette" tabindex="0" />' ),
-				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
+				colors = Array.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
 			// do we have an existing container? Empty and reuse it.
 			if ( this.picker.find( '.iris-palette-container' ).length ) {
@@ -463,12 +463,12 @@
 					target.gradient( origin, stops );
 					break;
 				case 'v':
-						if ( control === 'strip' ) {
-							stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
-						} else {
-							stops = ['rgba(0,0,0,0)', '#000'];
-						}
-						target.gradient( origin, stops );
+					if ( control === 'strip' ) {
+						stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
+					} else {
+						stops = ['rgba(0,0,0,0)', '#000'];
+					}
+					target.gradient( origin, stops );
 					break;
 				default:
 					break;
@@ -507,7 +507,7 @@
 				totalPadding = 20,
 				innerWidth = opts.border ? opts.width - totalPadding : opts.width,
 				controlsHeight,
-				paletteCount = $.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
+				paletteCount = Array.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
 				paletteMargin, paletteWidth, paletteContainerWidth;
 
 			if ( reset ) {
@@ -620,8 +620,8 @@
 				var focusClass = 'ui-state-focus';
 				event.preventDefault();
 				if (event.type === 'mousedown' ) {
-					self.picker.find( '.' + focusClass ).removeClass( focusClass ).blur();
-					$(this).addClass( focusClass ).focus();
+					self.picker.find( '.' + focusClass ).removeClass( focusClass ).trigger( 'blur' );
+					$(this).addClass( focusClass ).trigger( 'focus' );
 				} else {
 					$(this).removeClass( focusClass );
 				}
@@ -655,7 +655,7 @@
 			});
 
 			// allow clicking on the square to move there and keep dragging
-			square.mousedown( function( event ) {
+			square.on( 'mousedown', function( event ) {
 				var squareOffset, pos;
 				// only left click
 				if ( event.which !== 1 ) {
@@ -669,8 +669,8 @@
 
 				squareOffset = self.controls.square.offset();
 				pos = {
-						top: event.pageY - squareOffset.top,
-						left: event.pageX - squareOffset.left
+					top: event.pageY - squareOffset.top,
+					left: event.pageX - squareOffset.left
 				};
 				event.preventDefault();
 				self._squareDrag( event, { position: pos } );
@@ -695,7 +695,7 @@
 					return true;
 				}
 				event.stopPropagation();
-				$( this ).click();
+				$( this ).trigger( 'click' );
 			});
 		},
 
