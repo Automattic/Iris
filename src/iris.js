@@ -54,14 +54,14 @@
 	}
 
 	/**
-	 * Only for CSS3 gradients. oldIE will use a separate function.
-	 *
-	 * Accepts as many color stops as necessary from 2nd arg on, or 2nd
-	 * arg can be an array of color stops
-	 *
-	 * @param  {string} origin Gradient origin - top or left, defaults to left.
-	 * @return {string}        Appropriate CSS3 gradient string for use in
-	 */
+	* Only for CSS3 gradients. oldIE will use a separate function.
+	*
+	* Accepts as many color stops as necessary from 2nd arg on, or 2nd
+	* arg can be an array of color stops
+	*
+	* @param  {string} origin Gradient origin - top or left, defaults to left.
+	* @return {string}        Appropriate CSS3 gradient string for use in
+	*/
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
 		stops = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
@@ -463,12 +463,12 @@
 					target.gradient( origin, stops );
 					break;
 				case 'v':
-					if ( control === 'strip' ) {
-						stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
-					} else {
-						stops = ['rgba(0,0,0,0)', '#000'];
-					}
-					target.gradient( origin, stops );
+						if ( control === 'strip' ) {
+							stops = [ c.clone().v(100).toCSS(), c.clone().v(0).toCSS() ];
+						} else {
+							stops = ['rgba(0,0,0,0)', '#000'];
+						}
+						target.gradient( origin, stops );
 					break;
 				default:
 					break;
@@ -669,8 +669,8 @@
 
 				squareOffset = self.controls.square.offset();
 				pos = {
-					top: event.pageY - squareOffset.top,
-					left: event.pageX - squareOffset.left
+						top: event.pageY - squareOffset.top,
+						left: event.pageX - squareOffset.left
 				};
 				event.preventDefault();
 				self._squareDrag( event, { position: pos } );
