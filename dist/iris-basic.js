@@ -1,6 +1,6 @@
-/*! Iris Color Picker - v1.1.0-beta - 2016-10-25
+/*! Iris Color Picker - v1.1.1 - 2021-10-05
 * https://github.com/Automattic/Iris
-* Copyright (c) 2016 Matt Wiebe; Licensed GPLv2 */
+* Copyright (c) 2021 Matt Wiebe; Licensed GPLv2 */
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
 
@@ -66,7 +66,7 @@
 	*/
 	function createGradient( origin, stops ) {
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		if ( gradientType === 'webkit' ) {
 			return legacyWebkitGradient( origin, stops );
 		} else {
@@ -81,7 +81,7 @@
 		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
 
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		// 8 hex: AARRGGBB
 		// GradientType: 0 vertical, 1 horizontal
 		type = ( origin === 'top' ) ? 0 : 1;
@@ -371,7 +371,7 @@
 		_addPalettes: function () {
 			var container = $( '<div class="iris-palette-container" />' ),
 				palette = $( '<a class="iris-palette" tabindex="0" />' ),
-				colors = $.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
+				colors = Array.isArray( this.options.palettes ) ? this.options.palettes : this._palettes;
 
 			// do we have an existing container? Empty and reuse it.
 			if ( this.picker.find( '.iris-palette-container' ).length ) {
@@ -509,7 +509,7 @@
 				totalPadding = 20,
 				innerWidth = opts.border ? opts.width - totalPadding : opts.width,
 				controlsHeight,
-				paletteCount = $.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
+				paletteCount = Array.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
 				paletteMargin, paletteWidth, paletteContainerWidth;
 
 			if ( reset ) {
@@ -622,8 +622,8 @@
 				var focusClass = 'ui-state-focus';
 				event.preventDefault();
 				if (event.type === 'mousedown' ) {
-					self.picker.find( '.' + focusClass ).removeClass( focusClass ).blur();
-					$(this).addClass( focusClass ).focus();
+					self.picker.find( '.' + focusClass ).removeClass( focusClass ).trigger( 'blur' );
+					$(this).addClass( focusClass ).trigger( 'focus' );
 				} else {
 					$(this).removeClass( focusClass );
 				}
@@ -657,7 +657,7 @@
 			});
 
 			// allow clicking on the square to move there and keep dragging
-			square.mousedown( function( event ) {
+			square.on( 'mousedown', function( event ) {
 				var squareOffset, pos;
 				// only left click
 				if ( event.which !== 1 ) {
@@ -697,7 +697,7 @@
 					return true;
 				}
 				event.stopPropagation();
-				$( this ).click();
+				$( this ).trigger( 'click' );
 			});
 		},
 

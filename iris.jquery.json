@@ -2,7 +2,7 @@
   "name": "iris",
   "title": "Iris Color Picker",
   "description": "A(n awesome) Color Picker. Used by WordPress.",
-  "version": "1.1.0-beta",
+  "version": "1.1.1",
   "homepage": "https://github.com/Automattic/Iris",
   "docs": "http://automattic.github.com/Iris/",
   "bugs": "https://github.com/Automattic/Iris/issues",
